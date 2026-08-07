@@ -395,6 +395,11 @@ lo:{
  dash:'ໜ້າຫຼັກ',ent:'ຄົ້ນຫາວິສາຫະກິດ',declare:'ແຈ້ງຊຳລະທຶນ',inspect:'ຄິວກວດສອບ',approveQ:'ຄິວອະນຸມັດ',
  valQueue:'ຄິວງານປະເມີນ',valPortal:'ວຽກປະເມີນຂອງຂ້ອຍ',fin:'ການເງິນ',rep:'ລາຍງານ',set:'ຕັ້ງຄ່າລະບົບ',portal:'Portal ພາຍນອກ',
  myCap:'ທຶນຂອງຂ້ອຍ',notif:'ການແຈ້ງເຕືອນ',markRead:'ໝາຍວ່າອ່ານແລ້ວທັງໝົດ',noNotif:'ບໍ່ມີການແຈ້ງເຕືອນ',
+ mkTitle:'ໜ້າວຽກເຄົາເຕີ (Maker)',mkGreeting:'ສະບາຍດີ,',mkNewPay:'ບັນທຶກການຊຳລະໃໝ່',
+ mkKPending:'ລໍກວດສອບ/ອະນຸມັດ',mkKReturned:'ຕີກັບໃຫ້ແກ້ໄຂ',mkKDueSoon:'ໃກ້ຄົບກຳນົດ ≤30 ວັນ',mkKOverdue:'ເກີນກຳນົດ',
+ mkReturned:'ງານຕີກັບໃຫ້ແກ້ໄຂ',mkNoReturned:'ບໍ່ມີງານຕີກັບ',mkPending:'ລາຍການທີ່ຍື່ນໄປ ລໍຜົນ',mkNoPending:'ຍັງບໍ່ມີລາຍການທີ່ຍື່ນ',
+ mkDue:'ໃກ້ຄົບກຳນົດ / ເກີນກຳນົດ',mkNoDue:'ບໍ່ມີວິສາຫະກິດໃກ້ຄົບກຳນົດ',mkFix:'ແກ້ໄຂ',
+ mkBlocked:'ຄ້າງຄ່າປັບ (ບລັອກການຊຳລະ)',mkBlockedNote:'ຕ້ອງເກັບຄ່າປັບໃຫ້ຄົບກ່ອນ ຈຶ່ງບັນທຶກການຊຳລະໃໝ່ໄດ້',mkStage:'ຂັ້ນຕອນ',mkReason:'ເຫດຜົນ',mkOverBy:'ເກີນ',
 
  dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING — ລໍຊຳລະ',kPartial:'PARTIAL — ຊຳລະບາງສ່ວນ',
  kCompleted:'COMPLETED — ຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ວິສາຫະກິດຕາມສະຖານະ',
@@ -540,6 +545,11 @@ en:{
  dash:'Dashboard',ent:'Search Enterprises',declare:'Declare Payment',inspect:'Inspection Queue',approveQ:'Approval Queue',
  valQueue:'Valuation Queue',valPortal:'My Valuation Jobs',fin:'Finance',rep:'Reports',set:'System Settings',portal:'External Portal',
  myCap:'My Capital',notif:'Notifications',markRead:'Mark all as read',noNotif:'No notifications',
+ mkTitle:'Counter Workspace (Maker)',mkGreeting:'Hello,',mkNewPay:'New payment entry',
+ mkKPending:'Pending review',mkKReturned:'Returned to fix',mkKDueSoon:'Due ≤30 days',mkKOverdue:'Overdue',
+ mkReturned:'Returned for correction',mkNoReturned:'Nothing returned',mkPending:'Submitted — awaiting result',mkNoPending:'No submissions yet',
+ mkDue:'Due soon / Overdue',mkNoDue:'No enterprises due soon',mkFix:'Fix',
+ mkBlocked:'Outstanding penalties (payment blocked)',mkBlockedNote:'Collect the penalty in full before a new payment can be recorded',mkStage:'Stage',mkReason:'Reason',mkOverBy:'overdue',
 
  dashTitle:'Registered Capital Contribution Overview',kPending:'PENDING — awaiting payment',kPartial:'PARTIAL — partly paid',
  kCompleted:'COMPLETED — paid in full',kOverdue:'OVERDUE — past deadline',byStatus:'Enterprises by status',
@@ -1060,7 +1070,79 @@ function daysLeft(dueStr){
 function vDash(){
   if(S.role==='owner')return vOwnerDash();
   if(S.role==='admin')return vAdminDash();
+  if(S.role==='maker')return vMakerDash();
   return vStaffDash();
+}
+
+function vMakerDash(){
+  var pend=S.tasks;
+  var returned=S.ents.filter(function(e){return e.status!=='COMPLETED'&&!pendingOf(e.id)&&e.hist.some(function(h){return h.st==='returned'})});
+  var overdue=S.ents.filter(function(e){return e.status==='OVERDUE'});
+  var dueSoon=S.ents.filter(function(e){var d=daysLeft(e.due);return e.status!=='COMPLETED'&&e.status!=='OVERDUE'&&d>=0&&d<=30});
+  var penInvs=S.invs.filter(function(x){return x.kind==='penalty'&&x.status==='UNPAID'});
+  var penBy={};penInvs.forEach(function(x){penBy[x.ent]=(penBy[x.ent]||0)+x.amt});
+
+  var kpis='<div class="kpis" style="margin-bottom:16px">'+
+    kpiTile('warn','◷',t('mkKPending'),fmt(pend.length))+
+    kpiTile('bad','↩',t('mkKReturned'),fmt(returned.length))+
+    kpiTile('warn','◷',t('mkKDueSoon'),fmt(dueSoon.length))+
+    kpiTile('bad','⚠',t('mkKOverdue'),fmt(overdue.length))+
+   '</div>';
+
+  var retRows=returned.map(function(e){
+    var r=e.hist.filter(function(h){return h.st==='returned'}).slice(-1)[0];
+    return '<tr data-open="'+e.id+'"><td style="padding-left:16px"><span class="co">'+e.name+'<small>'+e.id+'</small></span></td>'+
+     '<td style="color:var(--muted);font-size:11px">'+(r?L(r.a):'')+'</td>'+
+     '<td class="r" style="padding-right:16px"><span style="color:var(--m);font-size:11px;font-weight:600">'+t('mkFix')+' →</span></td></tr>'}).join('');
+  var returnedCard='<div class="card"><div class="h"><h3>'+t('mkReturned')+'</h3>'+
+    (returned.length?'<span class="cnt" style="margin-left:auto">'+returned.length+'</span>':'')+'</div>'+
+    '<div class="c" style="padding:12px 0 0">'+(retRows
+     ?'<table><tbody>'+retRows+'</tbody></table>'
+     :'<div class="empty" style="padding:30px"><b>'+t('mkNoReturned')+'</b></div>')+'</div></div>';
+
+  var pendRows=pend.map(function(x){
+    return '<tr data-open="'+x.ent.id+'"><td style="padding-left:16px"><span class="co">'+x.ent.name+'<small>'+x.ent.id+'</small></span></td>'+
+     '<td class="r num">'+fmt(x.amt)+'</td>'+
+     '<td>'+(x.stage==='checker'?'<span class="pill p-warn">'+t('stageChecker')+'</span>':'<span class="pill p-rev">'+t('stageApprover')+'</span>')+'</td>'+
+     '<td style="padding-right:16px;color:var(--muted);font-size:11px">'+x.by+'</td></tr>'}).join('');
+  var pendingCard='<div class="card"><div class="h"><h3>'+t('mkPending')+'</h3>'+
+    (pend.length?'<span class="cnt" style="margin-left:auto">'+pend.length+'</span>':'')+'</div>'+
+    '<div class="c" style="padding:12px 0 0">'+(pendRows
+     ?'<table><thead><tr><th style="padding-left:16px">'+t('cEnt')+'</th><th class="r">'+t('cAmt')+'</th><th>'+t('mkStage')+'</th><th style="padding-right:16px">'+t('cBy')+'</th></tr></thead><tbody>'+pendRows+'</tbody></table>'
+     :'<div class="empty" style="padding:30px"><b>'+t('mkNoPending')+'</b></div>')+'</div></div>';
+
+  var dueList=overdue.concat(dueSoon);
+  var dueRows=dueList.map(function(e){
+    var d=daysLeft(e.due),over=d<0,pen=penBy[e.id]||0;
+    return '<tr data-open="'+e.id+'"><td style="padding-left:16px"><span class="co">'+e.name+'<small>'+e.id+'</small></span></td>'+
+     '<td class="num">'+e.due+'</td>'+
+     '<td class="num" style="color:'+(over?'var(--bad)':'var(--ink2)')+'">'+(over?t('mkOverBy')+' '+Math.abs(d):d)+' '+(lang==='lo'?'ວັນ':'days')+'</td>'+
+     '<td class="r num">'+fmt(e.cap-e.paid)+'</td>'+
+     '<td class="r num" style="color:'+(pen?'var(--bad)':'var(--muted)')+'">'+(pen?fmt(pen):'—')+'</td>'+
+     '<td class="r" style="padding-right:16px">'+pill(e.status)+'</td></tr>'}).join('');
+  var dueCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('mkDue')+'</h3>'+
+    '<span class="more" data-nav="ent">'+t('seeAll')+' →</span></div>'+
+    '<div class="c" style="padding:12px 0 0">'+(dueRows
+     ?'<table><thead><tr><th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('cDue')+'</th><th>'+t('daysLeft')+'</th>'+
+      '<th class="r">'+t('outstanding')+'</th><th class="r">'+t('penaltyAmt')+'</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+dueRows+'</tbody></table>'
+     :'<div class="empty" style="padding:30px"><b>'+t('mkNoDue')+'</b></div>')+'</div></div>';
+
+  var penRows=Object.keys(penBy).map(function(id){
+    var e=S.ents.filter(function(x){return x.id===id})[0];if(!e)return '';
+    return '<tr data-open="'+id+'"><td style="padding-left:16px"><span class="co">'+e.name+'<small>'+id+'</small></span></td>'+
+     '<td class="r num" style="color:var(--bad);padding-right:16px">'+fmt(penBy[id])+' LAK</td></tr>'}).join('');
+  var penCard=penRows?'<div class="card"><div class="h"><h3>'+t('mkBlocked')+'</h3></div>'+
+    '<div class="c"><div class="hint err" style="margin:0 0 10px">'+t('mkBlockedNote')+'</div>'+
+    '<table><tbody>'+penRows+'</tbody></table></div></div>':'';
+
+  var inner=
+   '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">'+
+   '<div style="font-size:12.5px;color:var(--ink2)">'+t('mkGreeting')+' <b>'+who().n+'</b></div>'+
+   '<button class="btn" data-nav="ent">＋ '+t('mkNewPay')+'</button></div>'+
+   kpis+
+   '<div class="split70" style="grid-template-columns:1fr 1fr;margin-bottom:14px">'+returnedCard+pendingCard+'</div>'+
+   dueCard+penCard;
+  return shell(t('mkTitle'),'',inner);
 }
 
 function vStaffDash(){
@@ -2323,7 +2405,7 @@ function bind(){
   if(dl)dl.onclick=function(){
     S.role=S.pick;S.mobile=false;S.read=false;
     S.view=S.role==='owner'?'dash':(S.role==='valfirm'?'valfirm':(S.role==='external'?'portal':
-      (S.role==='checker'?'inspect':(S.role==='approver'?'approveQ':(S.role==='admin'?'set':'ent')))));
+      (S.role==='checker'?'inspect':(S.role==='approver'?'approveQ':(S.role==='admin'?'set':(S.role==='maker'?'dash':'ent'))))));
     render();toast(t('loggedIn'),who().n+' · '+who().r,true)};
   var o2=$('#otp2');if(o2)otpWire(o2,function(f){$('#doApprove').disabled=!f});
   var da=$('#doApprove');if(da)da.onclick=function(){approve(S.modal.i)};
