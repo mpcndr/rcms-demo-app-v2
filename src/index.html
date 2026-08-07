@@ -1462,7 +1462,7 @@ function sechead(txt,first){
    'margin:'+(first?'0':'26px')+' 0 12px'+(first?'':';padding-top:20px;border-top:1px solid var(--line)')+'">'+txt+'</div>';
 }
 function vAdminDash(){
-  var PAL=['#0F5C8C','#1B6E45','#B06A05','#7A4FA3','#B03127','#3C7A6B'];
+  var PAL=['#3B82F6','#10B981','#F59E0B','#8B5CF6','#F43F5E','#06B6D4'];
   var online=S.users.filter(function(u){return u.online}).length;
   var lockedN=S.users.filter(function(u){return !u.active}).length;
   var byOrg={};S.users.forEach(function(u){byOrg[u.org]=(byOrg[u.org]||0)+1});
