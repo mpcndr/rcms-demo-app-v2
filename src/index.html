@@ -1508,8 +1508,11 @@ function vTxDetail(){
    mockDocs.map(function(f){return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
    '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+f+'</span>'+
    '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div></div>':'';
-  var col2=txCard+(payFieldsCard||colCard);
-  var inner=pbar+'<div class="declrow">'+regDetailCard(e)+'<div>'+col2+'</div></div>'+filesCard;
+  var regCard=regDetailCard(e).replace('<div class="card" style="margin-bottom:14px">','<div class="card" style="height:100%">');
+  var txC=txCard.replace('class="card" style="margin-bottom:14px"','class="card" style="flex:1 1 auto"');
+  var c3=(payFieldsCard||colCard).replace('class="card" style="margin-bottom:14px"','class="card" style="flex:1 1 auto"');
+  var rightCol='<div style="display:flex;flex-direction:column;gap:14px;height:100%">'+txC+c3+'</div>';
+  var inner=pbar+'<div class="declrow" style="align-items:stretch">'+regCard+rightCol+'</div>'+filesCard;
   return shell(t('reqDetail'),[e.name,tx.back||'detail'],inner);
 }
 function vDetail(){
