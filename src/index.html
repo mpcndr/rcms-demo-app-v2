@@ -422,6 +422,10 @@ lo:{
  ckTitle:'ໜ້າວຽກກວດສອບ (Checker)',ckKQueue:'ລໍກວດສອບໃນຄິວ',ckKValue:'ມູນຄ່າລວມໃນຄິວ',ckKApprover:'ສົ່ງຕໍ່ ລໍອະນຸມັດ',ckKReturned:'ຕີກັບໃຫ້ແກ້',
  ckQueue:'ຄິວລໍກວດສອບ',ckNoQueue:'ບໍ່ມີງານລໍກວດສອບ',ckAtApprover:'ສົ່ງຕໍ່ແລ້ວ ລໍອະນຸມັດ',ckNoApprover:'ຍັງບໍ່ມີງານທີ່ສົ່ງຕໍ່',
  ckReturned:'ຕີກັບໃຫ້ແກ້ໄຂ (ໂດຍຂ້ອຍ)',ckNoReturned:'ຍັງບໍ່ໄດ້ຕີກັບລາຍການໃດ',ckReview:'ຕ້ອງກວດເຂັ້ມ',ckOpen:'ເປີດກວດ',ckHighVal:'ຍອດສູງ',
+ apTitle:'ໜ້າວຽກອະນຸມັດ (Approver)',apKQueue:'ລໍອະນຸມັດ + ລົງນາມ',apKValue:'ມູນຄ່າລໍລົງນາມ',apKSigned:'ລົງນາມແລ້ວມື້ນີ້',apKOverdue:'ເກີນກຳນົດ (ທັງຝ່າຍ)',
+ apQueue:'ຄິວລໍອະນຸມັດ + ລົງນາມ',apNoQueue:'ບໍ່ມີງານລໍອະນຸມັດ',apSign:'ລົງນາມ',apVerifiedBy:'ກວດໂດຍ',
+ apPipeline:'ທໍ່ຂະບວນການ',apStgCheck:'ຢູ່ຂັ້ນກວດສອບ',apStgApprove:'ຢູ່ຂັ້ນອະນຸມັດ',apStgDone:'ຄົບຖ້ວນແລ້ວ',
+ apRisk:'ເກີນກຳນົດ / ຄ່າປັບ',apNoRisk:'ບໍ່ມີລາຍການສ່ຽງ',apRecent:'ລົງນາມລ່າສຸດ (E-Sign)',apNoRecent:'ຍັງບໍ່ໄດ້ລົງນາມລາຍການໃດ',
 
  dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING - ລໍຊຳລະ',kPartial:'PARTIAL - ຊຳລະບາງສ່ວນ',
  kCompleted:'COMPLETED - ຄົບຖ້ວນ',kOverdue:'OVERDUE - ເກີນກຳນົດ',byStatus:'ວິສາຫະກິດຕາມສະຖານະ',
@@ -576,6 +580,10 @@ en:{
  ckTitle:'Verification Workspace (Checker)',ckKQueue:'Awaiting my review',ckKValue:'Value in queue',ckKApprover:'Forwarded, at approver',ckKReturned:'Returned to fix',
  ckQueue:'Verification queue',ckNoQueue:'Nothing waiting for verification',ckAtApprover:'Forwarded - awaiting approval',ckNoApprover:'Nothing forwarded yet',
  ckReturned:'Returned for correction (by me)',ckNoReturned:'You have not returned any case',ckReview:'Needs close review',ckOpen:'Review',ckHighVal:'High value',
+ apTitle:'Approval Workspace (Approver)',apKQueue:'Awaiting my approval',apKValue:'Value awaiting sign-off',apKSigned:'Signed today',apKOverdue:'Overdue (division)',
+ apQueue:'Awaiting approval + E-Sign',apNoQueue:'Nothing waiting for approval',apSign:'Sign',apVerifiedBy:'Verified by',
+ apPipeline:'Pipeline',apStgCheck:'At verification',apStgApprove:'At approval',apStgDone:'Completed',
+ apRisk:'Overdue / penalties',apNoRisk:'No at-risk cases',apRecent:'Recently signed (E-Sign)',apNoRecent:'You have not signed any case yet',
 
  dashTitle:'Registered Capital Contribution Overview',kPending:'PENDING - awaiting payment',kPartial:'PARTIAL - partly paid',
  kCompleted:'COMPLETED - paid in full',kOverdue:'OVERDUE - past deadline',byStatus:'Enterprises by status',
@@ -765,7 +773,8 @@ var LU={
  hourglass:'<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>',
  clipboardCheck:'<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
  banknote:'<rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',
- send:'<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>'
+ send:'<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>',
+ signature:'<path d="m21 17-2.156-1.868A.5.5 0 0 0 18 15.5v.5a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1c0-2.545-3.991-3.97-8.5-4a1 1 0 0 0 0 5c4.153 0 4.745-11.295 5.708-13.5a2.5 2.5 0 1 1 3.31 3.284"/><path d="M3 21h18"/>'
 };
 function luSvg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(LU[name]||'')+'</svg>';}
 // Framed KPI card (icon top-right, big value, optional delta chip + subtext).
@@ -896,6 +905,15 @@ function seedReturned(){
   if(e)e.hist.push({d:'03/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ - ຫຼັກຖານການໂອນບໍ່ຊັດເຈນ',en:'Returned for correction - transfer evidence unclear'},
     m:'cash',v:0,u:'ນ. ສີວິໄລ',f:'-',ch:'',st:'returned'});
 }
+// Mock a couple of cases the Approver signed today, so the E-Sign KPI and the
+// recent-signature audit card open populated.
+function seedApproved(){
+  [['ELN-2025-1005',180000000],['ELN-2025-1006',1620000000]].forEach(function(p){
+    var e=S.ents.filter(function(x){return x.id===p[0]})[0];
+    if(e)e.hist.push({d:'04/08/2026',a:{lo:'ອະນຸມັດ ແລະ ລົງລາຍເຊັນດິຈິຕອນ',en:'Approved and digitally signed'},
+      m:'',v:p[1],u:'ຫົວໜ້າພະແນກ',f:'1',ch:'',st:'complete'});
+  });
+}
 
 var VALJOBS=[
  {id:'VAL-2026-0341',ent:'ELN-2025-1001',asset:{lo:'ທີ່ດິນ 2 ຕອນ',en:'2 land plots'},firm:'Lao Valuation Co., Ltd.',net:'in',amt:700000000,status:'doing'},
@@ -1013,11 +1031,11 @@ function reset(){
      valjobs:JSON.parse(JSON.stringify(VALJOBS)),users:JSON.parse(JSON.stringify(USERS_SEED)),
      backReasonInt:'',backReasonExt:'',loginStep:'cred',loginUser:'',loginPass:'',loginErr:'',tx:null,valI:0,valForm:{val:null,files:[],err:'',docType:'valReport',docErr:''},
      adv:{regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''}};
-  S.tasks=seedTasks();seedReturned();
+  S.tasks=seedTasks();seedReturned();seedApproved();
   render();
 }
 function clearCache(){
-  S.ents=seedEnts();S.invs=seedInv();S.tasks=seedTasks();seedReturned();S.taskI=0;S.form=null;S.modal=null;S.notif=[];
+  S.ents=seedEnts();S.invs=seedInv();S.tasks=seedTasks();seedReturned();seedApproved();S.taskI=0;S.form=null;S.modal=null;S.notif=[];
   S.read=false;S.bell=false;S.umenu=false;S.certCopy=false;
   S.valjobs=JSON.parse(JSON.stringify(VALJOBS));S.users=JSON.parse(JSON.stringify(USERS_SEED));
   S.backReasonInt='';S.backReasonExt='';S.tx=null;S.valI=0;S.valForm={val:null,files:[],err:'',docType:'valReport',docErr:''};
@@ -1143,6 +1161,7 @@ function vDash(){
   if(S.role==='admin')return vAdminDash();
   if(S.role==='maker')return vMakerDash();
   if(S.role==='checker')return vCheckerDash();
+  if(S.role==='approver')return vApproverDash();
   return vStaffDash();
 }
 
@@ -1280,6 +1299,78 @@ function vCheckerDash(){
    '<div class="split70" style="grid-template-columns:1fr 1fr;margin-bottom:14px">'+queueCard+apCard+'</div>'+
    retCard;
   return shell(t('ckTitle'),'',inner);
+}
+
+function vApproverDash(){
+  var me=who().n,LO=lang==='lo',TODAY='04/08/2026';
+  var myQ=[],atChk=0;
+  S.tasks.forEach(function(x,i){if(x.stage==='approve')myQ.push([x,i]);else if(x.stage==='checker')atChk++});
+  var qVal=myQ.reduce(function(a,p){return a+p[0].amt},0);
+  var signedAll=[],signedToday=0;
+  S.ents.forEach(function(e){e.hist.forEach(function(h){
+    if(h.st==='complete'&&h.u===me&&/digitally signed|ລົງລາຍເຊັນ/.test(L(h.a))){signedAll.push({e:e,h:h});if(h.d===TODAY)signedToday++}
+  })});
+  var overdue=S.ents.filter(function(e){return e.status==='OVERDUE'});
+  var penEnts=S.ents.filter(function(e){return S.invs.some(function(iv){return iv.ent===e.id&&iv.kind==='penalty'&&iv.status==='UNPAID'})});
+  var completed=S.ents.filter(function(e){return e.status==='COMPLETED'}).length;
+  var totCap=0,totPaid=0;S.ents.forEach(function(e){totCap+=e.cap;totPaid+=e.paid});
+  var paidRate=totCap?Math.round(totPaid/totCap*100):0;
+
+  var kpis='<div class="kpiframe"><div class="kpis">'+
+    kpiTile('warn','signature',t('apKQueue'),fmt(myQ.length),LO?'ຕ້ອງ E-Sign':'Needs your E-Sign')+
+    kpiTile('','banknote',t('apKValue'),fmt(qVal),LO?'ກີບ · ລໍລົງນາມ':'LAK · pending sign-off')+
+    kpiTile('ok','circleCheck',t('apKSigned'),fmt(signedToday),LO?'ລົງນາມດິຈິຕອນ':'Digitally signed')+
+    kpiTile('bad','triangleAlert',t('apKOverdue'),fmt(overdue.length),LO?'ຄວາມສ່ຽງ compliance':'Compliance risk')+
+   '</div></div>';
+
+  var qRows=myQ.map(function(p){var x=p[0];
+    var chk=(x.trail||[]).filter(function(t2){return /Checker/.test(t2.who)}).slice(-1)[0];
+    return '<tr data-task="'+p[1]+'"><td style="padding-left:16px" class="num">'+x.ref+'</td>'+
+     '<td><span class="co">'+x.ent.name+'<small>'+x.ent.id+'</small></span></td>'+
+     '<td>'+modeLbl(x.mode)+'</td><td class="r num">'+fmt(x.amt)+'</td>'+
+     '<td style="font-size:11px;color:var(--muted)">'+t('apVerifiedBy')+' '+(chk?chk.who.replace(/ \(.*/,''):x.by)+'</td>'+
+     '<td class="r" style="padding-right:16px"><span style="color:var(--m);font-size:11px;font-weight:600">'+t('apSign')+' →</span></td></tr>'}).join('');
+  var queueCard='<div class="card"><div class="h"><h3>'+t('apQueue')+'</h3>'+(myQ.length?'<span class="cnt" style="margin-left:auto">'+myQ.length+'</span>':'')+'</div>'+
+    '<div class="c" style="padding:12px 0 0">'+(qRows
+     ?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+'</th><th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+'</th><th></th><th></th></tr></thead><tbody>'+qRows+'</tbody></table>'
+     :'<div class="empty" style="padding:30px"><b>'+t('apNoQueue')+'</b></div>')+'</div></div>';
+
+  var stages=[[atChk,'#B06A05',t('apStgCheck')],[myQ.length,'#0F5C8C',t('apStgApprove')],[completed,'#1B6E45',t('apStgDone')]];
+  var maxS=Math.max(atChk,myQ.length,completed,1);
+  var pipeRows=stages.map(function(s){var w=s[0]/maxS*100;
+    return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">'+
+     '<span style="width:130px;font-size:11.5px;color:var(--ink2)">'+s[2]+'</span>'+
+     '<div style="flex:1;background:var(--soft);border-radius:5px;height:12px;overflow:hidden"><div style="width:'+w+'%;height:100%;background:'+s[1]+';border-radius:5px"></div></div>'+
+     '<span class="num" style="width:24px;text-align:right;font-weight:600">'+s[0]+'</span></div>';}).join('');
+  var pipeCard='<div class="card"><div class="h"><h3>'+t('apPipeline')+'</h3></div><div class="c">'+
+    '<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:16px"><span class="num" style="font-size:27px;font-weight:700;color:var(--m)">'+paidRate+'%</span>'+
+    '<span style="font-size:11px;color:var(--muted)">'+t('heroPaidPct')+'</span></div>'+pipeRows+'</div></div>';
+
+  var riskList=overdue.concat(penEnts.filter(function(e){return overdue.indexOf(e)<0}));
+  var riskRows=riskList.map(function(e){
+    var pen=S.invs.filter(function(iv){return iv.ent===e.id&&iv.kind==='penalty'&&iv.status==='UNPAID'}).reduce(function(a,iv){return a+iv.amt},0);
+    return '<tr data-open="'+e.id+'"><td style="padding-left:16px"><span class="co">'+e.name+'<small>'+e.id+'</small></span></td>'+
+     '<td class="num" style="color:'+(daysLeft(e.due)<0?'var(--bad)':'var(--ink2)')+'">'+e.due+'</td>'+
+     '<td class="r num" style="color:'+(pen?'var(--bad)':'var(--muted)')+'">'+(pen?fmt(pen):'-')+'</td>'+
+     '<td class="r" style="padding-right:16px">'+pill(e.status)+'</td></tr>'}).join('');
+  var riskCard='<div class="card"><div class="h"><h3>'+t('apRisk')+'</h3></div>'+
+    '<div class="c" style="padding:12px 0 0">'+(riskRows
+     ?'<table><thead><tr><th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('cDue')+'</th><th class="r">'+t('penaltyAmt')+'</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+riskRows+'</tbody></table>'
+     :'<div class="empty" style="padding:30px"><b>'+t('apNoRisk')+'</b></div>')+'</div></div>';
+
+  var recRows=signedAll.slice(-6).reverse().map(function(o){
+    return '<tr data-open="'+o.e.id+'"><td style="padding-left:16px"><span class="co">'+o.e.name+'<small>'+o.e.id+'</small></span></td>'+
+     '<td class="r num">'+(o.h.v?fmt(o.h.v):'-')+'</td>'+
+     '<td class="num" style="padding-right:16px">'+o.h.d+'</td></tr>'}).join('');
+  var recCard='<div class="card"><div class="h"><h3>'+t('apRecent')+'</h3>'+(signedAll.length?'<span class="cnt" style="margin-left:auto">'+signedAll.length+'</span>':'')+'</div>'+
+    '<div class="c" style="padding:12px 0 0">'+(recRows?'<table><tbody>'+recRows+'</tbody></table>':'<div class="empty" style="padding:30px"><b>'+t('apNoRecent')+'</b></div>')+'</div></div>';
+
+  var inner=
+   '<div style="font-size:12.5px;color:var(--ink2);margin-bottom:14px">'+t('mkGreeting')+' <b>'+me+'</b></div>'+
+   kpis+
+   '<div class="split70" style="grid-template-columns:1fr 1fr;margin-bottom:14px">'+queueCard+pipeCard+'</div>'+
+   '<div class="split70" style="grid-template-columns:1fr 1fr">'+riskCard+recCard+'</div>';
+  return shell(t('apTitle'),'',inner);
 }
 
 function vStaffDash(){
