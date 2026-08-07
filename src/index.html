@@ -547,7 +547,7 @@ lo:{
  simulatePaid:'ຈຳລອງການຊຳລະສຳເລັດ',paidOk:'ຊຳລະສຳເລັດ',paidOkS:'ລະບົບກວດສອບອັດຕະໂນມັດ ບໍ່ຕ້ອງລໍການອະນຸມັດ',
  myInvoices:'ໃບແຈ້ງໜີ້ຂອງຂ້ອຍ',cItem:'ລາຍການ',noInvoice:'ບໍ່ມີໃບແຈ້ງໜີ້ຄ້າງຊຳລະ',bizPayQR:'ຊຳລະດ້ວຍ QR',
 
- repTitle:'ລາຍງານ ແລະ ສະຖິຕິ',repPick:'ເລືອກລາຍງານ',repRange:'ຊ່ວງເວລາ',repGen:'ສ້າງລາຍງານ',dFrom:'ຕັ້ງແຕ່',dTo:'ຫາ',
+ repTitle:'ລາຍງານ',repPick:'ເລືອກລາຍງານ',repRange:'ຊ່ວງເວລາ',repGen:'ສ້າງລາຍງານ',dFrom:'ຕັ້ງແຕ່',dTo:'ຫາ',
  overdueTrend:'ຈຳນວນເກີນກຳນົດ ຍ້ອນຫຼັງ 12 ເດືອນ',overdueTrendN:'ຫຼຸດລົງນັບແຕ່ເລີ່ມແຈ້ງເຕືອນອັດຕະໂນມັດ',
 
  setTitle:'ຕັ້ງຄ່າລະບົບ',setFee:'ຄ່າທຳນຽມ',master:'Master Data',glTitle:'ບັນຊີຮັບທຶນ (Virtual GL)',
@@ -706,7 +706,7 @@ en:{
  simulatePaid:'Simulate successful payment',paidOk:'Payment successful',paidOkS:'Verified automatically by the system - no approval needed',
  myInvoices:'My Invoices',cItem:'Item',noInvoice:'No outstanding invoices',bizPayQR:'Pay by QR',
 
- repTitle:'Reports & Statistics',repPick:'Choose a report',repRange:'Date range',repGen:'Generate report',dFrom:'From',dTo:'To',
+ repTitle:'Reports',repPick:'Choose a report',repRange:'Date range',repGen:'Generate report',dFrom:'From',dTo:'To',
  overdueTrend:'Overdue enterprises, last 12 months',overdueTrendN:'Down since automated reminders started',
 
  setTitle:'System Settings',setFee:'Fees',master:'Master Data',glTitle:'Virtual GL',
@@ -2104,22 +2104,11 @@ function applyFinFilter(){
 }
 
 function vRep(){
-  var mm=MOCK_MONTHS[lang]||MOCK_MONTHS.en;
-  var c=counts();
-  var segs=[[c.COMPLETED,'#1B6E45',stName('COMPLETED')],[c.PARTIAL,'#B06A05',stName('PARTIAL')],
-    [c.PENDING,'#8E9CB0',stName('PENDING')],[c.OVERDUE,'#B03127',stName('OVERDUE')]];
   var reps=[{lo:'ສະຖິຕິວິສາຫະກິດຕາມຂະແໜງ ISIC',en:'Enterprises by ISIC sector'},
     {lo:'ລາຍງານການປະກອບທຶນຈົດທະບຽນ',en:'Registered capital contribution report'},
     {lo:'ລາຍງານຄ່າທຳນຽມ ແລະ ຄ່າປັບ',en:'Fees and penalties report'},
     {lo:'ລາຍງານປະສິດທິພາບງານ (Turnaround Time)',en:'Turnaround time report'}];
-  var inner='<div class="grid3" style="grid-template-columns:3fr 7fr">'+
-   '<div class="card"><div class="h"><h3>'+t('byStatus')+'</h3></div><div class="c">'+
-   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(segs,t('cEnt'))+donutLegend(segs)+
-   '</div></div></div>'+
-   '<div class="card"><div class="h"><h3>'+t('overdueTrend')+'</h3></div><div class="c">'+
-   barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
-   '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
-   '<div class="card"><div class="h"><h3>'+t('repPick')+'</h3></div><div class="c">'+
+  var inner='<div class="card"><div class="h"><h3>'+t('repPick')+'</h3></div><div class="c">'+
    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:9px">'+
    reps.map(function(r,i){return '<div class="acct'+(i===1?' on':'')+'" style="margin:0" data-soon="'+esc(L(r))+'">'+
    '<div class="av">◱</div><div><div class="nm">'+L(r)+'</div></div></div>'}).join('')+'</div>'+
