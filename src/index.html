@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RCMS — Registration and Capital Monitoring System</title>
+<title>RCMS - Registration and Capital Monitoring System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -379,10 +379,10 @@ tbody tr:hover td{background:var(--m-lite)}
 
 <script type="module">
 /* ============================================================
-   RCMS Phase 1 — rebuilt from RCMS_Phase1_Spec.md
+   RCMS Phase 1 - rebuilt from RCMS_Phase1_Spec.md
    Vanilla ES5 app logic, still one HTML file. Now built with Vite
    (see package.json) solely so real npm packages (e.g. Leaflet for
-   the map) can be imported — run `npm install` then `npm run dev`.
+   the map) can be imported - run `npm install` then `npm run dev`.
    ============================================================ */
 import Leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -390,7 +390,7 @@ import LOGO from './moic-logo.png';
 var D={
 lo:{
  sysName:'ລະບົບຂຶ້ນທະບຽນ ແລະ ຕິດຕາມການປະກອບທຶນ',sysSub:'Registration and Capital Monitoring System',
- coop:'ໂມດູນການປະກອບທຶນຈົດທະບຽນ (Phase 1) — ຮ່ວມມືລະຫວ່າງ MOIC ແລະ ທະນາຄານສົ່ງເສີມກະສິກຳ (APB)',
+ coop:'ໂມດູນການປະກອບທຶນຈົດທະບຽນ (Phase 1) - ຮ່ວມມືລະຫວ່າງ MOIC ແລະ ທະນາຄານສົ່ງເສີມກະສິກຳ (APB)',
  s1:'ວິສາຫະກິດຂຶ້ນທະບຽນ',s2:'ລ້ານລ້ານກີບ ທຶນຈົດທະບຽນ',s3:'ຂະບວນການທຸລະກຳ',
  pickAcct:'ເຂົ້າສູ່ລະບົບ',loginHint:'ພິມຊື່ຜູ້ໃຊ້ (ມີລາຍຊື່ demo ໃຫ້ autocomplete) ແລ້ວໃສ່ລະຫັດຜ່ານໃດກໍ່ໄດ້',
  loginUser:'ຊື່ຜູ້ໃຊ້',loginPass:'ລະຫັດຜ່ານ',loginNext:'ຖັດໄປ',loginBack:'← ກັບຄືນ',
@@ -400,7 +400,7 @@ lo:{
  codeSentNote:'ລະຫັດຢືນຢັນຖືກສົ່ງໄປແລ້ວ (ຈຳລອງ)',verifyCode:'ຢືນຢັນລະຫັດ',
  newPwLbl:'ລະຫັດຜ່ານໃໝ່',confirmPwLbl:'ຢືນຢັນລະຫັດຜ່ານໃໝ່',setNewPw:'ຕັ້ງລະຫັດຜ່ານໃໝ່',
  pwResetDone:'ຕັ້ງລະຫັດຜ່ານໃໝ່ສຳເລັດ',pwResetDoneS:'ນຳໃຊ້ລະຫັດຜ່ານໃໝ່ໃນຄັ້ງຕໍ່ໄປ (ຈຳລອງ)',
- pwMismatch:'ລະຫັດຜ່ານບໍ່ກົງກັນ',unknownUser:'ບໍ່ພົບຜູ້ໃຊ້ນີ້ — ເລືອກຈາກລາຍຊື່ທີ່ແນະນຳ',errPw:'ກະລຸນາໃສ່ລະຫັດຜ່ານ',
+ pwMismatch:'ລະຫັດຜ່ານບໍ່ກົງກັນ',unknownUser:'ບໍ່ພົບຜູ້ໃຊ້ນີ້ - ເລືອກຈາກລາຍຊື່ທີ່ແນະນຳ',errPw:'ກະລຸນາໃສ່ລະຫັດຜ່ານ',
  qrVerify:'ກວດສອບສະຖານະວິສາຫະກິດ',qrVerifyNote:'ບໍ່ຈຳເປັນຕ້ອງເຂົ້າສູ່ລະບົບ · ຄົ້ນຫາດ້ວຍຊື່ ຫຼື ເລກທະບຽນ',
  verifyNotFound:'ບໍ່ພົບຂໍ້ມູນວິສາຫະກິດນີ້',secNote:'ບັງຄັບ MFA ສຳລັບຜູ້ອະນຸມັດ · Session Timeout 15 ນາທີ · ຫ້າມເຂົ້າໃຊ້ຊ້ຳຊ້ອນ · Audit Trail ທຸກການເຂົ້າເຖິງ',
  kbTitle:'ປຸ່ມລັດ',close:'ປິດ',cancel:'ຍົກເລີກ',confirm:'ຢືນຢັນ',save:'ບັນທຶກ',edit:'ແກ້ໄຂ',manage:'ຈັດການ',
@@ -423,8 +423,8 @@ lo:{
  ckQueue:'ຄິວລໍກວດສອບ',ckNoQueue:'ບໍ່ມີງານລໍກວດສອບ',ckAtApprover:'ສົ່ງຕໍ່ແລ້ວ ລໍອະນຸມັດ',ckNoApprover:'ຍັງບໍ່ມີງານທີ່ສົ່ງຕໍ່',
  ckReturned:'ຕີກັບໃຫ້ແກ້ໄຂ (ໂດຍຂ້ອຍ)',ckNoReturned:'ຍັງບໍ່ໄດ້ຕີກັບລາຍການໃດ',ckReview:'ຕ້ອງກວດເຂັ້ມ',ckOpen:'ເປີດກວດ',ckHighVal:'ຍອດສູງ',
 
- dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING — ລໍຊຳລະ',kPartial:'PARTIAL — ຊຳລະບາງສ່ວນ',
- kCompleted:'COMPLETED — ຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ວິສາຫະກິດຕາມສະຖານະ',
+ dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING - ລໍຊຳລະ',kPartial:'PARTIAL - ຊຳລະບາງສ່ວນ',
+ kCompleted:'COMPLETED - ຄົບຖ້ວນ',kOverdue:'OVERDUE - ເກີນກຳນົດ',byStatus:'ວິສາຫະກິດຕາມສະຖານະ',
  heroPaidPct:'ອັດຕາການຊຳລະລວມ',heroEnts:'ວິສາຫະກິດທັງໝົດ',
  dueSoon:'ໃກ້ຄົບກຳນົດພາຍໃນ 30 ວັນ',seeAll:'ເບິ່ງທັງໝົດ',adminUsers:'ຜູ້ໃຊ້ລະບົບ',onlineNow:'ອອນລາຍຕອນນີ້',totalUsers:'ຜູ້ໃຊ້ທັງໝົດ',
  secCapital:'ພາບລວມທຶນຈົດທະບຽນ',secUsers:'ພາບລວມຜູ້ໃຊ້ລະບົບ',orgBreakdown:'ຈຳແນກຕາມໜ່ວຍງານ',
@@ -460,13 +460,13 @@ lo:{
  modeCashD:'ຊຳລະຜ່ານ QR / Mobile Banking ຫຼື ໂອນເຂົ້າບັນຊີ APB',modeAssetD:'ເລືອກປະເພດຊັບສິນ ແລະ ບໍລິສັດປະເມີນ',
  assetCategory:'ປະເພດຊັບສິນ',
  payMode:'ຮູບແບບການຊຳລະ',payFull:'ຊຳລະເຕັມຈຳນວນ',payPartial:'ຊຳລະບາງສ່ວນ',
- payFullOnly:'ມີການຊຳລະບາງສ່ວນມາກ່ອນແລ້ວ — ງວດຕໍ່ໄປຕ້ອງຊຳລະຍອດຄົງເຫຼືອທັງໝົດ',
- firmNet:'ບໍລິສັດປະເມີນ',inNet:'In-network',outNet:'Out-of-network (ບໍ່ມີ login — Maker ຄີຍ໌ແທນ)',
+ payFullOnly:'ມີການຊຳລະບາງສ່ວນມາກ່ອນແລ້ວ - ງວດຕໍ່ໄປຕ້ອງຊຳລະຍອດຄົງເຫຼືອທັງໝົດ',
+ firmNet:'ບໍລິສັດປະເມີນ',inNet:'In-network',outNet:'Out-of-network (ບໍ່ມີ login - Maker ຄີຍ໌ແທນ)',
  outNetShort:'Out-of-network',firmNameLbl:'ຊື່ບໍລິສັດປະເມີນ',
  fAmt:'ຈຳນວນເງິນ',fDate:'ວັນທີຊຳລະ',fAcct:'ບັນຊີຮັບເງິນ',fRef:'ເລກທີ່ອ້າງອີງ',fDocs:'ເອກະສານຫຼັກຖານ',
  dcSec1:'ຂໍ້ມູນລາຍການຊຳລະທຶນ',dcSec1Sub:'ເລືອກຮູບແບບງວດໃນຄັ້ງທຳອິດ ລະບົບຈະລັອກຄ່າເມື່ອມີລາຍການທີ່ອະນຸມັດແລ້ວ',
  dcPlan:'ຮູບແບບການຊຳລະທຶນ',dcOnce:'ຊຳລະຄັ້ງດຽວ 100%',dcSplit:'ແບ່ງຊຳລະ 2 ງວດ',
- dcInst:'ງວດທີ່',dcInst1:'ງວດທີ່ 1 — ຂັ້ນຕ່ຳ 30%',dcInst2:'ງວດທີ່ 2 — 70%',dcInstSingle:'ຊຳລະຄັ້ງດຽວ — 100%',
+ dcInst:'ງວດທີ່',dcInst1:'ງວດທີ່ 1 - ຂັ້ນຕ່ຳ 30%',dcInst2:'ງວດທີ່ 2 - 70%',dcInstSingle:'ຊຳລະຄັ້ງດຽວ - 100%',
  dcRecvDate:'ວັນທີ່ຮັບຊຳລະ/ຮັບມອບ',dcMinInst:'ຂັ້ນຕ່ຳຂອງງວດນີ້',dcOfficer:'ເຈົ້າໜ້າທີ່ຜູ້ບັນທຶກ',
  dcSec2:'ລາຍລະອຽດທຶນທີ່ນຳມາຊຳລະ',dcSec2Sub:'ເພີ່ມໄດ້ຫຼາຍລາຍການໃນງວດດຽວ ຮອງຮັບເງິນສົດ ຊັບສິນ ຫຼື ແບບປະສົມ',
  dcCashTransfer:'ເງິນສົດ/ເງິນໂອນ',dcNonCash:'ຊັບສິນທີ່ບໍ່ແມ່ນເງິນສົດ',dcAmtPaid:'ຈຳນວນເງິນທີ່ຊຳລະ',
@@ -492,14 +492,14 @@ lo:{
  checkerNote:'Checker ຢືນຢັນຄວາມຖືກຕ້ອງຂອງຂໍ້ມູນ ແລະ ຫຼັກຖານການເງິນ ແຕ່ຍັງບໍ່ມີສິດລົງລາຍເຊັນ',
  approverNote:'ການອະນຸມັດຕ້ອງຢືນຢັນຕົວຕົນດ້ວຍ MFA ອີກຄັ້ງ ແລ້ວລະບົບຈະລົງລາຍເຊັນດິຈິຕອນ',
  fwdApprover:'ຢືນຢັນ ແລະ ສົ່ງຕໍ່ຜູ້ອະນຸມັດ',signApprove:'ອະນຸມັດ ແລະ ລົງລາຍເຊັນດິຈິຕອນ',sendBack:'ຕີກັບໃຫ້ແກ້ໄຂ',
- reasonIntLbl:'ຄວາມເຫັນພາຍໃນ (ເຈົ້າໜ້າທີ່ເຫັນເທົ່ານັ້ນ)',reasonIntPh:'ບັນທຶກອ້າງອີງພາຍໃນ — ຜູ້ປະກອບການບໍ່ເຫັນ (ບໍ່ບັງຄັບ)',
+ reasonIntLbl:'ຄວາມເຫັນພາຍໃນ (ເຈົ້າໜ້າທີ່ເຫັນເທົ່ານັ້ນ)',reasonIntPh:'ບັນທຶກອ້າງອີງພາຍໃນ - ຜູ້ປະກອບການບໍ່ເຫັນ (ບໍ່ບັງຄັບ)',
  reasonExtLbl:'ຄວາມເຫັນພາຍນອກ (ແຈ້ງໃຫ້ຜູ້ປະກອບການ)',reasonExtPh:'ລະບຸເຫດຜົນທີ່ຕີກັບ...',
  mfaTitle:'ຢືນຢັນຕົວຕົນກ່ອນລົງລາຍເຊັນ',mfaAny:'ພິມຕົວເລກໃດກໍ່ໄດ້ 6 ຕົວ',
  sigNote:'ລາຍເຊັນດິຈິຕອນຈາກ Signature Repository · PKI Certificate ຫມົດອາຍຸ 12/2027',
  doneT:'ອະນຸມັດຮຽບຮ້ອຍ',statusTo:'ສະຖານະປ່ຽນເປັນ',certIssued:'ໃບຢັ້ງຢືນການຝາກທຶນ',issued:'ອອກແລ້ວ',
  notifSent:'ແຈ້ງເຕືອນຜູ້ປະກອບການ',sent:'ສົ່ງແລ້ວ',apiSent:'ສົ່ງຂໍ້ມູນໄປ eBRS / TaxRis',success:'ສຳເລັດ',
  goDash:'ເບິ່ງໜ້າຫຼັກ',goCert:'ເບິ່ງໃບຢັ້ງຢືນ',checkDone:'ກວດສອບຮຽບຮ້ອຍ',
- checkDoneS:'ສົ່ງຕໍ່ຜູ້ອະນຸມັດແລ້ວ — ເຂົ້າດ້ວຍບັນຊີຜູ້ອະນຸມັດເພື່ອລົງລາຍເຊັນ',backDone:'ຕີກັບໃຫ້ແກ້ໄຂແລ້ວ',
+ checkDoneS:'ສົ່ງຕໍ່ຜູ້ອະນຸມັດແລ້ວ - ເຂົ້າດ້ວຍບັນຊີຜູ້ອະນຸມັດເພື່ອລົງລາຍເຊັນ',backDone:'ຕີກັບໃຫ້ແກ້ໄຂແລ້ວ',
  backDoneS:'ງານກັບໄປຫາຜູ້ຍື່ນ · ບັນທຶກເຫດຜົນລົງ Audit Trail ແລ້ວ',apvDone:'ອະນຸມັດ ແລະ ລົງລາຍເຊັນດິຈິຕອນສຳເລັດ',
 
  valTitle:'ຄິວງານປະເມີນຫຼັກຊັບ',valAll:'ງານທັງໝົດ',valDoing:'ກຳລັງປະເມີນ',valWait:'ລໍກວດຮັບຜົນ',valOut:'ລໍອະນຸມັດບໍລິສັດ',
@@ -512,7 +512,7 @@ lo:{
  finTitle:'ການເງິນ ແລະ ຄ່າປັບ',feeTab:'ຄ່າທຳນຽມ',penTab:'ຄ່າປັບ',recTab:'ໃບຮັບເງິນເອເລັກໂຕຣນິກ',
  penDays:'ຈຳນວນວັນທີ່ເກີນ',payStatus:'ສະຖານະຊຳລະ',feeByType:'ຄ່າທຳນຽມຕາມປະເພດວິສາຫະກິດ',
  feeByCapital:'ຄ່າທຳນຽມຕາມມູນຄ່າທຶນຈົດທະບຽນ',feeRange:'ຊ່ວງທຶນຈົດທະບຽນ',feeAmt:'ຄ່າທຳນຽມ',penRate:'ອັດຕາຄ່າປັບຕໍ່ວັນ',
- penRateTBD:'ອັດຕາຄ່າປັບຕໍ່ວັນຍັງບໍ່ມີກຳນົດຈາກ TOR — ລໍຢືນຢັນຈາກລູກຄ້າ',
+ penRateTBD:'ອັດຕາຄ່າປັບຕໍ່ວັນຍັງບໍ່ມີກຳນົດຈາກ TOR - ລໍຢືນຢັນຈາກລູກຄ້າ',
  feeDecreeNote:'ອ້າງອີງຮັຖບັນຍັດເລກທີ 002/ປປທ 17/06/2021 · Parameter-driven ຫ້າມ hard-code',
  receiptNo:'ເລກທີ່ໃບຮັບເງິນ',viewReceipt:'ເບິ່ງໃບຮັບເງິນ',refund:'ຄືນເງິນ',refunded:'ຄືນເງິນແລ້ວ',refundDone:'ຄືນເງິນສຳເລັດ',
  chQR:'QR Code',chMobile:'Mobile Banking',chCounter:'ເຄົາເຕີ APB',payChannel:'ຊ່ອງທາງຊຳລະ',paidAtLbl:'ວັນເວລາທີ່ຊຳລະ',
@@ -540,11 +540,11 @@ lo:{
  kbHelp:'ເປີດ/ປິດໜ້ານີ້',kbNote:'ໃຊ້ໄດ້ທຸກໜ້າ ຍົກເວັ້ນຕອນພິມຂໍ້ມູນ',
  audOwner:'ຜູ້ປະກອບການ',audStaff:'ເຈົ້າໜ້າທີ່',audExternal:'ພາກສ່ວນພາຍນອກ',ebook:'E-book / PDF',video:'Video Tutorial',
  quickRef:'Quick Reference Guide',faq:'FAQ',inAppHelp:'ຄວາມຊ່ວຍເຫຼືອໃນລະບົບ',
- phase2:'ຢູ່ໃນຂອບເຂດງານຈິງ',notDemo:'ຍັງບໍ່ໄດ້ເຮັດໃນເດໂມນີ້ — ຢູ່ໃນຂອບເຂດງານຈິງ'
+ phase2:'ຢູ່ໃນຂອບເຂດງານຈິງ',notDemo:'ຍັງບໍ່ໄດ້ເຮັດໃນເດໂມນີ້ - ຢູ່ໃນຂອບເຂດງານຈິງ'
 },
 en:{
  sysName:'Registration and Capital Monitoring System',sysSub:'ລະບົບຂຶ້ນທະບຽນ ແລະ ຕິດຕາມການປະກອບທຶນ',
- coop:'Capital Contribution Module (Phase 1) — a joint effort of MOIC and the Agricultural Promotion Bank (APB)',
+ coop:'Capital Contribution Module (Phase 1) - a joint effort of MOIC and the Agricultural Promotion Bank (APB)',
  s1:'Registered enterprises',s2:'Trillion LAK registered capital',s3:'Business processes',
  pickAcct:'Sign in',loginHint:'',
  loginUser:'Username',loginPass:'Password',loginNext:'Next',loginBack:'← Back',
@@ -554,14 +554,14 @@ en:{
  codeSentNote:'A verification code has been sent (simulated)',verifyCode:'Verify code',
  newPwLbl:'New password',confirmPwLbl:'Confirm new password',setNewPw:'Set new password',
  pwResetDone:'Password reset successful',pwResetDoneS:'Use your new password next time (simulated)',
- pwMismatch:'Passwords do not match',unknownUser:'User not found — pick one of the suggested accounts',errPw:'Enter your password',
+ pwMismatch:'Passwords do not match',unknownUser:'User not found - pick one of the suggested accounts',errPw:'Enter your password',
  qrVerify:'Verify enterprise status',qrVerifyNote:'No login required · search by name or registration number',
  verifyNotFound:'No matching enterprise found',secNote:'MFA enforced for approvers · 15-minute session timeout · concurrent sessions blocked · every access written to the audit trail',
  kbTitle:'Keyboard shortcuts',close:'Close',cancel:'Cancel',confirm:'Confirm',save:'Save',edit:'Edit',manage:'Manage',
  helpCenter:'User Manual & Helpdesk',profile:'Profile',logout:'Sign out',signedAs:'Signed in as',
  loggedIn:'Signed in',resetDone:'Demo reset',resetDoneS:'Starting again from the sign-in screen',
  clearCache:'Clear cache',clearCacheConfirm:'Clear cache and reset all demo data? You will stay signed in.',
- clearCacheDone:'Cache cleared',clearCacheDoneS:'Demo data has been reset — you are still signed in',
+ clearCacheDone:'Cache cleared',clearCacheDoneS:'Demo data has been reset - you are still signed in',
 
  mMonitor:'Capital Monitoring',mQueue:'Queues',mOther:'Other',
  dash:'Dashboard',ent:'Search Enterprises',declare:'Declare Payment',inspect:'Inspection Queue',approveQ:'Approval Queue',
@@ -569,16 +569,16 @@ en:{
  myCap:'My Capital',notif:'Notifications',markRead:'Mark all as read',noNotif:'No notifications',
  mkTitle:'Counter Workspace (Maker)',mkGreeting:'Hello,',mkNewPay:'New payment entry',
  mkKPending:'Pending review',mkKReturned:'Returned to fix',mkKDueSoon:'Due ≤30 days',mkKOverdue:'Overdue',
- mkReturned:'Returned for correction',mkNoReturned:'Nothing returned',mkPending:'Submitted — awaiting result',mkNoPending:'No submissions yet',
+ mkReturned:'Returned for correction',mkNoReturned:'Nothing returned',mkPending:'Submitted - awaiting result',mkNoPending:'No submissions yet',
  mkDue:'Due soon / Overdue',mkNoDue:'No enterprises due soon',mkFix:'Fix',
  mkBlocked:'Outstanding penalties (payment blocked)',mkBlockedNote:'Collect the penalty in full before a new payment can be recorded',mkStage:'Stage',mkReason:'Reason',mkOverBy:'overdue',
  mkSecWork:'Needs your action',mkSecPortfolio:'Portfolio overview',mkTotalCo:'Total enterprises',mkPaidCo:'Fully paid',mkUnpaidCo:'Not fully paid',mkAwaitApprove:'Awaiting approval',
  ckTitle:'Verification Workspace (Checker)',ckKQueue:'Awaiting my review',ckKValue:'Value in queue',ckKApprover:'Forwarded, at approver',ckKReturned:'Returned to fix',
- ckQueue:'Verification queue',ckNoQueue:'Nothing waiting for verification',ckAtApprover:'Forwarded — awaiting approval',ckNoApprover:'Nothing forwarded yet',
+ ckQueue:'Verification queue',ckNoQueue:'Nothing waiting for verification',ckAtApprover:'Forwarded - awaiting approval',ckNoApprover:'Nothing forwarded yet',
  ckReturned:'Returned for correction (by me)',ckNoReturned:'You have not returned any case',ckReview:'Needs close review',ckOpen:'Review',ckHighVal:'High value',
 
- dashTitle:'Registered Capital Contribution Overview',kPending:'PENDING — awaiting payment',kPartial:'PARTIAL — partly paid',
- kCompleted:'COMPLETED — paid in full',kOverdue:'OVERDUE — past deadline',byStatus:'Enterprises by status',
+ dashTitle:'Registered Capital Contribution Overview',kPending:'PENDING - awaiting payment',kPartial:'PARTIAL - partly paid',
+ kCompleted:'COMPLETED - paid in full',kOverdue:'OVERDUE - past deadline',byStatus:'Enterprises by status',
  heroPaidPct:'Overall paid rate',heroEnts:'Enterprises tracked',
  dueSoon:'Due within the next 30 days',seeAll:'View all',adminUsers:'System users',onlineNow:'Online now',totalUsers:'Total users',
  secCapital:'Capital Overview',secUsers:'System Users Overview',orgBreakdown:'Breakdown by Organization',
@@ -614,15 +614,15 @@ en:{
  modeCashD:'Pay via QR / Mobile Banking or transfer to the APB account',modeAssetD:'Choose the asset category and a valuation firm',
  assetCategory:'Asset category',
  payMode:'Payment type',payFull:'Pay in full',payPartial:'Pay partially',
- payFullOnly:'A partial payment was already made — the next instalment must settle the full outstanding balance',
- firmNet:'Valuation firm',inNet:'In-network',outNet:'Out-of-network (no login — Maker keys it in)',
+ payFullOnly:'A partial payment was already made - the next instalment must settle the full outstanding balance',
+ firmNet:'Valuation firm',inNet:'In-network',outNet:'Out-of-network (no login - Maker keys it in)',
  outNetShort:'Out-of-network',firmNameLbl:'Valuation firm name',
  fAmt:'Amount',fDate:'Payment date',fAcct:'Receiving account',fRef:'Transaction reference',fDocs:'Supporting documents',
  dcSec1:'Payment transaction details',dcSec1Sub:'Choose the instalment plan on the first entry; the system locks it once a transaction is approved',
  dcPlan:'Capital payment plan',dcOnce:'Pay once 100%',dcSplit:'Split into 2 instalments',
- dcInst:'Instalment',dcInst1:'Instalment 1 — min 30%',dcInst2:'Instalment 2 — 70%',dcInstSingle:'Single payment — 100%',
+ dcInst:'Instalment',dcInst1:'Instalment 1 - min 30%',dcInst2:'Instalment 2 - 70%',dcInstSingle:'Single payment - 100%',
  dcRecvDate:'Payment / delivery date',dcMinInst:'Minimum for this instalment',dcOfficer:'Recording officer',
- dcSec2:'Capital being paid',dcSec2Sub:'Add multiple items in one instalment — cash, assets, or a mix',
+ dcSec2:'Capital being paid',dcSec2Sub:'Add multiple items in one instalment - cash, assets, or a mix',
  dcCashTransfer:'Cash / Transfer',dcNonCash:'Non-cash assets',dcAmtPaid:'Amount paid',
  dcChannel:'Payment channel',dcChTransfer:'Transfer to APB account',dcChQR:'QR / Mobile Banking',dcChCounter:'Cash deposit at counter',
  dcRecvAcct:'Receiving account',dcPayer:'Payer / source account name',dcPayerPh:'Enter payer name',
@@ -646,14 +646,14 @@ en:{
  checkerNote:'The Checker confirms the figures and financial evidence but cannot apply a signature.',
  approverNote:'Approval requires MFA again, after which the system applies a digital signature.',
  fwdApprover:'Verify and forward to the approver',signApprove:'Approve and sign digitally',sendBack:'Return for correction',
- reasonIntLbl:'Internal note (staff only)',reasonIntPh:'For internal reference — the business owner will not see this (optional)',
+ reasonIntLbl:'Internal note (staff only)',reasonIntPh:'For internal reference - the business owner will not see this (optional)',
  reasonExtLbl:'External note (shown to the business owner)',reasonExtPh:'State why this is being returned...',
  mfaTitle:'Verify your identity before signing',mfaAny:'Any 6 digits will do in this demo',
  sigNote:'Digital signature from the Signature Repository · PKI certificate valid until 12/2027',
  doneT:'Approved',statusTo:'Status changed to',certIssued:'Capital deposit certificate',issued:'Issued',
  notifSent:'Business owner notified',sent:'Sent',apiSent:'Data pushed to eBRS / TaxRis',success:'Success',
  goDash:'View dashboard',goCert:'View certificate',checkDone:'Verification complete',
- checkDoneS:'Forwarded to the approver — sign in as the approver to apply the signature',backDone:'Returned for correction',
+ checkDoneS:'Forwarded to the approver - sign in as the approver to apply the signature',backDone:'Returned for correction',
  backDoneS:'The case is back with the submitter · reason written to the audit trail',apvDone:'Approved and digitally signed',
 
  valTitle:'Asset Valuation Queue',valAll:'Total jobs',valDoing:'In progress',valWait:'Awaiting acceptance',valOut:'Awaiting firm approval',
@@ -666,12 +666,12 @@ en:{
  finTitle:'Finance & Penalties',feeTab:'Fees',penTab:'Penalties',recTab:'E-Receipts',
  penDays:'Days overdue',payStatus:'Payment status',feeByType:'Fee by enterprise type',
  feeByCapital:'Fee by registered capital',feeRange:'Registered capital band',feeAmt:'Fee',penRate:'Penalty rate per day',
- penRateTBD:'The daily penalty rate is not yet defined in the TOR — pending client confirmation',
+ penRateTBD:'The daily penalty rate is not yet defined in the TOR - pending client confirmation',
  feeDecreeNote:'Per decree 002/ປປທ dated 17 June 2021 · Parameter-driven, never hard-coded',
  receiptNo:'Receipt no.',viewReceipt:'View receipt',refund:'Refund',refunded:'Refunded',refundDone:'Refund completed',
  chQR:'QR Code',chMobile:'Mobile Banking',chCounter:'APB Counter',payChannel:'Payment channel',paidAtLbl:'Paid at',
  autoVerified:'Payment verified automatically by the system',scanNote:'Scan with your banking app or Mobile Banking',
- simulatePaid:'Simulate successful payment',paidOk:'Payment successful',paidOkS:'Verified automatically by the system — no approval needed',
+ simulatePaid:'Simulate successful payment',paidOk:'Payment successful',paidOkS:'Verified automatically by the system - no approval needed',
  myInvoices:'My Invoices',cItem:'Item',noInvoice:'No outstanding invoices',bizPayQR:'Pay by QR',
 
  repTitle:'Reports & Statistics',repPick:'Choose a report',repRange:'Date range',repGen:'Generate report',dFrom:'From',dTo:'To',
@@ -694,7 +694,7 @@ en:{
  kbHelp:'Show/hide this panel',kbNote:'Works everywhere except while typing in a field',
  audOwner:'Business owners',audStaff:'Officers',audExternal:'External parties',ebook:'E-book / PDF',video:'Video tutorial',
  quickRef:'Quick reference guide',faq:'FAQ',inAppHelp:'In-app help',
- phase2:'In the real scope of work',notDemo:'Not built in this demo — included in the real scope of work'
+ phase2:'In the real scope of work',notDemo:'Not built in this demo - included in the real scope of work'
 }};
 var lang='lo';
 function t(k){return (D[lang]&&D[lang][k])||D.en[k]||k}
@@ -707,7 +707,7 @@ var L=function(o){return o?(o[lang]||o.en||o.lo||''):''};
 var parseD=function(s){if(!s)return 0;var p=s.split('/');return Number(p[2]+p[1]+p[0])};
 function lastUpd(e){var d=e.reg;e.hist.forEach(function(h){if(parseD(h.d)>parseD(d))d=h.d});return d}
 var ST={COMPLETED:['kCompleted','p-ok'],PARTIAL:['kPartial','p-warn'],PENDING:['kPending','p-idle'],OVERDUE:['kOverdue','p-bad']};
-function stName(s){return ST[s]?t(ST[s][0]).split(' — ')[1]||t(ST[s][0]):s}
+function stName(s){return ST[s]?t(ST[s][0]).split(' - ')[1]||t(ST[s][0]):s}
 function pill(s){var x=ST[s]||['','p-idle'];return '<span class="pill '+x[1]+'">'+stName(s)+'</span>'}
 var HST={complete:['hstComplete','p-ok'],pending:['hstPending','p-warn'],returned:['hstReturned','p-bad']};
 function histPill(s){var x=HST[s]||HST.complete;return '<span class="pill '+x[1]+'">'+t(x[0])+'</span>'}
@@ -750,7 +750,7 @@ function donutLegend(segs){
     '<span class="ct">'+fmt(s[0])+'</span><span class="pc">'+pc.toFixed(0)+'%</span></div>'}).join('')+'</div>';
 }
 var KPI_ICON={PENDING:'◷',PARTIAL:'◐',COMPLETED:'✓',OVERDUE:'⚠'};
-// Lucide icons (https://lucide.dev/icons) — inner markup, inlined for offline use.
+// Lucide icons (https://lucide.dev/icons) - inner markup, inlined for offline use.
 var LU={
  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
  rotateCcw:'<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
@@ -849,7 +849,7 @@ function seedEnts(){return[
   insts:[{no:1,amt:228000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 20/09/2025',en:'Confirmed 20/09/2025'}},
          {no:2,amt:532000000,state:'over',meta:{lo:'ເກີນກຳນົດ 53 ວັນ · ຄ່າປັບສະສົມ <b style="color:var(--bad)">15,960,000 ກີບ</b>',en:'53 days overdue · accrued penalty <b style="color:var(--bad)">15,960,000 LAK</b>'}}],
   hist:[{d:'20/09/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:228000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter',st:'complete'},
-        {d:'13/06/2026',a:{lo:'ເຂົ້າສະຖານະເກີນກຳນົດ (ອັດຕະໂນມັດ)',en:'Flagged overdue (automatic)'},m:'',v:0,u:'System',f:'—',ch:'',st:'complete'}]},
+        {d:'13/06/2026',a:{lo:'ເຂົ້າສະຖານະເກີນກຳນົດ (ອັດຕະໂນມັດ)',en:'Flagged overdue (automatic)'},m:'',v:0,u:'System',f:'-',ch:'',st:'complete'}]},
  {id:'ELN-2025-1005',name:'ຫຼວງພະບາງ ທ່ອງທ່ຽວ',nameEn:'Luang Prabang Tourism',rep:'ທ. ບຸນເຮັງ ວິໄລວົງ',
   type:{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},prov:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},isic:'7911',
   reg:'31/08/2025',due:'31/08/2026',cap:180000000,paid:180000000,status:'COMPLETED',acct:'APB 044-2-77410-5',taxris:'207450441',
@@ -876,7 +876,7 @@ function seedInv(){return[
 ];}
 
 // Mock queue: two submissions the Maker keyed in, one waiting on the Checker
-// and one already forwarded to the Approver — so the Maker workspace opens
+// and one already forwarded to the Approver - so the Maker workspace opens
 // with live figures in every card.
 function seedTasks(){
   function E(id){return S.ents.filter(function(x){return x.id===id})[0]}
@@ -893,8 +893,8 @@ function seedTasks(){
 // Mock a case the Checker bounced back so the Maker has rework waiting.
 function seedReturned(){
   var e=S.ents.filter(function(x){return x.id==='ELN-2025-1006'})[0];
-  if(e)e.hist.push({d:'03/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ — ຫຼັກຖານການໂອນບໍ່ຊັດເຈນ',en:'Returned for correction — transfer evidence unclear'},
-    m:'cash',v:0,u:'ນ. ສີວິໄລ',f:'—',ch:'',st:'returned'});
+  if(e)e.hist.push({d:'03/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ - ຫຼັກຖານການໂອນບໍ່ຊັດເຈນ',en:'Returned for correction - transfer evidence unclear'},
+    m:'cash',v:0,u:'ນ. ສີວິໄລ',f:'-',ch:'',st:'returned'});
 }
 
 var VALJOBS=[
@@ -968,16 +968,16 @@ var PROV_META={
  'ຄຳມ່ວນ':{lat:17.4085,lng:104.8078,district:{lo:'ທ່າແຂກ',en:'Thakhek'},village:{lo:'ບ້ານທ່າແຂກ',en:'Ban Thakhek'}}
 };
 
-/* TOR §5.1/5.2 real fee schedule — decree 002/ປປທ 17/06/2021 */
+/* TOR §5.1/5.2 real fee schedule - decree 002/ປປທ 17/06/2021 */
 var FEES={
  byType:[[{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},40000],[{lo:'ບໍລິສັດຈຳກັດຜູ້ດຽວ',en:'Single-member limited company'},80000],
   [{lo:'ວິສາຫະກິດຫຸ້ນສ່ວນສາມັນ',en:'General partnership'},100000],[{lo:'ວິສາຫະກິດຫຸ້ນສ່ວນຈຳກັດ',en:'Limited partnership'},100000],
   [{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},100000],[{lo:'ບໍລິສັດມະຫາຊົນ',en:'Public company'},100000],
   [{lo:'ວິສາຫະກິດຂອງລັດ',en:'State enterprise'},100000],[{lo:'ວິສາຫະກິດປະສົມ',en:'Mixed enterprise'},100000]],
- byCapital:[['≤ 1,000,000',0],['1,000,001 – 10,000,000',20000],['10,000,001 – 20,000,000',50000],
-  ['20,000,001 – 50,000,000',100000],['50,000,001 – 100,000,000',300000],['100,000,001 – 400,000,000',500000],
-  ['400,000,001 – 1,000,000,000',1000000],['1,000,000,001 – 10,000,000,000',2600000],
-  ['10,000,000,001 – 20,000,000,000',4000000],['> 20,000,000,000',6000000]]
+ byCapital:[['≤ 1,000,000',0],['1,000,001 - 10,000,000',20000],['10,000,001 - 20,000,000',50000],
+  ['20,000,001 - 50,000,000',100000],['50,000,001 - 100,000,000',300000],['100,000,001 - 400,000,000',500000],
+  ['400,000,001 - 1,000,000,000',1000000],['1,000,000,001 - 10,000,000,000',2600000],
+  ['10,000,000,001 - 20,000,000,000',4000000],['> 20,000,000,000',6000000]]
 };
 
 var MOCK_MONTHS={lo:['ກ.ຍ.','ຕ.ລ.','ພ.ຈ.','ທ.ວ.','ມ.ກ.','ກ.ພ.','ມີ.ນ.','ເມ.ສ.','ພ.ພ.','ມິ.ຖ.','ກ.ລ.','ສ.ຫ.'],
@@ -1098,7 +1098,7 @@ function shell(title,crumb,inner,right){
 function vLogin(){
   var step=S.loginStep||'cred';
   var matched=matchAcct();
-  var dl=ACCTS.map(function(a){return '<option value="'+a.user+'" label="'+a.nm+' — '+(a.rl[lang]||a.rl.en)+'">';}).join('');
+  var dl=ACCTS.map(function(a){return '<option value="'+a.user+'" label="'+a.nm+' - '+(a.rl[lang]||a.rl.en)+'">';}).join('');
   var credBody=
    '<h2>'+t('pickAcct')+'</h2><p>'+t('loginHint')+'</p>'+
    '<div class="field"><label>'+t('loginUser')+'</label>'+
@@ -1116,7 +1116,7 @@ function vLogin(){
    '<div style="margin-top:12px;font-size:11px;color:var(--m);cursor:pointer" data-backcred="1">'+t('loginBack')+'</div>';
   return '<div class="login"><div class="lf"><div class="sealrow"><img class="moic-logo" src="'+LOGO+'" alt="MOIC"><div class="seal">ລ</div></div>'+
   '<h1>'+t('sysName')+'<br><span>RCMS</span></h1>'+
-  '<div class="sub">'+t('sysSub')+' — '+t('coop')+'</div>'+
+  '<div class="sub">'+t('sysSub')+' - '+t('coop')+'</div>'+
   '<div class="stat"><div><div class="n num">218,622</div><div class="l">'+t('s1')+'</div></div>'+
   '<div><div class="n num">1.15</div><div class="l">'+t('s2')+'</div></div>'+
   '<div><div class="n num">5</div><div class="l">'+t('s3')+'</div></div></div>'+
@@ -1125,7 +1125,7 @@ function vLogin(){
   '<span'+(lang==='lo'?' class="on"':'')+' data-lang="lo">ລາວ</span>'+
   '<span'+(lang==='en'?' class="on"':'')+' data-lang="en">EN</span></div>'+
   (step==='otp'?otpBody:credBody)+
-  '<div class="note">'+t('secNote')+'<br><br><kbd>Alt</kbd> + <kbd>/</kbd> — '+t('kbTitle')+'</div></div></div>';
+  '<div class="note">'+t('secNote')+'<br><br><kbd>Alt</kbd> + <kbd>/</kbd> - '+t('kbTitle')+'</div></div></div>';
 }
 
 function counts(){
@@ -1198,7 +1198,7 @@ function vMakerDash(){
      '<td class="num">'+e.due+'</td>'+
      '<td class="num" style="color:'+(over?'var(--bad)':'var(--ink2)')+'">'+(over?t('mkOverBy')+' '+Math.abs(d):d)+' '+(lang==='lo'?'ວັນ':'days')+'</td>'+
      '<td class="r num">'+fmt(e.cap-e.paid)+'</td>'+
-     '<td class="r num" style="color:'+(pen?'var(--bad)':'var(--muted)')+'">'+(pen?fmt(pen):'—')+'</td>'+
+     '<td class="r num" style="color:'+(pen?'var(--bad)':'var(--muted)')+'">'+(pen?fmt(pen):'-')+'</td>'+
      '<td class="r" style="padding-right:16px">'+pill(e.status)+'</td></tr>'}).join('');
   var dueCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('mkDue')+'</h3>'+
     '<span class="more" data-nav="ent">'+t('seeAll')+' →</span></div>'+
@@ -1388,8 +1388,8 @@ function vOwnerDash(){
 
 function vList(){
   var c=counts(),tot=S.ents.length,adv=S.adv;
-  var stOpts=[['ALL',t('allSt'),tot],['PENDING',t('kPending').split(' — ')[1],c.PENDING],['PARTIAL',t('kPartial').split(' — ')[1],c.PARTIAL],
-    ['COMPLETED',t('kCompleted').split(' — ')[1],c.COMPLETED],['OVERDUE',t('kOverdue').split(' — ')[1],c.OVERDUE]]
+  var stOpts=[['ALL',t('allSt'),tot],['PENDING',t('kPending').split(' - ')[1],c.PENDING],['PARTIAL',t('kPartial').split(' - ')[1],c.PARTIAL],
+    ['COMPLETED',t('kCompleted').split(' - ')[1],c.COMPLETED],['OVERDUE',t('kOverdue').split(' - ')[1],c.OVERDUE]]
     .map(function(o){return '<option value="'+o[0]+'"'+(S.tab===o[0]?' selected':'')+'>'+o[1]+' ('+fmt(o[2])+')</option>'}).join('');
   var list=S.ents.filter(function(e){
     if(S.tab!=='ALL'&&e.status!==S.tab)return false;
@@ -1422,7 +1422,7 @@ function vList(){
    '<span class="more" data-clearadv="1">'+t('clearCriteria')+'</span></div>'+
    '<div class="c" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 16px">'+
    '<div class="field"><label>'+t('fltRegNo')+'</label><input id="advRegNo" value="'+esc(adv.regNo)+'"></div>'+
-   '<div class="field"><label>'+t('fltEtype')+'</label><select id="advEtype"><option value="">—</option>'+etypeOpts+'</select></div>'+
+   '<div class="field"><label>'+t('fltEtype')+'</label><select id="advEtype"><option value="">-</option>'+etypeOpts+'</select></div>'+
    '<div class="field"><label>'+t('fltNameLo')+'</label><input id="advNameLo" value="'+esc(adv.nameLo)+'"></div>'+
    '<div class="field"><label>'+t('fltNameEn')+'</label><input id="advNameEn" value="'+esc(adv.nameEn)+'"></div>'+
    '<div class="field"><label>'+t('cProv')+'</label><select id="advProv"><option value="">'+t('allProv')+'</option>'+provOpts+'</select></div>'+
@@ -1450,7 +1450,7 @@ function regDetailCard(e){
   var finVal='<span style="color:'+(unpaidInvs.length?'var(--bad)':'var(--ok)')+'">'+
     (unpaidInvs.length?(unpaidInvs.length+' · '+fmt(unpaidAmt)+' LAK'):t('stPaid'))+'</span>';
   var rows=[
-    [t('regNo'),e.id],[t('nameLoLbl'),e.name],[t('nameEnLbl'),e.nameEn||'—'],[t('repLbl'),e.rep||'—'],
+    [t('regNo'),e.id],[t('nameLoLbl'),e.name],[t('nameEnLbl'),e.nameEn||'-'],[t('repLbl'),e.rep||'-'],
     [t('cRegD'),e.reg],[t('regStatusLbl'),t('operating')],[t('entType'),L(e.type)],
     [t('cProv'),L(e.prov)],[t('districtLbl'),district],[t('villageLbl'),village],
     ['ISIC',e.isic],[t('acctNo'),e.acct],
@@ -1463,7 +1463,7 @@ function regDetailCard(e){
     '<div class="c" style="display:flex;gap:16px;flex-wrap:wrap">'+
     '<div class="reglist">'+rows.map(function(r,i){return '<div class="regrow"><span class="k">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>'}).join('')+'</div>'+
     '<div class="regmap"><div id="regmap" data-lat="'+lat+'" data-lng="'+lng+'" style="width:100%;flex:1;min-height:260px;border-radius:8px;border:1px solid var(--line)"></div>'+
-    '<div class="cap">'+t('mapCaption')+' — '+lat.toFixed(4)+', '+lng.toFixed(4)+'</div></div>'+
+    '<div class="cap">'+t('mapCaption')+' - '+lat.toFixed(4)+', '+lng.toFixed(4)+'</div></div>'+
     '</div></div>';
 }
 var regMapInst=null;
@@ -1480,9 +1480,9 @@ function mountRegMap(){
 function docsErrMsg(f){
   if(f.mode==='asset'){
     if(!f.files.some(function(x){return x.k==='valReport'}))
-      return t('errFile')+' — '+t('reqLbl')+': '+L(MASTER.doctype[3]);
+      return t('errFile')+' - '+t('reqLbl')+': '+L(MASTER.doctype[3]);
   }else if(!f.files.length){
-    return t('errFile')+' — '+t('anyOneLbl')+': '+MASTER.doctype.slice(0,3).map(L).join(' / ');
+    return t('errFile')+' - '+t('anyOneLbl')+': '+MASTER.doctype.slice(0,3).map(L).join(' / ');
   }
   return '';
 }
@@ -1500,7 +1500,7 @@ function valDocMocks(jobId){
   return {valReport:'valuation-report-'+jobId+'.pdf',assetPhoto:'asset-photos.pdf',siteInspect:'site-inspection.jpg'};
 }
 function valDocsErrMsg(f){
-  if(!f.files.length)return t('errFile')+' — '+t('anyOneLbl')+': '+valDocTypeOptions().map(function(o){return o.lbl}).join(' / ');
+  if(!f.files.length)return t('errFile')+' - '+t('anyOneLbl')+': '+valDocTypeOptions().map(function(o){return o.lbl}).join(' / ');
   return '';
 }
 function wireDropTyped(el,f,opts,mocks){
@@ -1531,15 +1531,15 @@ function historySection(e){
     var clickable=!!h.v;
     return '<tr'+(clickable?' data-histrow="'+e.id+'|'+idx+'"':'')+'><td style="padding-left:16px" class="num">'+h.d+'</td><td>'+L(h.a)+
     (h.internal?'<div style="font-size:10px;color:var(--muted);margin-top:2px"><i style="font-style:normal;color:var(--m)">'+t('reasonIntLbl')+':</i> '+esc(h.internal)+'</div>':'')+'</td>'+
-    '<td>'+(h.m?modeLbl(h.m):'—')+'</td>'+
-    '<td class="r num">'+(h.v?fmt(h.v):'—')+'</td><td>'+histPill(h.st)+'</td><td>'+h.u+'</td>'+
+    '<td>'+(h.m?modeLbl(h.m):'-')+'</td>'+
+    '<td class="r num">'+(h.v?fmt(h.v):'-')+'</td><td>'+histPill(h.st)+'</td><td>'+h.u+'</td>'+
     '<td class="r" style="padding-right:16px">'+(h.v&&e.status==='COMPLETED'?'<span style="color:var(--m);cursor:pointer" data-cert="1">'+t('dlPdf')+'</span>':h.f)+'</td></tr>'}).join('')
     :'<tr><td colspan="7" style="padding:24px;text-align:center;color:var(--muted)">'+t('noHistory')+'</td></tr>';
   return '<div class="card"><div class="h"><h3>'+t('auditTrail')+'</h3></div>'+
     '<div class="c" style="padding:12px 0 0"><table><thead><tr><th style="padding-left:16px">'+t('cDate')+'</th><th>'+t('cAct')+'</th>'+
     '<th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+' (LAK)</th><th>'+t('cStatus')+'</th><th>'+t('cBy')+'</th>'+
     '<th class="r" style="padding-right:16px">'+t('cDoc')+'</th></tr></thead><tbody>'+hist+'</tbody></table>'+
-    '<div class="audit" style="margin:14px 16px 16px"><b>'+t('auditTrail')+'</b> — '+t('auditNote')+'</div></div></div>';
+    '<div class="audit" style="margin:14px 16px 16px"><b>'+t('auditTrail')+'</b> - '+t('auditNote')+'</div></div></div>';
 }
 function vTxDetail(){
   var tx=S.tx;if(!tx)return vList();
@@ -1552,7 +1552,7 @@ function vTxDetail(){
   var txCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('reqDetail')+'</h3></div><div class="c"><div class="kv">'+
    '<div><span class="k">'+t('cDate')+'</span><span class="v num">'+h.d+'</span></div>'+
    '<div><span class="k">'+t('cAct')+'</span><span class="v">'+L(h.a)+'</span></div>'+
-   '<div><span class="k">'+t('cMode')+'</span><span class="v">'+(h.m?modeLbl(h.m):'—')+'</span></div>'+
+   '<div><span class="k">'+t('cMode')+'</span><span class="v">'+(h.m?modeLbl(h.m):'-')+'</span></div>'+
    '<div><span class="k">'+t('cAmt')+'</span><span class="v num">'+fmt(h.v)+' LAK</span></div>'+
    '<div><span class="k">'+t('cStatus')+'</span><span class="v">'+histPill(h.st)+'</span></div>'+
    '<div><span class="k">'+t('cBy')+'</span><span class="v">'+h.u+'</span></div>'+
@@ -1571,7 +1571,7 @@ function vTxDetail(){
    '<div class="acts" style="margin-top:14px"><button class="btn ghost" data-soon="'+t('viewReport')+'">'+t('viewReport')+'</button></div>'+
    '</div></div>':'';
   var docPool=h.m==='asset'?['valuation-report.pdf','asset-photos.pdf','site-inspection.jpg']:['bank-slip.pdf','confirmation-letter.pdf','deposit-receipt.jpg'];
-  var docCount=h.f&&h.f!=='—'?Number(h.f):0;
+  var docCount=h.f&&h.f!=='-'?Number(h.f):0;
   var mockDocs=docCount?docPool.slice(0,Math.min(docCount,docPool.length)):[];
   var filesCard=mockDocs.length?'<div class="card"><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+
    mockDocs.map(function(f){return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
@@ -1601,7 +1601,7 @@ function vDetail(){
   var blocked=(e.status!=='COMPLETED'&&S.role==='maker'&&!pend&&unpaidPen.length);
 
   var banner=pend?'<div class="alert" style="background:var(--m-lite);border-color:#C8DDEC;border-left-color:var(--m);margin-bottom:14px">'+
-    '<div><div class="t" style="color:var(--m)">'+t('hasPending')+' — '+pend.ref+' · '+fmt(pend.amt)+' LAK</div>'+
+    '<div><div class="t" style="color:var(--m)">'+t('hasPending')+' - '+pend.ref+' · '+fmt(pend.amt)+' LAK</div>'+
     '<div class="s" style="color:var(--ink2)">'+t('waitingOn')+' '+(pend.stage==='checker'?t('stageChecker'):t('stageApprover'))+'</div></div></div>':'';
 
   var capCard='<div class="card" style="display:flex;flex-direction:column;height:100%">'+
@@ -1714,7 +1714,7 @@ function vDeclare(){
       :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div>'+
     (f.docErr?'<div class="hint err" style="margin-top:8px">'+f.docErr+'</div>':'')+'</div>')+
   '</div>'+
-  '<div class="audit"><b>'+t('auditTrail')+'</b> — '+who().n+' · 04/08/2026 09:47</div>'+
+  '<div class="audit"><b>'+t('auditTrail')+'</b> - '+who().n+' · 04/08/2026 09:47</div>'+
   '<div class="acts" style="margin-top:16px"><button class="btn" id="submitDeclare">'+t('submitDeclare')+'</button>'+
   '<button class="btn ghost" data-nav="'+(isOwner?'dash':'ent')+'">'+t('cancel')+'</button></div></div></div>'+
   '</div>';
@@ -1747,7 +1747,7 @@ function vTask(){
     return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);'+
     'border-radius:7px;margin-bottom:6px"><span style="color:var(--bad)">▤</span>'+
     '<span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
-    '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join(''):'—';
+    '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join(''):'-';
   var inner=
   stepCircles([[cls(1),t('channelOnline').split(' (')[0]],[cls(2),t('stageChecker')],[cls(3),t('stageApprover')]])+
   regDetailCard(e)+
@@ -1818,7 +1818,7 @@ function vValJobDetail(){
     return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
     '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
     '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div>'
-    :'<div class="empty">—</div>')+'</div></div>';
+    :'<div class="empty">-</div>')+'</div></div>';
   var formCard=canSubmit?'<div class="card"><div class="h"><h3>'+t('submitJob')+'</h3></div><div class="c">'+
    '<div class="field"><label>'+t('valDeclared')+' (LAK)</label>'+
    '<input class="big num" id="fjVal" value="'+(S.valForm.val!=null?S.valForm.val:j.amt)+'"></div>'+
@@ -1870,7 +1870,7 @@ function vFin(){
   if(tab==='pen'){
     var realPen=S.invs.filter(function(x){return x.kind==='penalty'}).map(function(x){
       var ent=S.ents.filter(function(y){return y.id===x.ent})[0];
-      return [ent?ent.name:x.ent,x.ent,'—',x.amt,x.status]});
+      return [ent?ent.name:x.ent,x.ent,'-',x.amt,x.status]});
     var penMock=[['ຈຳປາສັກ ອາຫານ ຈຳກັດ','ELN-2024-1004',53,15960000,'UNPAID']];
     var pen=realPen.concat(penMock);
     body='<div class="card"><div class="c" style="padding:0"><table><thead><tr>'+
@@ -1912,7 +1912,7 @@ function vFin(){
      '<td class="r" style="padding-right:16px"><span class="pill '+(x[3]?'p-ok':'p-warn')+'">'+(x[3]?t('stPaid'):t('stDue'))+'</span></td></tr>'}).join('')+
      '</tbody></table></div></div>';
   }
-  return shell(t('finTitle')+' — '+t(subLbl),'',body);
+  return shell(t('finTitle')+' - '+t(subLbl),'',body);
 }
 
 function vRep(){
@@ -1936,7 +1936,7 @@ function vRep(){
    reps.map(function(r,i){return '<div class="acct'+(i===1?' on':'')+'" style="margin:0" data-soon="'+esc(L(r))+'">'+
    '<div class="av">◱</div><div><div class="nm">'+L(r)+'</div></div></div>'}).join('')+'</div>'+
    '<div style="display:flex;gap:14px;align-items:flex-end;margin-top:18px;flex-wrap:wrap">'+
-   '<div class="field" style="flex:0 1 190px;margin:0"><label>'+t('repRange')+' — '+t('dFrom')+'</label><input type="date" value="2026-01-01"></div>'+
+   '<div class="field" style="flex:0 1 190px;margin:0"><label>'+t('repRange')+' - '+t('dFrom')+'</label><input type="date" value="2026-01-01"></div>'+
    '<div class="field" style="flex:0 1 190px;margin:0"><label>'+t('dTo')+'</label><input type="date" value="2026-08-04"></div>'+
    '<div class="acts"><button class="btn" data-soon="'+t('repGen')+'">'+t('repGen')+'</button>'+
    '<button class="btn ghost" data-soon="'+t('export')+'">'+t('export')+'</button></div></div></div></div>';
@@ -2009,7 +2009,7 @@ function vSet(){
      '<td><span class="pill p-ok">'+t('success')+'</span></td><td class="r num" style="padding-right:16px">'+l[4]+'</td></tr>'}).join('')+
      '</tbody></table><div class="audit" style="margin:14px 16px 16px">'+t('apiNote')+'</div></div></div>';
   }
-  return shell(t('setTitle')+' — '+t(subLbl),'',body);
+  return shell(t('setTitle')+' - '+t(subLbl),'',body);
 }
 
 function vPortal(){
@@ -2191,7 +2191,7 @@ function vModal(){
        '<div class="acts"><button class="btn" style="flex:1" id="doSendCode">'+t('sendCode')+'</button>'+
        '<button class="btn ghost" data-close>'+t('cancel')+'</button></div>';
     } else if(fstep==='otp'){
-      fbody='<p>'+t('codeSentNote')+(m.idv?' — '+esc(m.idv):'')+'</p>'+
+      fbody='<p>'+t('codeSentNote')+(m.idv?' - '+esc(m.idv):'')+'</p>'+
        '<div class="otp" id="otp3">'+[0,1,2,3,4,5].map(function(){return '<input maxlength="1" size="1" inputmode="numeric">'}).join('')+'</div>'+
        '<div class="acts" style="margin-top:8px"><button class="btn" style="flex:1" id="doVerifyCode" disabled>'+t('verifyCode')+'</button>'+
        '<button class="btn ghost" data-close>'+t('cancel')+'</button></div>';
@@ -2338,7 +2338,7 @@ function vMobile(){
   '<div class="v num" style="color:var(--'+(remain>0?'warn':'ok')+')">'+fmt(remain>0?remain:e.cap)+' LAK</div>'+
   '<div style="font-size:10px;color:var(--muted)">'+t('cPaid')+' '+pct+'% · '+t('cDue')+' '+e.due+'</div></div>'+
   '<div class="mrow"><span>'+t('cStatus')+'</span>'+pill(e.status)+'</div>'+
-  '<div class="mrow"><span>'+t('bizVal')+'</span><span style="color:var(--muted)">—</span></div>'+
+  '<div class="mrow"><span>'+t('bizVal')+'</span><span style="color:var(--muted)">-</span></div>'+
   '<div class="mrow" style="border:0"><span>'+t('bizReg')+'</span><span style="color:var(--m)">'+t('bizDl')+'</span></div>'+
   (unpaid?'<div class="pcard" style="border-color:#F0CBC6;background:var(--badbg);margin-top:12px">'+
     '<div class="l">'+L(unpaid.title)+'</div><div class="v num" style="color:var(--bad)">'+fmt(unpaid.amt)+' LAK</div>'+
@@ -2505,7 +2505,7 @@ function bind(){
     if(pendingOf(e.id)){toast(t('hasPending'),t('hasPendingS'));return go(S.role==='owner'?'dash':'detail')}
     var v=Number(String(S.form.amt).replace(/[^0-9]/g,''));
     if(!v){S.form.err=t('errAmt');return render()}
-    if(v>e.cap-e.paid){S.form.err=t('errOver')+' — '+fmt(e.cap-e.paid);return render()}
+    if(v>e.cap-e.paid){S.form.err=t('errOver')+' - '+fmt(e.cap-e.paid);return render()}
     if(S.form.mode==='asset'){
       var reqK=ASSET_REQ[S.form.assetCat],reqV=S.form.assetVals&&S.form.assetVals[reqK];
       if(!reqV||!reqV.trim()){S.form.err=t('errAssetField');return render()}
@@ -2532,7 +2532,7 @@ function bind(){
   document.querySelectorAll('[data-fwd]').forEach(function(b){b.onclick=function(){
     var x=S.tasks[S.taskI],e=x.ent,who1=who().n;x.stage='approve';
     x.trail.push({who:who1+' (Checker)',act:{lo:'ກວດສອບແລ້ວ ສົ່ງຕໍ່ຜູ້ອະນຸມັດ',en:'Verified and sent to the approver'},at:'04/08/2026 10:04'});
-    e.hist.push({d:'04/08/2026',a:{lo:'ກວດສອບໂດຍ Checker',en:'Verified by the Checker'},m:'',v:0,u:who1,f:'—',ch:'',st:'complete'});
+    e.hist.push({d:'04/08/2026',a:{lo:'ກວດສອບໂດຍ Checker',en:'Verified by the Checker'},m:'',v:0,u:who1,f:'-',ch:'',st:'complete'});
     toast(t('checkDone'),t('checkDoneS'),true);go('inspect')}});
   var riTxt=$('#reasonIntTxt');if(riTxt)riTxt.oninput=function(){S.backReasonInt=riTxt.value};
   var reTxt=$('#reasonExtTxt');if(reTxt)reTxt.oninput=function(){S.backReasonExt=reTxt.value};
@@ -2542,8 +2542,8 @@ function bind(){
     if(!(S.backReasonExt||'').trim()){S.modal.err=t('errRequired');return render()}
     var x=S.tasks[S.taskI],e=x.ent,extReason=S.backReasonExt.trim(),intNote=(S.backReasonInt||'').trim(),wasChecker=x.stage==='checker';
     if(e.insts[1]){e.insts[1].state='due';e.insts[1].meta={lo:'ຖືກຕີກັບໃຫ້ແກ້ໄຂ 04/08/2026',en:'Returned for correction on 04/08/2026'}}
-    e.hist.push({d:'04/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ — '+extReason,en:'Returned for correction — '+extReason},
-      m:'',v:0,u:who().n,f:'—',ch:'',internal:intNote,st:'returned'});
+    e.hist.push({d:'04/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ - '+extReason,en:'Returned for correction - '+extReason},
+      m:'',v:0,u:who().n,f:'-',ch:'',internal:intNote,st:'returned'});
     S.tasks.splice(S.taskI,1);S.backReasonInt='';S.backReasonExt='';S.modal=null;toast(t('backDone'),t('backDoneS'));
     go(wasChecker?'inspect':'approveQ')}});
 
