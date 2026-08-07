@@ -794,7 +794,8 @@ var LU={
  clipboardCheck:'<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
  banknote:'<rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',
  send:'<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>',
- signature:'<path d="m21 17-2.156-1.868A.5.5 0 0 0 18 15.5v.5a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1c0-2.545-3.991-3.97-8.5-4a1 1 0 0 0 0 5c4.153 0 4.745-11.295 5.708-13.5a2.5 2.5 0 1 1 3.31 3.284"/><path d="M3 21h18"/>'
+ signature:'<path d="m21 17-2.156-1.868A.5.5 0 0 0 18 15.5v.5a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1c0-2.545-3.991-3.97-8.5-4a1 1 0 0 0 0 5c4.153 0 4.745-11.295 5.708-13.5a2.5 2.5 0 1 1 3.31 3.284"/><path d="M3 21h18"/>',
+ scale:'<path d="M12 3v18"/><path d="m19 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1"/><path d="m5 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M7 21h10"/>'
 };
 function luSvg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(LU[name]||'')+'</svg>';}
 // Framed KPI card (icon top-right, big value, optional delta chip + subtext).
@@ -1977,11 +1978,13 @@ function vValQueue(){
     '<td class="r num">'+fmt(j.amt)+'</td><td class="r" style="padding-right:16px"><span class="pill '+lbl[1]+'">'+t(lbl[0])+'</span></td></tr>'}).join('');
   var counts={doing:0,wait:0,outapprove:0,accepted:0};
   S.valjobs.forEach(function(j){counts[j.status]++});
-  var inner='<div class="kpis">'+
-   '<div class="kpi"><div class="k">'+t('valAll')+'</div><div class="v num">'+S.valjobs.length+'</div></div>'+
-   '<div class="kpi warn"><div class="k">'+t('valDoing')+'</div><div class="v num">'+counts.doing+'</div></div>'+
-   '<div class="kpi"><div class="k">'+t('valWait')+'</div><div class="v num">'+counts.wait+'</div></div>'+
-   '<div class="kpi bad"><div class="k">'+t('valOut')+'</div><div class="v num">'+counts.outapprove+'</div></div></div>'+
+  var LO=lang==='lo';
+  var inner='<div class="kpiframe"><div class="kpis">'+
+   kpiTile('','scale',t('valAll'),fmt(S.valjobs.length),LO?'ໃນຄິວປະເມີນ':'In the valuation queue')+
+   kpiTile('warn','clock',t('valDoing'),fmt(counts.doing),LO?'ບໍລິສັດກຳລັງເຮັດ':'Firms working on it')+
+   kpiTile('','hourglass',t('valWait'),fmt(counts.wait),LO?'ລໍຢືນຢັນຜົນ':'Awaiting acceptance')+
+   kpiTile('bad','triangleAlert',t('valOut'),fmt(counts.outapprove),LO?'ຕ້ອງອະນຸມັດກ່ອນ':'Approve the firm first')+
+   '</div></div>'+
    '<div class="card"><div class="h"><h3>'+t('valTitle')+'</h3></div>'+
    '<div class="c" style="padding:12px 0 0"><table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th>'+
    '<th>'+t('cEnt')+' / '+t('valAsset')+'</th><th>'+t('valFirm')+'</th><th>'+t('valFirmType')+'</th>'+
