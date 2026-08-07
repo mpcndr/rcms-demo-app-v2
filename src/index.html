@@ -459,6 +459,9 @@ lo:{
  heroPaidPct:'ອັດຕາການຊຳລະລວມ',heroEnts:'ວິສາຫະກິດທັງໝົດ',
  dueSoon:'ໃກ້ຄົບກຳນົດພາຍໃນ 30 ວັນ',seeAll:'ເບິ່ງທັງໝົດ',adminUsers:'ຜູ້ໃຊ້ລະບົບ',onlineNow:'ອອນລາຍຕອນນີ້',totalUsers:'ຜູ້ໃຊ້ທັງໝົດ',
  secCapital:'ພາບລວມທຶນຈົດທະບຽນ',secUsers:'ພາບລວມຜູ້ໃຊ້ລະບົບ',orgBreakdown:'ຈຳແນກຕາມໜ່ວຍງານ',
+ adminDashTitle:'ພາບລວມລະບົບ',secSysHealth:'ສະຖານະລະບົບ',secIntegration:'ການເຊື່ອມຕໍ່ & API',secConfig:'ການຕັ້ງຄ່າລະບົບ',secAudit:'ບັນທຶກການເຂົ້າໃຊ້ & ຄວາມປອດໄພ',
+ usersByRole:'ຜູ້ໃຊ້ຕາມສິດ',apiUp:'ການເຊື່ອມຕໍ່ອອນລາຍ',apiFail:'ການເອີ້ນ API ລົ້ມເຫຼວ',apiEndpoint:'ປາຍທາງ',apiRate:'ອັດຕາສຳເລັດ',apiLast:'ຊິງຄ໌ລ່າສຸດ',
+ cfgFee:'ຕາຕະລາງຄ່າທຳນຽມ',cfgMaster:'ຂໍ້ມູນຫຼັກ',audUser:'ຜູ້ໃຊ້',audAction:'ການກະທຳ',audCat:'ໝວດ',
 
  cEnt:'ວິສາຫະກິດ',cType:'ປະເພດ',cProv:'ແຂວງ',cRegD:'ວັນຈົດທະບຽນ',cDue:'ຄົບກຳນົດ',cCap:'ທຶນຈົດທະບຽນ',
  cPaid:'ຊຳລະແລ້ວ',cLeft:'ຍັງເຫຼືອ',cStatus:'ສະຖານະ',cDate:'ວັນທີ',cAct:'ລາຍການ',cMode:'ຊ່ອງທາງ',
@@ -618,6 +621,9 @@ en:{
  heroPaidPct:'Overall paid rate',heroEnts:'Enterprises tracked',
  dueSoon:'Due within the next 30 days',seeAll:'View all',adminUsers:'System users',onlineNow:'Online now',totalUsers:'Total users',
  secCapital:'Capital Overview',secUsers:'System Users Overview',orgBreakdown:'Breakdown by Organization',
+ adminDashTitle:'System Overview',secSysHealth:'System Health',secIntegration:'Integrations & API',secConfig:'System Configuration',secAudit:'Audit & Security Log',
+ usersByRole:'Users by Role',apiUp:'Integrations online',apiFail:'Failed API calls',apiEndpoint:'Endpoint',apiRate:'Success rate',apiLast:'Last sync',
+ cfgFee:'Fee schedule',cfgMaster:'Master data',audUser:'User',audAction:'Action',audCat:'Category',
 
  cEnt:'Enterprise',cType:'Type',cProv:'Province',cRegD:'Registered',cDue:'Deadline',cCap:'Registered capital',
  cPaid:'Paid',cLeft:'Outstanding',cStatus:'Status',cDate:'Date',cAct:'Activity',cMode:'Channel',
@@ -803,7 +809,8 @@ var LU={
  banknote:'<rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',
  send:'<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>',
  signature:'<path d="m21 17-2.156-1.868A.5.5 0 0 0 18 15.5v.5a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1c0-2.545-3.991-3.97-8.5-4a1 1 0 0 0 0 5c4.153 0 4.745-11.295 5.708-13.5a2.5 2.5 0 1 1 3.31 3.284"/><path d="M3 21h18"/>',
- scale:'<path d="M12 3v18"/><path d="m19 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1"/><path d="m5 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M7 21h10"/>'
+ scale:'<path d="M12 3v18"/><path d="m19 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1"/><path d="m5 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M7 21h10"/>',
+ plug:'<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>'
 };
 function luSvg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(LU[name]||'')+'</svg>';}
 // Framed KPI card (icon top-right, big value, optional delta chip + subtext).
@@ -965,6 +972,22 @@ var USERS_SEED=[
 ];
 
 var ROLE_OPT={APB:['Maker','Checker'],MOIC:['Approver + E-Sign','System Admin'],VAL:['In-network firm']};
+
+/* System-admin dashboard mock data (integration health + audit trail) */
+var API_ENDPOINTS=[
+ {nm:'eBRS',desc:{lo:'ລະບົບທະບຽນວິສາຫະກິດ',en:'Enterprise registry'},st:'up',rate:'99.9%',lat:'1.2s',last:'09:15'},
+ {nm:'TaxRIS',desc:{lo:'ລະບົບຂໍ້ມູນອາກອນ',en:'Tax information system'},st:'up',rate:'99.4%',lat:'0.8s',last:'09:15'},
+ {nm:'FinLink',desc:{lo:'ບັນຊີ Virtual GL',en:'Virtual GL ledger'},st:'up',rate:'98.7%',lat:'2.1s',last:'09:12'},
+ {nm:'GovPay',desc:{lo:'ປະຕູຊຳລະເງິນລັດ',en:'Government payment gateway'},st:'slow',rate:'95.2%',lat:'6.8s',last:'08:40'}
+];
+var AUDIT_LOG=[
+ {t:'09:15',u:'ທ. ບຸນມີ',a:{lo:'ເຂົ້າສູ່ລະບົບ (ຢືນຢັນ MFA)',en:'Signed in (MFA verified)'},cat:'auth'},
+ {t:'09:02',u:'ທ. ບຸນມີ',a:{lo:'ປ່ຽນສິດຂອງ ນ. ຄຳລາ ເປັນ Maker',en:'Changed role of ນ. ຄຳລາ to Maker'},cat:'rbac'},
+ {t:'08:47',u:{lo:'ລະບົບ',en:'System'},a:{lo:'ລັອກບັນຊີ ນ. ຄຳພອນ (ໃສ່ລະຫັດຜິດ 5 ຄັ້ງ)',en:'Locked ນ. ຄຳພອນ (5 failed sign-ins)'},cat:'security'},
+ {t:'08:40',u:{lo:'ລະບົບ',en:'System'},a:{lo:'GovPay ຕອບຊ້າ - ກຳລັງເຊື່ອມຕໍ່ຄືນ',en:'GovPay degraded - reconnecting'},cat:'system'},
+ {t:{lo:'ມື້ວານ 16:20',en:'Yesterday 16:20'},u:'ທ. ບຸນມີ',a:{lo:'ແກ້ໄຂຕາຕະລາງຄ່າທຳນຽມ (ຕາມທຶນ)',en:'Edited fee schedule (by capital)'},cat:'config'},
+ {t:{lo:'ມື້ວານ 08:55',en:'Yesterday 08:55'},u:'ຫົວໜ້າພະແນກ',a:{lo:'ເຂົ້າສູ່ລະບົບ (ຢືນຢັນ MFA)',en:'Signed in (MFA verified)'},cat:'auth'}
+];
 var ASSET_FIELDS={
  land:[
   ['deedNo',{lo:'ເລກທີ່ໂຉນດ *',en:'Deed No. *'},'text'],
@@ -1438,43 +1461,86 @@ function sechead(txt,first){
    'margin:'+(first?'0':'26px')+' 0 12px'+(first?'':';padding-top:20px;border-top:1px solid var(--line)')+'">'+txt+'</div>';
 }
 function vAdminDash(){
-  var c=counts();
-  var capSegs=[[c.COMPLETED,'#1B6E45',stName('COMPLETED')],[c.PARTIAL,'#B06A05',stName('PARTIAL')],
-    [c.PENDING,'#8E9CB0',stName('PENDING')],[c.OVERDUE,'#B03127',stName('OVERDUE')]];
-  var mm=MOCK_MONTHS[lang]||MOCK_MONTHS.en;
+  var PAL=['#0F5C8C','#1B6E45','#B06A05','#7A4FA3','#B03127','#3C7A6B'];
   var online=S.users.filter(function(u){return u.online}).length;
+  var lockedN=S.users.filter(function(u){return !u.active}).length;
   var byOrg={};S.users.forEach(function(u){byOrg[u.org]=(byOrg[u.org]||0)+1});
-  var userSegs=Object.keys(byOrg).map(function(k,i){return [byOrg[k],['#0F5C8C','#1B6E45','#B06A05'][i%3],k]});
+  var orgSegs=Object.keys(byOrg).map(function(k,i){return [byOrg[k],PAL[i%PAL.length],k]});
+  var byRole={};S.users.forEach(function(u){byRole[u.role]=(byRole[u.role]||0)+1});
+  var roleSegs=Object.keys(byRole).map(function(k,i){return [byRole[k],PAL[i%PAL.length],k]});
   var orgRows=Object.keys(byOrg).map(function(k){
     var us=S.users.filter(function(u){return u.org===k});
     var onl=us.filter(function(u){return u.online}).length,lck=us.filter(function(u){return !u.active}).length;
     return '<tr><td style="padding-left:16px">'+k+'</td><td class="r num">'+us.length+'</td>'+
     '<td class="r num" style="color:var(--ok)">'+onl+'</td>'+
     '<td class="r num" style="padding-right:16px;color:'+(lck?'var(--bad)':'var(--muted)')+'">'+lck+'</td></tr>'}).join('');
+
+  // integration health
+  var apiUpN=API_ENDPOINTS.filter(function(a){return a.st==='up'}).length;
+  var apiFails=6;
+  var apiSt={up:[{lo:'ອອນລາຍ',en:'Online'},'p-ok'],slow:[{lo:'ຕອບຊ້າ',en:'Degraded'},'p-warn'],down:[{lo:'ຫຼຸດການເຊື່ອມ',en:'Offline'},'p-bad']};
+  var apiRows=API_ENDPOINTS.map(function(a){var s=apiSt[a.st];
+    return '<tr><td style="padding-left:16px"><span class="co">'+a.nm+'<small>'+L(a.desc)+'</small></span></td>'+
+    '<td><span class="pill '+s[1]+'">'+L(s[0])+'</span></td>'+
+    '<td class="r num">'+a.rate+'</td><td class="r num">'+a.lat+'</td>'+
+    '<td class="r num" style="padding-right:16px">'+a.last+'</td></tr>'}).join('');
+
+  // audit / security trail
+  var catMap={auth:[{lo:'ເຂົ້າສູ່ລະບົບ',en:'Sign-in'},'p-idle'],rbac:[{lo:'ສິດ RBAC',en:'RBAC'},'p-rev'],
+    security:[{lo:'ຄວາມປອດໄພ',en:'Security'},'p-bad'],system:[{lo:'ລະບົບ',en:'System'},'p-warn'],config:[{lo:'ຕັ້ງຄ່າ',en:'Config'},'p-ok']};
+  var audRows=AUDIT_LOG.map(function(l){var cc=catMap[l.cat];
+    var tt=typeof l.t==='string'?l.t:L(l.t),uu=typeof l.u==='string'?l.u:L(l.u);
+    return '<tr><td style="padding-left:16px" class="num">'+tt+'</td><td>'+uu+'</td><td>'+L(l.a)+'</td>'+
+    '<td class="r" style="padding-right:16px"><span class="pill '+cc[1]+'">'+L(cc[0])+'</span></td></tr>'}).join('');
+
+  // system-config status
+  var glCount=0;S.ents.forEach(function(e){e.hist.forEach(function(h){if((h.m==='cash'||h.m==='asset')&&h.v)glCount++})});
+  var feeCount=FEES.byType.length+FEES.byCapital.length;
+  var masterRecs=MASTER.isic.length+MASTER.prov.length+MASTER.etype.length+MASTER.doctype.length+MASTER.valfirms.length;
+
   var inner=
-   capHero()+
-   sechead(t('secCapital'),true)+
-   '<div class="grid3" style="grid-template-columns:3fr 7fr">'+
-   '<div class="card"><div class="h"><h3>'+t('byStatus')+'</h3></div><div class="c">'+
-   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(capSegs,t('cEnt'))+donutLegend(capSegs)+
-   '</div></div></div>'+
-   '<div class="card"><div class="h"><h3>'+t('overdueTrend')+'</h3></div><div class="c">'+
-   barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
-   '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
-   sechead(t('secUsers'))+
-   '<div class="kpiframe"><div class="kpis" style="grid-template-columns:repeat(3,1fr)">'+
+   sechead(t('secSysHealth'),true)+
+   '<div class="kpiframe"><div class="kpis" style="grid-template-columns:repeat(5,1fr)">'+
    kpiTile('','users',t('totalUsers'),S.users.length,lang==='lo'?'ຜູ້ໃຊ້ທັງໝົດໃນລະບົບ':'All system users')+
    kpiTile('ok','userCheck',t('onlineNow'),online,lang==='lo'?'ກຳລັງໃຊ້ງານ':'Active now')+
-   kpiTile('warn','userX',t('uLocked'),S.users.filter(function(u){return !u.active}).length,lang==='lo'?'ບັນຊີຖືກລັອກ':'Locked accounts')+'</div></div>'+
-   '<div class="grid3" style="grid-template-columns:1fr 1fr;margin-top:12px">'+
+   kpiTile('warn','userX',t('uLocked'),lockedN,lang==='lo'?'ບັນຊີຖືກລັອກ':'Locked accounts')+
+   kpiTile(apiUpN<API_ENDPOINTS.length?'warn':'ok','plug',t('apiUp'),apiUpN+'/'+API_ENDPOINTS.length,lang==='lo'?'ປາຍທາງເຊື່ອມຕໍ່':'Endpoints connected')+
+   kpiTile(apiFails?'warn':'ok','triangleAlert',t('apiFail'),apiFails,lang==='lo'?'24 ຊົ່ວໂມງຜ່ານມາ':'In the last 24 hours')+
+   '</div></div>'+
+
+   sechead(t('secUsers'))+
+   '<div class="grid3" style="grid-template-columns:1fr 1fr">'+
    '<div class="card"><div class="h"><h3>'+t('adminUsers')+'</h3></div><div class="c">'+
-   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(userSegs,t('totalUsers'))+donutLegend(userSegs)+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(orgSegs,t('totalUsers'))+donutLegend(orgSegs)+
    '</div></div></div>'+
-   '<div class="card"><div class="h"><h3>'+t('orgBreakdown')+'</h3></div><div class="c" style="padding:10px 0 0">'+
+   '<div class="card"><div class="h"><h3>'+t('usersByRole')+'</h3></div><div class="c">'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(roleSegs,t('totalUsers'))+donutLegend(roleSegs)+
+   '</div></div></div></div>'+
+   '<div class="card" style="margin-top:12px"><div class="h"><h3>'+t('orgBreakdown')+'</h3></div><div class="c" style="padding:10px 0 0">'+
    '<table><thead><tr><th style="padding-left:16px">'+t('uOrg')+'</th><th class="r">'+t('totalUsers')+'</th>'+
    '<th class="r">'+t('onlineNow')+'</th><th class="r" style="padding-right:16px">'+t('uLocked')+'</th></tr></thead>'+
-   '<tbody>'+orgRows+'</tbody></table></div></div></div>';
-  return shell(t('dashTitle'),'',inner);
+   '<tbody>'+orgRows+'</tbody></table></div></div>'+
+
+   sechead(t('secIntegration'))+
+   '<div class="card"><div class="h"><h3>'+t('secIntegration')+'</h3><span class="more" data-subtab="set:api">'+t('setApi')+' →</span></div>'+
+   '<div class="c" style="padding:10px 0 0">'+
+   '<table><thead><tr><th style="padding-left:16px">'+t('apiEndpoint')+'</th><th>'+t('cStatus')+'</th>'+
+   '<th class="r">'+t('apiRate')+'</th><th class="r">'+t('apiDur')+'</th><th class="r" style="padding-right:16px">'+t('apiLast')+'</th></tr></thead>'+
+   '<tbody>'+apiRows+'</tbody></table></div></div>'+
+
+   sechead(t('secConfig'))+
+   '<div class="grid3">'+
+   kpiTile('','banknote',t('cfgFee'),feeCount,lang==='lo'?'ລາຍການ · ອັບເດດ 17/06/2021':'tiers · updated 17/06/2021')+
+   kpiTile('','building2',t('cfgMaster'),masterRecs,lang==='lo'?'ລາຍການ · 5 ຊຸດຂໍ້ມູນ':'records · 5 datasets')+
+   kpiTile('','wallet',t('glTitle'),glCount,lang==='lo'?'ລາຍການ · ລົງບັນຊີ 04/08/2026':'entries · last posting 04/08/2026')+
+   '</div>'+
+
+   sechead(t('secAudit'))+
+   '<div class="card"><div class="h"><h3>'+t('secAudit')+'</h3></div><div class="c" style="padding:10px 0 0">'+
+   '<table><thead><tr><th style="padding-left:16px">'+t('cTime')+'</th><th>'+t('audUser')+'</th>'+
+   '<th>'+t('audAction')+'</th><th class="r" style="padding-right:16px">'+t('audCat')+'</th></tr></thead>'+
+   '<tbody>'+audRows+'</tbody></table></div></div>';
+  return shell(t('adminDashTitle'),'',inner);
 }
 
 function vOwnerDash(){
@@ -2465,7 +2531,7 @@ function logout(){S.role=null;S.view='login';S.mobile=false;S.bell=false;S.umenu
   S.loginStep='cred';S.loginUser='';S.loginPass='';S.loginErr='';render()}
 function roleHome(role){
   return role==='owner'?'dash':(role==='valfirm'?'valfirm':(role==='external'?'portal':
-    (role==='checker'?'dash':(role==='approver'?'dash':(role==='admin'?'set':(role==='maker'?'dash':'ent'))))));
+    (role==='checker'?'dash':(role==='approver'?'dash':(role==='admin'?'dash':(role==='maker'?'dash':'ent'))))));
 }
 function switchRole(id){
   if(id===S.role){S.umenu=false;return render()}
