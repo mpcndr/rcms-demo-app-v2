@@ -1415,9 +1415,9 @@ function vDeclare(){
      :'<div class="hint">'+t('payFullOnly')+'</div>')+'</div>'+
    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
    '<div class="field" style="margin:0"><label>'+t('dcInst')+' *</label><select>'+
-     ((canPartial&&f.payMode==='partial')
-       ?'<option>'+t('dcInst1')+'</option><option>'+t('dcInst2')+'</option>'
-       :'<option>'+t('dcInstSingle')+'</option>')+'</select></div>'+
+     '<option'+((canPartial&&f.payMode==='partial')?'':' selected')+'>'+t('dcInstSingle')+'</option>'+
+     '<option'+((canPartial&&f.payMode==='partial')?' selected':'')+'>'+t('dcInst1')+'</option>'+
+     '<option>'+t('dcInst2')+'</option>'+'</select></div>'+
    '<div class="field" style="margin:0"><label>'+t('dcRecvDate')+' *</label><input type="date" value="2026-06-08"></div>'+
    '</div>'+
    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
