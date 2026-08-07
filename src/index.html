@@ -135,13 +135,14 @@ select.sel{cursor:pointer;height:33px;flex:0 1 190px}
 .kpi2 .dl{font-size:11.5px;font-weight:600;white-space:nowrap}
 .kpi2 .dl.up{color:var(--ok)} .kpi2 .dl.down{color:var(--bad)}
 .kpi2 .ks{font-size:11px;color:var(--muted);line-height:1.5}
-.hotcard{border:1.5px solid var(--m);box-shadow:0 0 0 3px rgba(15,92,140,.10),0 8px 24px rgba(15,92,140,.15)}
-.hotcard .h{background:var(--m-lite);border-bottom:1px solid #C8DDEC;border-radius:9px 9px 0 0;padding:13px 16px}
-.hotcard .h h3{color:var(--m-dark)}
-.hoticon{width:26px;height:26px;flex:0 0 26px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--m);color:#fff;margin-right:9px}
-.hoticon svg{width:15px;height:15px}
-@keyframes hotpulse{0%,100%{box-shadow:0 0 0 0 rgba(15,92,140,.30)}50%{box-shadow:0 0 0 5px rgba(15,92,140,0)}}
-.hotcnt{background:var(--m);color:#fff;border-radius:9px;padding:1px 9px;font-size:12px;font-weight:700;animation:hotpulse 2s ease-out infinite}
+@property --spinang{syntax:'<angle>';initial-value:0deg;inherits:false}
+.spinred{position:relative;border-color:transparent}
+.spinred::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:conic-gradient(from var(--spinang),#B03127,#F0A0A0,#7A1E18,#E86A60,#B03127);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:spinredrot 3s linear infinite;pointer-events:none;z-index:2}
+@keyframes spinredrot{to{--spinang:360deg}}
 .dlegend{display:flex;flex-direction:column;gap:7px;flex:1;min-width:200px}
 .dlegend .row{position:relative;overflow:hidden;display:flex;align-items:center;gap:9px;padding:8px 10px;
   border-radius:7px;background:var(--soft);font-size:11px;transition:.15s}
@@ -1355,14 +1356,8 @@ function vApproverDash(){
      '<td>'+modeLbl(x.mode)+'</td><td class="r num">'+fmt(x.amt)+'</td>'+
      '<td style="font-size:11px;color:var(--muted)">'+t('apVerifiedBy')+' '+(chk?chk.who.replace(/ \(.*/,''):x.by)+'</td>'+
      '<td class="r" style="padding-right:16px"><span style="color:var(--m);font-size:11px;font-weight:600">'+t('apSign')+' →</span></td></tr>'}).join('');
-  var hot=myQ.length>0;
-  var qHead=hot
-    ?'<div class="h"><span class="hoticon">'+luSvg('signature')+'</span><h3>'+t('apQueue')+'</h3>'+
-      '<span style="margin-left:auto;display:flex;align-items:center;gap:9px">'+
-      '<span class="pill p-warn" style="font-weight:600">'+t('apActionNeeded')+'</span>'+
-      '<span class="hotcnt num">'+myQ.length+'</span></span></div>'
-    :'<div class="h"><h3>'+t('apQueue')+'</h3></div>';
-  var queueCard='<div class="card'+(hot?' hotcard':'')+'">'+qHead+
+  var queueCard='<div class="card'+(myQ.length?' spinred':'')+'"><div class="h"><h3>'+t('apQueue')+'</h3>'+
+    (myQ.length?'<span class="cnt" style="margin-left:auto">'+myQ.length+'</span>':'')+'</div>'+
     '<div class="c" style="padding:12px 0 0">'+(qRows
      ?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+'</th><th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+'</th><th></th><th></th></tr></thead><tbody>'+qRows+'</tbody></table>'
      :'<div class="empty" style="padding:30px"><b>'+t('apNoQueue')+'</b></div>')+'</div></div>';
