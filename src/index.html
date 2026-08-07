@@ -307,6 +307,10 @@ tbody tr:hover td{background:var(--m-lite)}
 
 .veil{position:fixed;inset:0;background:rgba(6,26,42,.66);display:flex;align-items:center;justify-content:center;z-index:300;padding:20px}
 .modal{background:var(--white);border-radius:11px;width:100%;max-width:440px;padding:26px;box-shadow:0 22px 60px rgba(0,0,0,.4);max-height:90vh;overflow-y:auto}
+/* Modal footer buttons: secondary on the left, primary on the right, group right-aligned.
+   row-reverse keeps the DOM's primary-first order rendering as [secondary][primary]. */
+.modal .acts:not([style*="column"]){flex-direction:row-reverse;justify-content:flex-start}
+.modal .acts:not([style*="column"]) .btn{flex:0 0 auto!important;width:auto!important}
 .modal h3{font-size:16px;font-weight:600;margin-bottom:5px}
 .modal p{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.7}
 .otp{display:flex;gap:8px;margin-bottom:8px}
@@ -2298,7 +2302,7 @@ function vModal(){
       .map(function(k){return '<div><span>'+t(k[1])+'</span><kbd>'+k[0]+'</kbd></div>'}).join('');
     return '<div class="veil" id="veil"><div class="modal" style="max-width:390px"><h3>'+t('kbTitle')+'</h3>'+
     '<p>'+t('kbNote')+'</p><div class="keys">'+rows+'</div>'+
-    '<button class="btn ghost" style="width:100%;margin-top:18px" data-close>'+t('close')+'</button></div></div>';
+    '<div class="acts" style="margin-top:18px"><button class="btn ghost" data-close>'+t('close')+'</button></div></div></div>';
   }
   if(m.type==='qr'){
     var inv=S.invs.filter(function(x){return x.id===m.inv})[0];if(!inv)return '';
@@ -2357,7 +2361,7 @@ function vModal(){
     var gh=groups.map(function(g){return '<div style="margin-bottom:14px"><div style="font-size:11.5px;font-weight:600;margin-bottom:7px">'+t(g[0])+'</div>'+
       '<div class="acts">'+g[1].map(function(k){return '<button class="btn ghost" style="font-size:11px;padding:7px 11px" data-soon="'+t(k)+'">'+t(k)+'</button>'}).join('')+'</div></div>'}).join('');
     return '<div class="veil" id="veil"><div class="modal" style="max-width:420px"><h3>'+t('helpCenter')+'</h3>'+gh+
-    '<button class="btn ghost" style="width:100%;margin-top:6px" data-close>'+t('close')+'</button></div></div>';
+    '<div class="acts" style="margin-top:6px"><button class="btn ghost" data-close>'+t('close')+'</button></div></div></div>';
   }
   if(m.type==='forgot'){
     var fstep=m.step||'id',fbody;
@@ -2398,8 +2402,8 @@ function vModal(){
     '<div class="field" style="margin-bottom:8px"><label>'+t('reasonExtLbl')+'</label>'+
     '<textarea id="reasonExtTxt" rows="2" placeholder="'+t('reasonExtPh')+'">'+esc(S.backReasonExt||'')+'</textarea></div>'+
     (m.err?'<div class="hint err">'+m.err+'</div>':'')+
-    '<div class="acts" style="margin-top:14px"><button class="btn ghost" data-close>'+t('cancel')+'</button>'+
-    '<button class="btn danger" style="flex:1" data-back="1">'+t('confirm')+'</button></div></div></div>';
+    '<div class="acts" style="margin-top:14px"><button class="btn danger" data-back="1">'+t('confirm')+'</button>'+
+    '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
   }
   if(m.type==='verify'){
     var vq=(m.q||'').trim().toLowerCase();
@@ -2414,7 +2418,7 @@ function vModal(){
       '<div style="font-size:9.5px;color:var(--muted);text-align:center;margin-top:12px">verify.rcms.gov.la</div>'
       :'<div class="empty" style="padding:20px">'+t('verifyNotFound')+'</div>')
      :'')+
-    '<button class="btn ghost" style="width:100%;margin-top:14px" data-close>'+t('close')+'</button></div></div>';
+    '<div class="acts" style="margin-top:14px"><button class="btn ghost" data-close>'+t('close')+'</button></div></div></div>';
   }
   return '';
 }
