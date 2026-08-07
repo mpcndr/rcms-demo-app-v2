@@ -233,6 +233,17 @@ tbody tr:hover td{background:var(--m-lite)}
 .field input.big{font-size:18px;font-weight:600;font-family:'IBM Plex Mono',monospace}
 .hint{font-size:10.5px;color:var(--muted);margin-top:5px}
 .hint.err{color:var(--bad)}
+.fsec .fsh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.fsec .fsh .n{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.fsec .fsub{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.fsec+.fsec{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
+.fseg{display:inline-flex;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:3px;gap:2px;flex-wrap:wrap}
+.fseg button{border:0;background:transparent;font-family:inherit;font-size:11.5px;color:var(--ink2);padding:7px 13px;border-radius:6px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.fseg button:hover{color:var(--ink)}
+.fseg button.on{background:var(--m);color:#fff;font-weight:600;box-shadow:0 1px 3px rgba(15,92,140,.28)}
+.roinfo{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 13px}
+.roinfo .k{font-size:10.5px;color:var(--muted);margin-bottom:4px}
+.roinfo .v{font-size:13.5px;font-weight:600;color:var(--ink)}
 .drop{border:1.5px dashed var(--line);border-radius:8px;padding:18px;text-align:center;color:var(--muted);font-size:11.5px;background:var(--white);cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:5px}
 .drop.drag{border-color:var(--m);background:var(--m-lite);color:var(--m)}
@@ -426,6 +437,15 @@ lo:{
  firmNet:'ບໍລິສັດປະເມີນ',inNet:'In-network',outNet:'Out-of-network (ບໍ່ມີ login — Maker ຄີຍ໌ແທນ)',
  outNetShort:'Out-of-network',firmNameLbl:'ຊື່ບໍລິສັດປະເມີນ',
  fAmt:'ຈຳນວນເງິນ',fDate:'ວັນທີຊຳລະ',fAcct:'ບັນຊີຮັບເງິນ',fRef:'ເລກທີ່ອ້າງອີງ',fDocs:'ເອກະສານຫຼັກຖານ',
+ dcSec1:'ຂໍ້ມູນລາຍການຊຳລະທຶນ',dcSec1Sub:'ເລືອກຮູບແບບງວດໃນຄັ້ງທຳອິດ ລະບົບຈະລັອກຄ່າເມື່ອມີລາຍການທີ່ອະນຸມັດແລ້ວ',
+ dcPlan:'ຮູບແບບການຊຳລະທຶນ',dcOnce:'ຊຳລະຄັ້ງດຽວ 100%',dcSplit:'ແບ່ງຊຳລະ 2 ງວດ',
+ dcInst:'ງວດທີ່',dcInst1:'ງວດທີ່ 1 — ຂັ້ນຕ່ຳ 30%',dcInst2:'ງວດທີ່ 2 — 70%',dcInstSingle:'ຊຳລະຄັ້ງດຽວ — 100%',
+ dcRecvDate:'ວັນທີ່ຮັບຊຳລະ/ຮັບມອບ',dcMinInst:'ຂັ້ນຕ່ຳຂອງງວດນີ້',dcOfficer:'ເຈົ້າໜ້າທີ່ຜູ້ບັນທຶກ',
+ dcSec2:'ລາຍລະອຽດທຶນທີ່ນຳມາຊຳລະ',dcSec2Sub:'ເພີ່ມໄດ້ຫຼາຍລາຍການໃນງວດດຽວ ຮອງຮັບເງິນສົດ ຊັບສິນ ຫຼື ແບບປະສົມ',
+ dcCashTransfer:'ເງິນສົດ/ເງິນໂອນ',dcNonCash:'ຊັບສິນທີ່ບໍ່ແມ່ນເງິນສົດ',dcAmtPaid:'ຈຳນວນເງິນທີ່ຊຳລະ',
+ dcChannel:'ຊ່ອງທາງການຊຳລະ',dcChTransfer:'ໂອນເງິນເຂົ້າບັນຊີ APB',dcChQR:'QR / Mobile Banking',dcChCounter:'ຝາກເງິນສົດທີ່ເຄົາເຕີ',
+ dcRecvAcct:'ບັນຊີຮັບຊຳລະ',dcPayer:'ຊື່ຜູ້ຊຳລະ/ຊື່ບັນຊີຕົ້ນທາງ',dcPayerPh:'ລະບຸຊື່ຜູ້ຊຳລະ',
+ dcTxnNo:'ເລກທີ່ລາຍການ/ເລກທີ່ໃບນຳຝາກ',dcTxnPh:'ເຊັ່ນ TXN-20260806-001',dcEvidence:'ຫຼັກຖານການຊຳລະເງິນ',
  dropT:'ກົດເພື່ອແນບໄຟລ໌ ຫຼື ລາກໄຟລ໌ມາວາງທີ່ນີ້',dropS:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ໃບນຳຝາກ / ສະລິບໂອນ / ໜັງສືຢືນຢັນ · PDF, JPG ບໍ່ເກີນ 10MB',
  dropSVal:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ບົດລາຍງານປະເມີນລາຄາ / ຮູບຖ່າຍຊັບສິນ / ໃບກວດສະຖານທີ່ · PDF, JPG ບໍ່ເກີນ 10MB',
  reqLbl:'ຈຳເປັນ',optLbl:'ບໍ່ບັງຄັບ',anyOneLbl:'ເລືອກຢ່າງໜ້ອຍ 1',docAssetPhoto:'ຮູບຖ່າຍຊັບສິນ',docSiteInspect:'ໃບກວດສະຖານທີ່',
@@ -562,6 +582,15 @@ en:{
  firmNet:'Valuation firm',inNet:'In-network',outNet:'Out-of-network (no login — Maker keys it in)',
  outNetShort:'Out-of-network',firmNameLbl:'Valuation firm name',
  fAmt:'Amount',fDate:'Payment date',fAcct:'Receiving account',fRef:'Transaction reference',fDocs:'Supporting documents',
+ dcSec1:'Payment transaction details',dcSec1Sub:'Choose the instalment plan on the first entry; the system locks it once a transaction is approved',
+ dcPlan:'Capital payment plan',dcOnce:'Pay once 100%',dcSplit:'Split into 2 instalments',
+ dcInst:'Instalment',dcInst1:'Instalment 1 — min 30%',dcInst2:'Instalment 2 — 70%',dcInstSingle:'Single payment — 100%',
+ dcRecvDate:'Payment / delivery date',dcMinInst:'Minimum for this instalment',dcOfficer:'Recording officer',
+ dcSec2:'Capital being paid',dcSec2Sub:'Add multiple items in one instalment — cash, assets, or a mix',
+ dcCashTransfer:'Cash / Transfer',dcNonCash:'Non-cash assets',dcAmtPaid:'Amount paid',
+ dcChannel:'Payment channel',dcChTransfer:'Transfer to APB account',dcChQR:'QR / Mobile Banking',dcChCounter:'Cash deposit at counter',
+ dcRecvAcct:'Receiving account',dcPayer:'Payer / source account name',dcPayerPh:'Enter payer name',
+ dcTxnNo:'Transaction / deposit slip no.',dcTxnPh:'e.g. TXN-20260806-001',dcEvidence:'Payment evidence',
  dropT:'Click to attach, or drag and drop files here',dropS:'Attach at least 1: deposit slip / transfer receipt / confirmation letter · PDF, JPG up to 10MB',
  dropSVal:'Attach at least 1: appraisal report / asset photos / site inspection form · PDF, JPG up to 10MB',
  reqLbl:'Required',optLbl:'Optional',anyOneLbl:'Choose at least 1',docAssetPhoto:'Asset photos',docSiteInspect:'Site inspection form',
@@ -1370,63 +1399,92 @@ function vDeclare(){
   var e=S.ents.filter(function(x){return x.id===S.sel})[0],f=S.form,remain=e.cap-e.paid;
   var isOwner=S.role==='owner',canPartial=e.paid===0;
   if(!canPartial&&f.payMode!=='full'){f.payMode='full';if(f.mode==='cash')f.amt=fmt(remain)}
+  var minInst=(canPartial&&f.payMode==='partial')?Math.round(e.cap*0.3):remain;
+  var acctLast4=e.acct.replace(/\D/g,'').slice(-4);
   var inner=
   '<div class="declrow">'+regDetailCard(e)+
   '<div class="card"><div class="c">'+
-  '<div style="font-size:11px;color:var(--muted);margin-bottom:9px">'+t('capMode')+'</div>'+
-  '<div class="radio"><div class="opt'+(f.mode==='cash'?' on':'')+'" data-mode="cash"><div class="t">'+t('modeCash')+'</div>'+
-  '<div class="s">'+t('modeCashD')+'</div></div>'+
-  '<div class="opt'+(f.mode==='asset'?' on':'')+'" data-mode="asset"><div class="t">'+t('modeAsset')+'</div>'+
-  '<div class="s">'+t('modeAssetD')+'</div></div></div>'+
-  (canPartial?'<div style="display:flex;align-items:center;gap:10px;margin:14px 0 4px">'+
-   '<span style="font-size:11px;color:var(--muted)">'+t('payMode')+'</span>'+
-   '<div class="lang"><span'+(f.payMode==='full'?' class="on"':'')+' data-paymode="full">'+t('payFull')+'</span>'+
-   '<span'+(f.payMode==='partial'?' class="on"':'')+' data-paymode="partial">'+t('payPartial')+'</span></div></div>'
-   :'<div class="hint" style="margin-top:10px">'+t('payFullOnly')+'</div>')+
-  (f.mode==='cash'?
-   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
-   '<div class="field"><label>'+t('fAmt')+' (LAK)</label><input class="big num" id="fAmt" value="'+f.amt+'"'+(f.payMode==='full'?' disabled':'')+'>'+
-   '<div class="hint'+(f.err?' err':'')+'">'+(f.err||(t('remainNote')+' '+fmt(remain)+' LAK'))+'</div></div>'+
-   '<div class="field"><label>'+t('fDate')+'</label><input value="04/08/2026" class="num"></div>'+
-   '<div class="field"><label>'+t('fAcct')+'</label><input value="'+e.acct+'"></div>'+
-   '<div class="field"><label>'+t('fRef')+'</label><input class="num" value="TRX-20260804-00913"></div></div>'
-   :'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
-   '<div class="field"><label>'+t('fRef')+'</label><input class="num" value="TRX-20260804-00913"></div></div>')+
-  (f.mode==='asset'?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
-   '<div class="field"><label>'+t('assetCategory')+'</label><select id="assetCat">'+
-   ['land','building','car','machine'].map(function(k){return '<option value="'+k+'"'+(f.assetCat===k?' selected':'')+'>'+t(k+'Type')+'</option>'}).join('')+'</select></div>'+
-   '</div>'+
-   '<div class="field" style="margin-top:14px"><label>'+t('firmNet')+'</label>'+
-   '<div style="display:flex;flex-direction:column;gap:8px">'+
-   '<div style="display:flex;align-items:center;gap:10px">'+
-   '<label style="display:flex;align-items:center;gap:5px;font-size:11.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto">'+
-   '<input type="radio" name="firmType" data-firmtype="in"'+(f.firmType!=='out'?' checked':'')+'>'+t('inNet')+'</label>'+
-   (f.firmType!=='out'?'<select id="firmName" style="flex:1;min-width:180px">'+
-     MASTER.valfirms.filter(function(vf){return vf.net==='in'}).map(function(vf){return '<option value="'+vf.nm+'"'+(f.firmName===vf.nm?' selected':'')+'>'+vf.nm+'</option>'}).join('')+'</select>':'')+
-   '</div>'+
-   '<div style="display:flex;align-items:center;gap:10px">'+
-   '<label style="display:flex;align-items:center;gap:5px;font-size:11.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto">'+
-   '<input type="radio" name="firmType" data-firmtype="out"'+(f.firmType==='out'?' checked':'')+'>'+t('outNetShort')+'</label>'+
-   (f.firmType==='out'?'<input list="outFirmList" id="firmName" style="flex:1;min-width:180px" placeholder="'+t('firmNameLbl')+'" value="'+esc(f.firmName||'')+'">'+
-     '<datalist id="outFirmList">'+MASTER.valfirms.filter(function(vf){return vf.net==='out'}).map(function(vf){return '<option value="'+vf.nm+'">'}).join('')+'</datalist>':'')+
-   '</div></div>'+
+  /* ---- Section 1: payment transaction details ---- */
+  '<div class="fsec">'+
+   '<div class="fsh"><span class="n">1. '+t('dcSec1')+'</span></div>'+
+   '<div class="fsub">'+t('dcSec1Sub')+'</div>'+
+   '<div class="field"><label>'+t('dcPlan')+' *</label>'+
+   (canPartial
+     ?'<div class="fseg"><button type="button" class="'+(f.payMode==='full'?'on':'')+'" data-paymode="full">'+t('dcOnce')+'</button>'+
+      '<button type="button" class="'+(f.payMode==='partial'?'on':'')+'" data-paymode="partial">'+t('dcSplit')+'</button></div>'
+     :'<div class="hint">'+t('payFullOnly')+'</div>')+'</div>'+
+   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+   '<div class="field" style="margin:0"><label>'+t('dcInst')+' *</label><select>'+
+     ((canPartial&&f.payMode==='partial')
+       ?'<option>'+t('dcInst1')+'</option><option>'+t('dcInst2')+'</option>'
+       :'<option>'+t('dcInstSingle')+'</option>')+'</select></div>'+
+   '<div class="field" style="margin:0"><label>'+t('dcRecvDate')+' *</label><input type="date" value="2026-06-08"></div>'+
    '</div>'+
    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
-   ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
-     return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
+   '<div class="roinfo"><div class="k">'+t('dcMinInst')+'</div><div class="v num">'+fmt(minInst)+' LAK</div></div>'+
+   '<div class="roinfo"><div class="k">'+t('dcOfficer')+'</div><div class="v">'+who().n+'</div></div>'+
    '</div>'+
-   (f.err?'<div class="hint err" style="margin-top:8px">'+f.err+'</div>':'')
-   :'')+
-  '<div class="field"><label>'+t('fDocs')+'</label>'+
-  '<select id="docType" style="width:100%;margin-bottom:10px">'+docTypeOptions(f.mode).map(function(o){
-    return '<option value="'+o.k+'"'+(f.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
-  '<div class="drop" id="drop"><span class="dropIcon">⬆</span><b>'+t('dropT')+'</b></div>'+
-  '<div class="filelist">'+(f.files.length?f.files.map(function(fl){
-    return '<div class="filerow"><span class="fic">✓</span>'+
-    '<div class="fmeta"><b>'+fl.lbl+'</b><span>'+fl.name+'</span></div>'+
-    '<span class="frm" data-rmfile="'+fl.k+'" title="'+t('cancel')+'">✕</span></div>'}).join('')
-    :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div>'+
-  (f.docErr?'<div class="hint err" style="margin-top:8px">'+f.docErr+'</div>':'')+'</div>'+
+  '</div>'+
+  /* ---- Section 2: capital being paid ---- */
+  '<div class="fsec">'+
+   '<div class="fsh"><span class="n">2. '+t('dcSec2')+'</span>'+
+    '<div class="fseg" style="margin-left:auto">'+
+    '<button type="button" class="'+(f.mode==='cash'?'on':'')+'" data-mode="cash">💳 '+t('dcCashTransfer')+'</button>'+
+    '<button type="button" class="'+(f.mode==='asset'?'on':'')+'" data-mode="asset">◈ '+t('dcNonCash')+'</button>'+
+    '</div></div>'+
+   '<div class="fsub">'+t('dcSec2Sub')+'</div>'+
+   (f.mode==='cash'?
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+    '<div class="field" style="margin:0"><label>'+t('dcAmtPaid')+' (LAK) *</label>'+
+     '<input class="num" id="fAmt" value="'+f.amt+'"'+(f.payMode==='full'?' disabled':'')+'>'+
+     '<div class="hint'+(f.err?' err':'')+'">'+(f.err||(t('remainNote')+' '+fmt(remain)+' LAK'))+'</div></div>'+
+    '<div class="field" style="margin:0"><label>'+t('dcChannel')+' *</label><select>'+
+     '<option>'+t('dcChTransfer')+'</option><option>'+t('dcChQR')+'</option><option>'+t('dcChCounter')+'</option></select></div>'+
+    '<div class="field" style="margin:0"><label>'+t('dcRecvAcct')+' *</label><select><option>APB Capital Account · •••• '+acctLast4+'</option></select></div>'+
+    '<div class="field" style="margin:0"><label>'+t('dcPayer')+' *</label><input placeholder="'+t('dcPayerPh')+'"></div>'+
+    '<div class="field" style="margin:0"><label>'+t('dcTxnNo')+' *</label><input class="num" placeholder="'+t('dcTxnPh')+'"></div>'+
+    '<div class="field" style="margin:0"><label>'+t('dcEvidence')+' *</label><input type="file" id="fileEvidence">'+
+     (f.files.length?'<div class="filelist" style="margin-top:8px">'+f.files.map(function(fl){
+       return '<div class="filerow"><span class="fic">✓</span><div class="fmeta"><b>'+fl.lbl+'</b><span>'+fl.name+'</span></div>'+
+       '<span class="frm" data-rmfile="'+fl.k+'" title="'+t('cancel')+'">✕</span></div>'}).join('')+'</div>':'')+
+     (f.docErr?'<div class="hint err" style="margin-top:6px">'+f.docErr+'</div>':'')+'</div>'+
+    '</div>'
+   :
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+    '<div class="field" style="margin:0"><label>'+t('assetCategory')+'</label><select id="assetCat">'+
+    ['land','building','car','machine'].map(function(k){return '<option value="'+k+'"'+(f.assetCat===k?' selected':'')+'>'+t(k+'Type')+'</option>'}).join('')+'</select></div>'+
+    '</div>'+
+    '<div class="field" style="margin-top:14px"><label>'+t('firmNet')+'</label>'+
+    '<div style="display:flex;flex-direction:column;gap:8px">'+
+    '<div style="display:flex;align-items:center;gap:10px">'+
+    '<label style="display:flex;align-items:center;gap:5px;font-size:11.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto">'+
+    '<input type="radio" name="firmType" data-firmtype="in"'+(f.firmType!=='out'?' checked':'')+'>'+t('inNet')+'</label>'+
+    (f.firmType!=='out'?'<select id="firmName" style="flex:1;min-width:180px">'+
+      MASTER.valfirms.filter(function(vf){return vf.net==='in'}).map(function(vf){return '<option value="'+vf.nm+'"'+(f.firmName===vf.nm?' selected':'')+'>'+vf.nm+'</option>'}).join('')+'</select>':'')+
+    '</div>'+
+    '<div style="display:flex;align-items:center;gap:10px">'+
+    '<label style="display:flex;align-items:center;gap:5px;font-size:11.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto">'+
+    '<input type="radio" name="firmType" data-firmtype="out"'+(f.firmType==='out'?' checked':'')+'>'+t('outNetShort')+'</label>'+
+    (f.firmType==='out'?'<input list="outFirmList" id="firmName" style="flex:1;min-width:180px" placeholder="'+t('firmNameLbl')+'" value="'+esc(f.firmName||'')+'">'+
+      '<datalist id="outFirmList">'+MASTER.valfirms.filter(function(vf){return vf.net==='out'}).map(function(vf){return '<option value="'+vf.nm+'">'}).join('')+'</datalist>':'')+
+    '</div></div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
+    ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
+      return '<div class="field" style="margin:0"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
+    '</div>'+
+    (f.err?'<div class="hint err" style="margin-top:8px">'+f.err+'</div>':'')+
+    '<div class="field" style="margin-top:14px"><label>'+t('fDocs')+'</label>'+
+    '<select id="docType" style="width:100%;margin-bottom:10px">'+docTypeOptions(f.mode).map(function(o){
+      return '<option value="'+o.k+'"'+(f.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
+    '<div class="drop" id="drop"><span class="dropIcon">⬆</span><b>'+t('dropT')+'</b></div>'+
+    '<div class="filelist">'+(f.files.length?f.files.map(function(fl){
+      return '<div class="filerow"><span class="fic">✓</span>'+
+      '<div class="fmeta"><b>'+fl.lbl+'</b><span>'+fl.name+'</span></div>'+
+      '<span class="frm" data-rmfile="'+fl.k+'" title="'+t('cancel')+'">✕</span></div>'}).join('')
+      :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div>'+
+    (f.docErr?'<div class="hint err" style="margin-top:8px">'+f.docErr+'</div>':'')+'</div>')+
+  '</div>'+
   '<div class="audit"><b>'+t('auditTrail')+'</b> — '+who().n+' · 04/08/2026 09:47</div>'+
   '<div class="acts" style="margin-top:16px"><button class="btn" id="submitDeclare">'+t('submitDeclare')+'</button>'+
   '<button class="btn ghost" data-nav="'+(isOwner?'dash':'ent')+'">'+t('cancel')+'</button></div></div></div>'+
@@ -2205,6 +2263,10 @@ function bind(){
   var aut=$('#advUpdTo');if(aut)aut.onchange=function(){S.adv.updTo=aut.value;render()};
 
   var amt=$('#fAmt');if(amt)amt.oninput=function(){S.form.amt=amt.value};
+  var fev=$('#fileEvidence');if(fev)fev.onchange=function(){
+    if(fev.files&&fev.files.length){S.form.files=[{k:'doc0',lbl:t('dcEvidence'),name:fev.files[0].name}];S.form.docErr=''}
+    else S.form.files=[];
+    render()};
   if($('#drop'))wireDropTyped($('#drop'),S.form,docTypeOptions(S.form.mode),DOC_MOCKS);
 
   var sp=$('#submitDeclare');
