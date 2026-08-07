@@ -467,6 +467,7 @@ lo:{
  cAmt:'ຈຳນວນ',cBy:'ຜູ້ສົ່ງເລື່ອງ',cDoc:'ເອກະສານ',cTime:'ເວລາ',cRef:'ເລກທີ່ອ້າງອີງ',
  hstComplete:'ສຳເລັດ',hstPending:'ລໍກວດສອບ',hstReturned:'ຕີກັບ',
  search:'ຄົ້ນຫາຊື່ ຫຼື ເລກທະບຽນ',searchBtn:'ຄົ້ນຫາ',allSt:'ທຸກສະຖານະ',allProv:'ທຸກແຂວງ',allIsic:'ISIC ທຸກຂະແໜງ',
+ allCh:'ທຸກຊ່ອງທາງ',allOrg:'ທຸກໜ່ວຍງານ',allRole:'ທຸກສິດ',
  export:'ສົ່ງອອກ Excel',print:'ພິມ',showing:'ສະແດງ',of:'ຈາກ',items:'ລາຍການ',
  noMatch:'ບໍ່ພົບລາຍການທີ່ຕົງກັບເງື່ອນໄຂ',noMatchS:'ລອງປ່ຽນເງື່ອນໄຂ ຫຼື ລ້າງຄ່າຄົ້ນຫາ',
  filterTitle:'ຕົວກອງ',clearCriteria:'ລ້າງເງື່ອນໄຂ',fltRegNo:'ເລກທະບຽນ',fltEtype:'ປະເພດວິສາຫະກິດ',
@@ -629,6 +630,7 @@ en:{
  cAmt:'Amount',cBy:'Submit by',cDoc:'Files',cTime:'Time',cRef:'Reference',
  hstComplete:'Complete',hstPending:'Pending',hstReturned:'Returned',
  search:'Search by name or registration number',searchBtn:'Search',allSt:'All statuses',allProv:'All provinces',allIsic:'All ISIC sectors',
+ allCh:'All channels',allOrg:'All organisations',allRole:'All roles',
  export:'Export to Excel',print:'Print',showing:'Showing',of:'of',items:'records',
  noMatch:'No records match these filters',noMatchS:'Try different criteria or clear the search',
  filterTitle:'Filter',clearCriteria:'Clear criteria',fltRegNo:'Registration number',fltEtype:'Enterprise type',
@@ -1101,7 +1103,6 @@ function clearCache(){
 function menus(){
   var Tc=S.tasks.filter(function(x){return x.stage==='checker'}).length;
   var Ta=S.tasks.filter(function(x){return x.stage==='approve'}).length;
-  var SET_SUB=[['fee','setFee'],['master','master'],['gl','glTitle'],['user','setUser'],['api','setApi']];
   if(S.role==='owner')return [['mMonitor'],['dash','▦','myCap']];
   if(S.role==='maker')return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent']];
   if(S.role==='valfirm')return [['mMonitor'],['valfirm','◫','valPortal']];
@@ -1110,7 +1111,7 @@ function menus(){
     ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin'],['rep','◱','rep']];
   if(S.role==='approver')return [['mMonitor'],['dash','▦','dash'],
     ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin'],['rep','◱','rep']];
-  return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent'],['mOther'],['rep','◱','rep'],['set','⚙','set',null,SET_SUB]];
+  return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent'],['mOther'],['rep','◱','rep'],['set','⚙','set']];
 }
 function bellPanel(){
   var ns=notifs(),un=S.read?0:ns.length;
@@ -2190,39 +2191,65 @@ function vRep(){
   return shell(t('repTitle'),'',inner);
 }
 
+function setFilterCard(flds){
+  return '<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('filterTitle')+'</h3>'+
+   '<span class="more" data-clearset="1">'+t('clearCriteria')+'</span></div>'+
+   '<div class="c" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 16px">'+flds+'</div>'+
+   '<div class="c" style="padding-top:0"><div class="acts" style="justify-content:center"><button class="btn" data-setsearch="1">'+t('searchBtn')+'</button></div></div></div>';
+}
+function applySetFilter(){
+  var gv=function(id){var el=document.getElementById(id);return el?el.value.trim().toLowerCase():null};
+  var gEnt=gv('glFEnt'),gAcct=gv('glFAcct'),gCh=gv('glFCh'),gBy=gv('glFBy');
+  var gf=document.getElementById('glFFrom'),gt=document.getElementById('glFTo');
+  var gFrom=gf&&gf.value?gf.value:'',gTo=gt&&gt.value?gt.value:'';
+  var uUser=gv('setFUser'),uOrg=gv('setFOrg'),uRole=gv('setFRole'),uStatus=gv('setFStatus');
+  document.querySelectorAll('#setContent tbody tr').forEach(function(tr){
+    var d=tr.dataset,ok=true;
+    if(gEnt&&(d.ent||'').indexOf(gEnt)<0)ok=false;
+    if(gAcct&&(d.acct||'').indexOf(gAcct)<0)ok=false;
+    if(gCh&&d.channel!==gCh)ok=false;
+    if(gBy&&(d.by||'').indexOf(gBy)<0)ok=false;
+    if(gFrom&&(d.date||'')<gFrom)ok=false;
+    if(gTo&&(d.date||'')>gTo)ok=false;
+    if(uUser&&(d.user||'').indexOf(uUser)<0)ok=false;
+    if(uOrg&&(d.org||'')!==uOrg)ok=false;
+    if(uRole&&(d.role||'')!==uRole)ok=false;
+    if(uStatus&&d.ustatus!==uStatus)ok=false;
+    tr.style.display=ok?'':'none';
+  });
+}
 function vSet(){
-  var tab=S.setTab,subLbl={fee:'setFee',master:'master',gl:'glTitle',user:'setUser',api:'setApi'}[tab];
-  var body;
+  var tab=S.setTab;
+  var body,filterCard='';
   if(tab==='fee'){
-    body='<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('feeByType')+'</h3></div><div class="c" style="padding:12px 0 0">'+
-     '<table><thead><tr><th style="padding-left:16px">'+t('entType')+'</th><th class="r">'+t('feeAmt')+' (LAK)</th>'+
-     '<th class="r" style="padding-right:16px">'+t('manage')+'</th></tr></thead><tbody>'+
-     FEES.byType.map(function(x){return '<tr><td style="padding-left:16px">'+L(x[0])+'</td><td class="r num">'+fmt(x[1])+'</td>'+
-     '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('')+
-     '</tbody></table></div></div>'+
-     '<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('feeByCapital')+'</h3></div><div class="c" style="padding:12px 0 0">'+
-     '<table><thead><tr><th style="padding-left:16px">'+t('feeRange')+' (LAK)</th><th class="r">'+t('feeAmt')+' (LAK)</th>'+
-     '<th class="r" style="padding-right:16px">'+t('manage')+'</th></tr></thead><tbody>'+
-     FEES.byCapital.map(function(x){return '<tr><td style="padding-left:16px" class="num">'+x[0]+'</td><td class="r num">'+fmt(x[1])+'</td>'+
-     '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('')+
-     '</tbody></table><div class="audit" style="margin:14px 16px 16px">'+t('feeDecreeNote')+'</div></div></div>'+
-     '<div class="card"><div class="h"><h3>'+t('penRate')+'</h3></div><div class="c"><div class="empty" style="padding:20px"><b>'+t('penRateTBD')+'</b></div></div></div>';
+    var feeTypeRows=FEES.byType.map(function(x){return '<tr><td style="padding-left:16px">'+L(x[0])+'</td>'+
+     '<td class="r num" style="padding-right:16px">'+fmt(x[1])+'</td></tr>'}).join('');
+    var feeCapRows=FEES.byCapital.map(function(x){return '<tr><td style="padding-left:16px" class="num">'+x[0]+'</td>'+
+     '<td class="r num" style="padding-right:16px">'+fmt(x[1])+'</td></tr>'}).join('');
+    body='<div class="grid3" style="align-items:stretch">'+
+     '<div class="card"><div class="h"><h3>'+t('feeByType')+'</h3></div><div class="c" style="padding:12px 0 0">'+
+     '<table><thead><tr><th style="padding-left:16px">'+t('entType')+'</th>'+
+     '<th class="r" style="padding-right:16px">'+t('feeAmt')+' (LAK)</th></tr></thead><tbody>'+feeTypeRows+'</tbody></table></div></div>'+
+     '<div class="card"><div class="h"><h3>'+t('feeByCapital')+'</h3></div><div class="c" style="padding:12px 0 0">'+
+     '<table><thead><tr><th style="padding-left:16px">'+t('feeRange')+' (LAK)</th>'+
+     '<th class="r" style="padding-right:16px">'+t('feeAmt')+' (LAK)</th></tr></thead><tbody>'+feeCapRows+'</tbody></table>'+
+     '<div class="audit" style="margin:14px 16px 16px">'+t('feeDecreeNote')+'</div></div></div>'+
+     '<div class="card"><div class="h"><h3>'+t('penRate')+'</h3></div><div class="c"><div class="empty" style="padding:20px"><b>'+t('penRateTBD')+'</b></div></div></div>'+
+     '</div>';
   } else if(tab==='master'){
-    var mini=function(title,rows){return '<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+title+'</h3></div>'+
+    var mc=function(title,rows){return '<div class="card"><div class="h"><h3>'+title+'</h3></div>'+
       '<div class="c" style="padding:12px 0 0"><table><tbody>'+rows+'</tbody></table></div></div>'};
-    var isicRows=MASTER.isic.map(function(x){return '<tr><td style="padding-left:16px" class="num">'+x[0]+'</td><td>'+x[1]+'</td>'+
-      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
-    var provRows=MASTER.prov.map(function(p){return '<tr><td style="padding-left:16px">'+p+'</td>'+
-      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
-    var etypeRows=MASTER.etype.map(function(x){return '<tr><td style="padding-left:16px">'+L(x)+'</td>'+
-      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
-    var doctypeRows=MASTER.doctype.map(function(x){return '<tr><td style="padding-left:16px">'+L(x)+'</td>'+
-      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
+    var isicRows=MASTER.isic.map(function(x){return '<tr><td style="padding-left:16px" class="num">'+x[0]+'</td>'+
+      '<td style="padding-right:16px">'+x[1]+'</td></tr>'}).join('');
+    var provRows=MASTER.prov.map(function(p){return '<tr><td style="padding:8px 16px">'+p+'</td></tr>'}).join('');
+    var etypeRows=MASTER.etype.map(function(x){return '<tr><td style="padding:8px 16px">'+L(x)+'</td></tr>'}).join('');
+    var docRows=MASTER.doctype.map(function(x){return '<tr><td style="padding:8px 16px">'+L(x)+'</td></tr>'}).join('');
     var firmRows=MASTER.valfirms.map(function(x){return '<tr><td style="padding-left:16px"><span class="co">'+x.nm+'</span></td>'+
-      '<td>'+(x.net==='in'?'<span class="pill p-ok">'+t('inNet')+'</span>':'<span class="pill p-warn">'+t('outNet').split(' (')[0]+'</span>')+'</td>'+
-      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
-    body=mini('ISIC Code',isicRows)+mini(t('cProv'),provRows)+mini(t('entType'),etypeRows)+
-      mini(t('cDoc'),doctypeRows)+mini(t('valFirm'),firmRows);
+      '<td class="r" style="padding-right:16px">'+(x.net==='in'?'<span class="pill p-ok">'+t('inNet')+'</span>':'<span class="pill p-warn">'+t('outNet').split(' (')[0]+'</span>')+'</td></tr>'}).join('');
+    body='<div class="grid3" style="align-items:stretch;margin-bottom:12px">'+
+      mc('ISIC Code',isicRows)+mc(t('cProv'),provRows)+mc(t('entType'),etypeRows)+'</div>'+
+     '<div class="grid3" style="align-items:stretch">'+
+      mc(t('cDoc'),docRows)+mc(t('valFirm'),firmRows)+'</div>';
   } else if(tab==='gl'){
     var glRows=[];
     S.ents.forEach(function(e){e.hist.forEach(function(h){
@@ -2231,22 +2258,43 @@ function vSet(){
      (glRows.length?'<table><thead><tr><th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('acctNo')+'</th>'+
      '<th>'+t('cDate')+'</th><th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+' (LAK)</th>'+
      '<th class="r" style="padding-right:16px">'+t('cBy')+'</th></tr></thead><tbody>'+
-     glRows.map(function(g){return '<tr><td style="padding-left:16px"><span class="co">'+g.ent+'</span></td>'+
+     glRows.map(function(g){var iso=g.d.split('/').reverse().join('-');
+     return '<tr data-ent="'+esc(g.ent.toLowerCase())+'" data-acct="'+esc(g.acct.toLowerCase())+'" data-date="'+iso+'" data-channel="'+g.m+'" data-by="'+esc((g.u||'').toLowerCase())+'">'+
+     '<td style="padding-left:16px"><span class="co">'+g.ent+'</span></td>'+
      '<td class="num" style="font-size:10.5px">'+g.acct+'</td><td class="num">'+g.d+'</td>'+
      '<td>'+modeLbl(g.m)+'</td><td class="r num">'+fmt(g.v)+'</td>'+
      '<td class="r" style="padding-right:16px">'+g.u+'</td></tr>'}).join('')+'</tbody></table>'
       :'<div class="empty">'+t('noHistory')+'</div>')+
      '<div class="audit" style="margin:14px 16px 16px">'+t('glNote')+'</div></div></div>';
+    var chOpts='<option value="">'+t('allCh')+'</option><option value="cash">'+t('modeCash')+'</option><option value="asset">'+t('modeAsset')+'</option>';
+    filterCard=setFilterCard(
+     '<div class="field"><label>'+t('cEnt')+'</label><input id="glFEnt"></div>'+
+     '<div class="field"><label>'+t('acctNo')+'</label><input id="glFAcct"></div>'+
+     '<div class="field"><label>'+t('finDateFrom')+'</label><input type="date" id="glFFrom"></div>'+
+     '<div class="field"><label>'+t('finDateTo')+'</label><input type="date" id="glFTo"></div>'+
+     '<div class="field"><label>'+t('cMode')+'</label><select id="glFCh">'+chOpts+'</select></div>'+
+     '<div class="field"><label>'+t('cBy')+'</label><input id="glFBy"></div>');
   } else if(tab==='user'){
     body='<div class="card"><div class="h"><h3>'+t('setUser')+'</h3><span class="more" data-adduser="1">'+t('addUser')+'</span></div><div class="c" style="padding:12px 0 0">'+
      '<table><thead><tr><th style="padding-left:16px">'+t('uName')+'</th><th>'+t('uOrg')+'</th><th>'+t('uRole')+'</th>'+
      '<th>'+t('onlineNow')+'</th><th>'+t('cStatus')+'</th><th>'+t('uPwd')+'</th><th class="r" style="padding-right:16px">'+t('manage')+'</th></tr></thead><tbody>'+
-     S.users.map(function(u,i){return '<tr><td style="padding-left:16px"><span class="co">'+u.nm+'</span></td><td>'+u.org+'</td><td>'+u.role+'</td>'+
+     S.users.map(function(u,i){return '<tr data-user="'+esc(u.nm.toLowerCase())+'" data-org="'+esc(u.org.toLowerCase())+'" data-role="'+esc(u.role.toLowerCase())+'" data-ustatus="'+(u.active?'active':'locked')+'">'+
+     '<td style="padding-left:16px"><span class="co">'+u.nm+'</span></td><td>'+u.org+'</td><td>'+u.role+'</td>'+
      '<td>'+(u.online?'<span class="pill p-ok">●</span>':'<span class="pill p-idle">○</span>')+'</td>'+
      '<td>'+(u.active?'<span class="pill p-ok">'+t('uActive')+'</span>':'<span class="pill p-bad">'+t('uLocked')+'</span>')+'</td>'+
      '<td class="num" style="'+(Number(u.pwd)>90?'color:var(--bad)':'')+'">'+u.pwd+'</td>'+
      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-toggleuser="'+i+'">'+(u.active?t('deactivate'):t('activate'))+'</td></tr>'}).join('')+
      '</tbody></table></div></div>';
+    var orgs=[],roles=[];
+    S.users.forEach(function(u){if(orgs.indexOf(u.org)<0)orgs.push(u.org);if(roles.indexOf(u.role)<0)roles.push(u.role)});
+    var orgOpts='<option value="">'+t('allOrg')+'</option>'+orgs.map(function(o){return '<option value="'+esc(o.toLowerCase())+'">'+o+'</option>'}).join('');
+    var roleOpts='<option value="">'+t('allRole')+'</option>'+roles.map(function(r){return '<option value="'+esc(r.toLowerCase())+'">'+r+'</option>'}).join('');
+    var uStatusOpts='<option value="">'+t('allSt')+'</option><option value="active">'+t('uActive')+'</option><option value="locked">'+t('uLocked')+'</option>';
+    filterCard=setFilterCard(
+     '<div class="field"><label>'+t('uName')+'</label><input id="setFUser"></div>'+
+     '<div class="field"><label>'+t('uOrg')+'</label><select id="setFOrg">'+orgOpts+'</select></div>'+
+     '<div class="field"><label>'+t('uRole')+'</label><select id="setFRole">'+roleOpts+'</select></div>'+
+     '<div class="field"><label>'+t('cStatus')+'</label><select id="setFStatus">'+uStatusOpts+'</select></div>');
   } else {
     var logs=[['09:15:02','eBRS','sync 1,284',1,'1.2s'],['09:15:04','TaxRis','12',1,'0.8s'],['09:12:44','FinLink','Virtual GL',1,'2.1s']];
     body='<div class="card"><div class="h"><h3>'+t('setApi')+'</h3></div><div class="c" style="padding:12px 0 0">'+
@@ -2256,7 +2304,9 @@ function vSet(){
      '<td><span class="pill p-ok">'+t('success')+'</span></td><td class="r num" style="padding-right:16px">'+l[4]+'</td></tr>'}).join('')+
      '</tbody></table><div class="audit" style="margin:14px 16px 16px">'+t('apiNote')+'</div></div></div>';
   }
-  return shell(t('setTitle')+' - '+t(subLbl),'',body);
+  var tabBar='<div class="ftabs">'+[['fee','setFee'],['master','master'],['gl','glTitle'],['user','setUser'],['api','setApi']].map(function(tb){
+    return '<div class="ft'+(tab===tb[0]?' on':'')+'" data-subtab="set:'+tb[0]+'">'+t(tb[1])+'</div>';}).join('')+'</div>';
+  return shell(t('setTitle'),'',tabBar+filterCard+'<div id="setContent">'+body+'</div>');
 }
 
 function vPortal(){
@@ -2623,6 +2673,12 @@ function bind(){
     ['finFEnt','finFRef','finFReceipt','finFItem','finFStatus','finFDays','finFFrom','finFTo'].forEach(function(id){var el=$('#'+id);if(el)el.value=''});
     applyFinFilter()}});
   document.querySelectorAll('[data-finsearch]').forEach(function(b){b.onclick=function(){applyFinFilter()}});
+  ['glFEnt','glFAcct','glFBy','setFUser'].forEach(function(id){var el=$('#'+id);if(el)el.oninput=applySetFilter});
+  ['glFCh','glFFrom','glFTo','setFOrg','setFRole','setFStatus'].forEach(function(id){var el=$('#'+id);if(el)el.onchange=applySetFilter});
+  document.querySelectorAll('[data-clearset]').forEach(function(b){b.onclick=function(){
+    ['glFEnt','glFAcct','glFBy','glFFrom','glFTo','glFCh','setFUser','setFOrg','setFRole','setFStatus'].forEach(function(id){var el=$('#'+id);if(el)el.value=''});
+    applySetFilter()}});
+  document.querySelectorAll('[data-setsearch]').forEach(function(b){b.onclick=function(){applySetFilter()}});
   document.querySelectorAll('[data-burger]').forEach(function(b){b.onclick=function(){S.mini=!S.mini;render()}});
   document.querySelectorAll('[data-open]').forEach(function(r){r.onclick=function(){S.sel=r.dataset.open;go('detail')}});
   document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.dataset.tab;go('ent')}});
