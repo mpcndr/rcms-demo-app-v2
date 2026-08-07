@@ -536,7 +536,7 @@ lo:{
  jobSubmitted:'ສົ່ງຜົນປະເມີນແລ້ວ',jobSubmittedS:'ລໍເຈົ້າໜ້າທີ່ Checker ກວດຮັບຜົນ',jobAccepted:'ກວດຮັບຜົນປະເມີນແລ້ວ',
  jobAcceptedS:'ມູນຄ່ານີ້ນັບເປັນທຶນຈົດທະບຽນແລ້ວ',firmApproved:'ອະນຸມັດບໍລິສັດແລ້ວ',firmApprovedS:'ບໍລິສັດສາມາດບັນທຶກມູນຄ່າໄດ້ແລ້ວ',
 
- finTitle:'ການເງິນ ແລະ ຄ່າປັບ',feeTab:'ຄ່າທຳນຽມ',penTab:'ຄ່າປັບ',recTab:'ໃບຮັບເງິນເອເລັກໂຕຣນິກ',
+ finTitle:'ການເງິນ ແລະ ຄ່າປັບ',feeTab:'ຄ່າທຳນຽມ',penTab:'ຄ່າປັບ',recTab:'ໃບຮັບເງິນເອເລັກໂຕຣນິກ',finSearchPh:'ຄົ້ນຫາໃນຕາຕະລາງ...',
  penDays:'ຈຳນວນວັນທີ່ເກີນ',payStatus:'ສະຖານະຊຳລະ',feeByType:'ຄ່າທຳນຽມຕາມປະເພດວິສາຫະກິດ',
  feeByCapital:'ຄ່າທຳນຽມຕາມມູນຄ່າທຶນຈົດທະບຽນ',feeRange:'ຊ່ວງທຶນຈົດທະບຽນ',feeAmt:'ຄ່າທຳນຽມ',penRate:'ອັດຕາຄ່າປັບຕໍ່ວັນ',
  penRateTBD:'ອັດຕາຄ່າປັບຕໍ່ວັນຍັງບໍ່ມີກຳນົດຈາກ TOR - ລໍຢືນຢັນຈາກລູກຄ້າ',
@@ -695,7 +695,7 @@ en:{
  jobSubmitted:'Valuation result submitted',jobSubmittedS:'Awaiting acceptance by the Checker',jobAccepted:'Valuation result accepted',
  jobAcceptedS:'This value now counts toward registered capital',firmApproved:'Firm approved',firmApprovedS:'The firm can now record valuations',
 
- finTitle:'Finance & Penalties',feeTab:'Fees',penTab:'Penalties',recTab:'E-Receipts',
+ finTitle:'Finance & Penalties',feeTab:'Fees',penTab:'Penalties',recTab:'E-Receipts',finSearchPh:'Search the table...',
  penDays:'Days overdue',payStatus:'Payment status',feeByType:'Fee by enterprise type',
  feeByCapital:'Fee by registered capital',feeRange:'Registered capital band',feeAmt:'Fee',penRate:'Penalty rate per day',
  penRateTBD:'The daily penalty rate is not yet defined in the TOR - pending client confirmation',
@@ -2046,7 +2046,8 @@ function vFin(){
   }
   var tabBar='<div class="ftabs">'+[['fee','feeTab'],['pen','penTab'],['rec','recTab']].map(function(tb){
     return '<div class="ft'+(tab===tb[0]?' on':'')+'" data-subtab="fin:'+tb[0]+'">'+t(tb[1])+'</div>';}).join('')+'</div>';
-  return shell(t('finTitle'),'',tabBar+body);
+  var search='<div class="filters" style="margin-bottom:12px"><input class="inp" id="finSearch" placeholder="'+t('finSearchPh')+'" style="flex:0 1 320px"></div>';
+  return shell(t('finTitle'),'',tabBar+search+'<div id="finContent">'+body+'</div>');
 }
 
 function vRep(){
@@ -2504,6 +2505,10 @@ function bind(){
   document.querySelectorAll('[data-subtab]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();var p=b.dataset.subtab.split(':');
     if(p[0]==='fin'){S.finTab=p[1];go('fin')}else{S.setTab=p[1];go('set')}}});
+  var finSr=$('#finSearch');if(finSr)finSr.oninput=function(){
+    var q=finSr.value.trim().toLowerCase();
+    document.querySelectorAll('#finContent tbody tr').forEach(function(tr){
+      tr.style.display=tr.textContent.toLowerCase().indexOf(q)>-1?'':'none'})};
   document.querySelectorAll('[data-burger]').forEach(function(b){b.onclick=function(){S.mini=!S.mini;render()}});
   document.querySelectorAll('[data-open]').forEach(function(r){r.onclick=function(){S.sel=r.dataset.open;go('detail')}});
   document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.dataset.tab;go('ent')}});
