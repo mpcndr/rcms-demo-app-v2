@@ -1866,10 +1866,7 @@ function vTask(){
     'border-radius:7px;margin-bottom:6px"><span style="color:var(--bad)">▤</span>'+
     '<span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
     '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join(''):'-';
-  var inner=
-  stepCircles([[cls(1),t('channelOnline').split(' (')[0]],[cls(2),t('stageChecker')],[cls(3),t('stageApprover')]])+
-  regDetailCard(e)+
-  '<div class="split"><div><div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('reqDetail')+'</h3></div>'+
+  var caseCard='<div class="card"><div class="h"><h3>'+t('reqDetail')+'</h3></div>'+
   '<div class="c"><div class="kv">'+
   '<div><span class="k">'+t('cRef')+'</span><span class="v num">'+x.ref+'</span></div>'+
   '<div><span class="k">'+t('cEnt')+'</span><span class="v">'+e.name+'</span></div>'+
@@ -1877,16 +1874,24 @@ function vTask(){
   '<div><span class="k">'+t('cPaid')+'</span><span class="v num">'+fmt(e.paid)+' ('+Math.round(e.paid/e.cap*100)+'%)</span></div>'+
   '<div><span class="k">'+t('amtNow')+'</span><span class="v num" style="color:var(--m);font-size:14px">'+fmt(x.amt)+' LAK</span></div>'+
   '<div><span class="k">'+t('cMode')+'</span><span class="v">'+modeLbl(x.mode)+'</span></div>'+
-  '</div></div></div>'+
-  '<div class="card"><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+files+
-  '<div class="audit">'+t('evidenceN')+'</div></div></div></div>'+
-  '<div><div class="card"><div class="h"><h3>'+t('decide')+'</h3></div><div class="c">'+
-  '<div style="font-size:11.5px;color:var(--muted);line-height:1.7">'+(isC?t('checkerNote'):t('approverNote'))+'</div>'+
-  '</div></div></div></div>'+
-  '<div class="acts" style="margin-top:14px">'+
+  '</div></div></div>';
+  var evidCard='<div class="card"><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+files+
+  '<div class="audit">'+t('evidenceN')+'</div></div></div>';
+  var decideCard='<div class="card" style="flex:1 1 auto;display:flex;flex-direction:column;background:#FEF7E0;border-color:#F1E4B0">'+
+  '<div class="h"><h3>'+t('decide')+'</h3></div>'+
+  '<div class="c" style="flex:1;display:flex;flex-direction:column">'+
+  '<div style="font-size:11.5px;color:var(--ink2);line-height:1.7">'+(isC?t('checkerNote'):t('approverNote'))+'</div>'+
+  '<div class="acts" style="margin-top:auto;padding-top:16px">'+
   '<button class="btn danger" data-openback="1">'+t('sendBack')+'</button>'+
   (isC?'<button class="btn" data-fwd="1">'+t('fwdApprover')+'</button>'
       :'<button class="btn" data-sign="1">'+t('signApprove')+'</button>')+
+  '</div></div></div>';
+  var regCard=regDetailCard(e).replace('<div class="card" style="margin-bottom:14px">','<div class="card" style="height:100%">');
+  var inner=
+  stepCircles([[cls(1),t('channelOnline').split(' (')[0]],[cls(2),t('stageChecker')],[cls(3),t('stageApprover')]])+
+  '<div class="declrow" style="align-items:stretch;margin-top:14px">'+
+  regCard+
+  '<div style="display:flex;flex-direction:column;gap:14px;height:100%">'+caseCard+evidCard+decideCard+'</div>'+
   '</div>';
   return shell(x.ref,[isC?t('queueTitle'):t('apTitle'),isC?'inspect':'dash'],inner);
 }
