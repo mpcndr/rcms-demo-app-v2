@@ -654,9 +654,9 @@ function toast(a,b,ok){
 }
 
 /* ---------- donut charts (replaces all progress-bar style visuals) ---------- */
-function donutPct(pct,color){
-  var R=42,C=2*Math.PI*R,len=pct/100*C;
-  return '<svg viewBox="0 0 100 100" style="width:118px;height:118px;flex:0 0 118px">'+
+function donutPct(pct,color,size){
+  var R=42,C=2*Math.PI*R,len=pct/100*C,sz=size||118;
+  return '<svg viewBox="0 0 100 100" style="width:'+sz+'px;height:'+sz+'px;flex:0 0 '+sz+'px">'+
    '<circle cx="50" cy="50" r="'+R+'" fill="none" stroke="var(--soft)" stroke-width="13"/>'+
    '<circle cx="50" cy="50" r="'+R+'" fill="none" stroke="'+(color||'#1B6E45')+'" stroke-width="13" stroke-linecap="round" '+
    'stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" transform="rotate(-90 50 50)"/>'+
@@ -1114,18 +1114,21 @@ function vOwnerDash(){
   var days=daysLeft(e.due);
   var payBtn=(remain>0)?(pend?'<button class="btn ghost" disabled>'+t('waitingOn')+' '+(pend.stage==='checker'?t('stageChecker'):t('stageApprover'))+'…</button>'
     :'<button class="btn" data-selfpay="1">'+t('selfDeclare')+'</button>'):'';
-  var capStatusCard='<div class="card"><div class="h"><h3>'+t('capDetails')+'</h3></div>'+
-   '<div class="c"><div class="donutrow">'+donutPct(pct,'#1B6E45')+
-   '<div class="dstat">'+
+  var capStatusCard='<div class="card" style="display:flex;flex-direction:column;height:100%">'+
+   '<div class="h"><h3>'+t('capDetails')+'</h3></div>'+
+   '<div class="c" style="flex:1;display:flex;flex-direction:column;gap:14px">'+
+   '<div style="display:flex;justify-content:center;padding:4px 0">'+donutPct(pct,'#1B6E45',160)+'</div>'+
+   '<div class="dstat" style="grid-template-columns:1fr;grid-auto-rows:1fr;flex:1">'+
    '<div class="cell"><div class="k">'+t('cCap')+'</div><div class="v">'+fmt(e.cap)+'</div></div>'+
    '<div class="cell"><div class="k">'+t('cPaid')+'</div><div class="v" style="color:var(--ok)">'+fmt(e.paid)+'</div></div>'+
    '<div class="cell"><div class="k">'+(remain>0?t('bizRemain'):t('bizDone'))+'</div><div class="v" style="color:'+(remain>0?'var(--warn)':'var(--ok)')+'">'+fmt(remain)+'</div></div>'+
    '<div class="cell"><div class="k">'+t('cDue')+'</div><div class="v" style="color:'+(days<0?'var(--bad)':'var(--ink)')+';font-size:13px">'+e.due+'</div>'+
    '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">'+(lang==='lo'?days+' ວັນ':days+' days')+'</div></div>'+
-   '</div></div>'+
-   (payBtn?'<div style="margin-top:14px">'+payBtn+'</div>':'')+
+   '</div>'+
+   (payBtn?'<div>'+payBtn+'</div>':'')+
    '</div></div>';
-  var inner='<div class="split" style="margin-bottom:14px">'+regDetailCard(e)+capStatusCard+'</div>'+
+  var regCard=regDetailCard(e).replace('<div class="card" style="margin-bottom:14px">','<div class="card" style="height:100%">');
+  var inner='<div class="split" style="margin-bottom:14px;align-items:stretch">'+regCard+capStatusCard+'</div>'+
    historySection(e)+
    '<div class="card" style="margin:14px 0"><div class="h"><h3>'+t('myInvoices')+'</h3></div><div class="c" style="padding:12px 0 0">'+
    (invRows?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cItem')+'</th>'+
