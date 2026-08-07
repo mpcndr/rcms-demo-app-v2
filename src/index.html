@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RCMS — Registration and Capital Monitoring System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --m-dark:#08324D; --m:#0F5C8C; --m-light:#5FA3CC; --m-lite:#EAF2F8;
+  --ink:#0E2233; --ink2:#33495E; --muted:#6C7F91;
+  --line:#DBE3EA; --soft:#EFF3F7; --paper:#F4F7FA; --white:#fff;
+  --ok:#1B6E45; --okbg:#E7F2EC; --warn:#B06A05; --warnbg:#FCF1DF;
+  --bad:#B03127; --badbg:#FBEAE8; --idle:#5E6B7E; --idlebg:#EEF1F5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'IBM Plex Sans','Noto Sans Lao',system-ui,sans-serif;background:var(--paper);
+  color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+body.lo{font-family:'Noto Sans Lao','IBM Plex Sans',system-ui,sans-serif}
+body.lo .app,body.lo .login{line-height:1.7}
+.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+button{font-family:inherit}
+#frame{height:100vh}
+
+.app{display:flex;height:100vh;overflow:hidden}
+.side{width:224px;flex:0 0 224px;background:var(--m-dark);color:#B9CEDD;padding:14px 10px;
+  overflow-y:auto;transition:width .18s,flex-basis .18s}
+.side::-webkit-scrollbar{width:5px}
+.side::-webkit-scrollbar-thumb{background:#1A5476;border-radius:3px}
+.app.mini .side{width:62px;flex:0 0 62px}
+.app.mini .side .lbl,.app.mini .side .sect,.app.mini .side .brand{display:none}
+.sh{display:flex;align-items:center;gap:9px;padding:2px 6px 16px}
+.burger{width:32px;height:32px;flex:0 0 32px;border:0;border-radius:6px;background:#12486B;color:#DCE9F2;
+  cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+.burger:hover{background:#1A5D87}
+.brand{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;letter-spacing:.02em;display:flex;align-items:center}
+.sect{font-size:9.5px;color:#6E93AD;letter-spacing:.09em;padding:12px 8px 5px;font-weight:500;text-transform:uppercase}
+.mi{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:6px;font-size:12.5px;
+  cursor:pointer;white-space:nowrap;color:#B2C6D6;margin-bottom:1px}
+.mi:hover{background:#12486B;color:#fff}
+.mi.on{background:var(--m);color:#fff;font-weight:600}
+.mi .ic{width:18px;flex:0 0 18px;text-align:center;font-size:14px}
+.mi .cnt{margin-left:auto;background:var(--bad);color:#fff;border-radius:9px;padding:0 6px;font-size:10px;font-weight:600}
+.mi.soon{opacity:.48}
+.mi.sub{padding-left:36px;font-size:11.5px;color:#93AAC0}
+.mi.sub.on{background:#12486B;color:#fff;font-weight:600}
+.app.mini .mi.sub{display:none}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.top{background:var(--white);border-bottom:1px solid var(--line);padding:11px 24px;
+  display:flex;align-items:center;gap:14px;flex:0 0 auto;z-index:20}
+.crumb{font-size:11px;color:var(--muted);cursor:pointer}
+.crumb:hover{color:var(--m)}
+.title{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.top .rt{margin-left:auto;display:flex;align-items:center;gap:12px}
+.lang{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;font-size:11px}
+.lang span{padding:5px 11px;cursor:pointer;color:var(--muted)}
+.lang span:hover{background:var(--m-lite)}
+.lang span.on{background:var(--m);color:#fff;font-weight:600}
+.bellwrap{position:relative}
+.bell{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--ink2);cursor:pointer;border:1px solid transparent}
+.bell:hover{background:var(--m-lite)}
+.bell.open{background:var(--m-lite);border-color:#C8DDEC}
+.bell b{position:absolute;top:1px;right:1px;background:var(--bad);color:#fff;font-size:8.5px;
+  border-radius:8px;padding:0 4px;font-weight:600;line-height:1.5}
+.panel{position:absolute;right:0;top:40px;width:344px;background:var(--white);border:1px solid var(--line);
+  border-radius:9px;box-shadow:0 14px 40px rgba(8,50,77,.19);z-index:60;overflow:hidden}
+.panel .ph{padding:11px 14px;border-bottom:1px solid var(--soft);display:flex;align-items:center;gap:8px}
+.panel .ph h4{font-size:12.5px;font-weight:600}
+.panel .ph span{margin-left:auto;font-size:10.5px;color:var(--m);cursor:pointer}
+.panel .pb{max-height:330px;overflow-y:auto}
+.nrow{padding:11px 14px;border-bottom:1px solid var(--soft);display:flex;gap:10px;cursor:pointer}
+.nrow:hover{background:var(--m-lite)}
+.nrow:last-child{border-bottom:0}
+.nrow .dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px;margin-top:5px}
+.nrow .nt{font-size:11.5px;font-weight:600;line-height:1.5}
+.nrow .ns{font-size:10.5px;color:var(--muted);line-height:1.65;margin-top:2px}
+.nrow .nx{font-size:9.5px;color:var(--muted);margin-top:4px}
+.avatar{width:31px;height:31px;border-radius:50%;background:var(--m-lite);color:var(--m);font-size:10px;
+  font-weight:600;display:flex;align-items:center;justify-content:center;border:1px solid #C8DDEC;cursor:pointer}
+.uinfo{text-align:right;font-size:10.5px;line-height:1.45}
+.uinfo b{color:var(--ink)} .uinfo span{color:var(--muted)}
+
+.body{padding:20px 24px 32px;flex:1;overflow-y:auto;background:var(--paper)}
+.wrap{max-width:1440px;margin:0 auto}
+
+.alert{background:var(--badbg);border:1px solid #F0CBC6;border-left:3px solid var(--bad);border-radius:7px;
+  padding:11px 14px;display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.alert .t{font-size:12.5px;color:var(--bad);font-weight:600}
+.alert .s{font-size:11.5px;color:#8A4C45}
+.alert button{margin-left:auto;background:var(--bad);color:#fff;border:0;border-radius:5px;padding:7px 12px;font-size:11.5px;cursor:pointer}
+.filters{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.sel,.inp{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:7px 11px;
+  font-size:11.5px;color:var(--ink2);font-family:inherit;min-width:0}
+select.sel{cursor:pointer;height:33px;flex:0 1 190px}
+.inp{flex:0 1 280px}
+.sel:focus,.inp:focus{outline:none;border-color:var(--m);box-shadow:0 0 0 2px rgba(15,92,140,.15)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--white);border:1px solid var(--line);border-radius:9px;padding:14px 16px;position:relative;overflow:hidden;cursor:pointer;transition:.15s}
+.kpi:hover{border-color:var(--m-light);box-shadow:0 3px 14px rgba(15,92,140,.1);transform:translateY(-1px)}
+.kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--m-light)}
+.kpi.ok:before{background:var(--ok)} .kpi.warn:before{background:var(--warn)} .kpi.bad:before{background:var(--bad)}
+.kpi .k{font-size:11.5px;color:var(--muted);margin-bottom:7px}
+.kpi .v{font-size:26px;font-weight:600;letter-spacing:-.03em}
+.kpi.ok .v{color:var(--ok)} .kpi.warn .v{color:var(--warn)} .kpi.bad .v{color:var(--bad)}
+.kpi .d{font-size:10.5px;color:var(--muted);margin-top:4px}
+@keyframes flash{0%{background:var(--m-lite)}100%{background:var(--white)}}
+.flash{animation:flash 1.5s ease-out}
+.dkpi{box-shadow:0 1px 2px rgba(8,50,77,.05)}
+.dkpi .ic{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;background:var(--m-lite);color:var(--m)}
+.dkpi.ok .ic{background:var(--okbg);color:var(--ok)}
+.dkpi.warn .ic{background:var(--warnbg);color:var(--warn)}
+.dkpi.bad .ic{background:var(--badbg);color:var(--bad)}
+.dlegend{display:flex;flex-direction:column;gap:7px;flex:1;min-width:200px}
+.dlegend .row{position:relative;overflow:hidden;display:flex;align-items:center;gap:9px;padding:8px 10px;
+  border-radius:7px;background:var(--soft);font-size:11px;transition:.15s}
+.dlegend .row:hover{background:var(--m-lite)}
+.dlegend .row .bar{position:absolute;left:0;top:0;bottom:0;opacity:.16;border-radius:7px 0 0 7px}
+.dlegend .row i{width:9px;height:9px;border-radius:3px;flex:0 0 auto;position:relative}
+.dlegend .row .nm{flex:1;color:var(--ink2);position:relative}
+.dlegend .row .ct{font-weight:600;color:var(--ink);font-family:'IBM Plex Mono',monospace;position:relative}
+.dlegend .row .pc{font-size:10px;color:var(--muted);min-width:32px;text-align:right;position:relative}
+.dstat{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-width:220px;align-content:center}
+.dstat .cell{background:var(--soft);border-radius:9px;padding:12px 14px}
+.dstat .cell .k{font-size:10.5px;color:var(--muted);margin-bottom:5px}
+.dstat .cell .v{font-size:16.5px;font-weight:600;font-family:'IBM Plex Mono',monospace;letter-spacing:-.02em}
+.hero{background:linear-gradient(135deg,var(--m-dark),var(--m));border-radius:12px;padding:22px 26px;
+  display:flex;align-items:center;gap:30px;flex-wrap:wrap;margin-bottom:16px;color:#fff}
+.hero .hpct{font-size:42px;font-weight:700;font-family:'IBM Plex Mono',monospace;letter-spacing:-.02em;line-height:1}
+.hero .hpctl{font-size:10.5px;color:#BBD3E8;text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+.hero .hstats{display:flex;gap:30px;flex-wrap:wrap;flex:1}
+.hero .hstat .k{font-size:10.5px;color:#BBD3E8;margin-bottom:5px}
+.hero .hstat .v{font-size:18px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+@media(max-width:640px){.hero{padding:18px}}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:12px;align-items:start}
+.card{background:var(--white);border:1px solid var(--line);border-radius:9px}
+.card .h{padding:13px 16px 0;display:flex;align-items:baseline;gap:10px}
+.card .h h3{font-size:12.5px;font-weight:600}
+.card .h .more{margin-left:auto;font-size:11px;color:var(--m);cursor:pointer}
+.card .c{padding:14px 16px 16px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:10.5px;color:var(--ink2)}
+.legend i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:5px}
+.legend b{font-weight:600;color:var(--ink)}
+.upanel{position:absolute;right:0;top:42px;width:236px;background:var(--white);border:1px solid var(--line);
+  border-radius:9px;box-shadow:0 14px 40px rgba(8,50,77,.19);z-index:60;overflow:hidden}
+.upanel .uh{padding:13px 15px;border-bottom:1px solid var(--soft)}
+.upanel .uh .t2{font-size:9.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.upanel .uh .n2{font-size:12.5px;font-weight:600;margin-top:4px}
+.upanel .uh .r2{font-size:10.5px;color:var(--muted);margin-top:2px}
+.upanel .ui{padding:11px 15px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:9px;color:var(--ink2)}
+.upanel .ui:hover{background:var(--m-lite)}
+.upanel .ui.out{color:var(--bad);border-top:1px solid var(--soft)}
+
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{text-align:left;font-weight:500;color:var(--muted);font-size:10.5px;padding:9px 11px;background:var(--m-lite);border-bottom:1px solid var(--line)}
+td{padding:10px 11px;border-bottom:1px solid var(--soft);color:var(--ink2)}
+tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:var(--m-lite)}
+.r{text-align:right}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.pill i{font-style:normal;font-size:8.5px;opacity:.6;margin-left:5px;font-weight:500}
+.p-ok{background:var(--okbg);color:var(--ok)} .p-warn{background:var(--warnbg);color:var(--warn)}
+.p-bad{background:var(--badbg);color:var(--bad)} .p-idle{background:var(--idlebg);color:var(--idle)}
+.p-rev{background:var(--m-lite);color:var(--m)}
+.co{font-weight:500;color:var(--ink)}
+.co small{display:block;color:var(--muted);font-weight:400;font-size:10px;margin-top:1px}
+.empty{padding:44px;text-align:center;color:var(--muted);font-size:12px}
+.empty b{display:block;color:var(--ink2);font-size:13px;margin-bottom:5px}
+
+.capcard{background:var(--white);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:12px}
+.capcard .ch{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.capcard h3{font-size:12.5px;font-weight:600}
+.donutrow{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+
+.btn{background:var(--m);color:#fff;border:0;border-radius:6px;padding:9px 15px;font-size:12px;cursor:pointer}
+.btn:hover{background:var(--m-dark)}
+.btn.ghost{background:var(--white);border:1px solid var(--line);color:var(--ink2)}
+.btn.ghost:hover{background:var(--m-lite);border-color:var(--m-light)}
+.btn.danger{background:var(--bad);color:#fff}
+.btn.danger:hover{background:#8F231C}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.kv{font-size:11.5px}
+.kv>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--soft)}
+.kv>div:last-child{border:0}
+.kv .k{color:var(--muted);flex-shrink:0} .kv .v{font-weight:500;text-align:right}
+.reglist{border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:1.3;min-width:280px}
+.regrow{display:flex;justify-content:space-between;gap:14px;padding:9px 13px;font-size:11.5px}
+.regrow:nth-child(even){background:var(--soft)}
+.regrow .k{color:var(--muted)} .regrow .v{font-weight:600;color:var(--ink);text-align:right}
+.regmap{flex:1;min-width:240px;display:flex;flex-direction:column;gap:6px}
+.regmap .cap{font-size:10.5px;color:var(--muted);text-align:center}
+.leaflet-container{z-index:0}
+.steps{display:flex}
+.st{flex:1;padding:10px 12px;background:var(--white);border:1px solid var(--line);font-size:11px;color:var(--muted)}
+.st:first-child{border-radius:7px 0 0 7px} .st:last-child{border-radius:0 7px 7px 0}
+.st+.st{border-left:0}
+.st.done{background:var(--okbg);border-color:#CFE5D9;color:var(--ok);font-weight:600}
+.st.now{background:var(--m-lite);border-color:#C8DDEC;color:var(--m);font-weight:600}
+.st b{display:block;font-size:9.5px;opacity:.75;font-weight:500}
+.stepc{display:flex;align-items:flex-start;padding:6px 4px 2px}
+.stepc .scwrap{display:flex;flex-direction:column;align-items:center;flex:0 0 auto;width:110px}
+.stepc .sc{width:32px;height:32px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:13px;color:var(--muted);background:var(--white);flex:0 0 32px;transition:.15s}
+.stepc .sc.done{background:var(--ok);border-color:var(--ok);color:#fff;font-size:15px}
+.stepc .sc.now{background:var(--m);border-color:var(--m);color:#fff;box-shadow:0 0 0 4px var(--m-lite);transform:scale(1.12)}
+.stepc .scl{font-size:10.5px;color:var(--muted);margin-top:10px;text-align:center;line-height:1.4}
+.stepc .scl.on{color:var(--ink);font-weight:700}
+.stepc .scline{flex:1;height:2px;background:var(--line);margin:15px -20px 0}
+.stepc .scline.done{background:var(--ok)}
+
+.radio{display:flex;gap:10px;margin-bottom:15px}
+.opt{flex:1;border:1px solid var(--line);border-radius:8px;padding:13px 14px;cursor:pointer;background:var(--white)}
+.opt:hover{border-color:var(--m-light)}
+.opt.on{border-color:var(--m);background:var(--m-lite);box-shadow:0 0 0 2px rgba(15,92,140,.13)}
+.opt .t{font-size:12.5px;font-weight:600;margin-bottom:4px}
+.opt .s{font-size:11px;color:var(--muted);line-height:1.6}
+.field{margin-bottom:14px;min-width:0}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;min-width:0;background:var(--white);border:1px solid var(--line);
+  border-radius:6px;padding:10px 12px;font-size:12.5px;font-family:inherit;color:var(--ink)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--m);box-shadow:0 0 0 2px rgba(15,92,140,.15)}
+.field input.big{font-size:18px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.hint{font-size:10.5px;color:var(--muted);margin-top:5px}
+.hint.err{color:var(--bad)}
+.drop{border:1.5px dashed var(--line);border-radius:8px;padding:18px;text-align:center;color:var(--muted);font-size:11.5px;background:var(--white);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:5px}
+.drop.drag{border-color:var(--m);background:var(--m-lite);color:var(--m)}
+.drop:hover{border-color:var(--m);background:var(--m-lite)}
+.drop .dropIcon{font-size:17px;color:var(--m)}
+.drop b{color:var(--ink2);font-size:12.5px;font-weight:600}
+.files{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:var(--m-lite);border:1px solid #C8DDEC;border-radius:5px;padding:5px 10px;font-size:10.5px;color:var(--ink2)}
+.chip b{color:var(--ok);margin-right:4px}
+.filelist{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+.filerow{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--white)}
+.filerow .fic{width:24px;height:24px;border-radius:50%;background:var(--okbg);color:var(--ok);font-size:12px;
+  display:flex;align-items:center;justify-content:center;flex:0 0 24px}
+.filerow .fmeta{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.filerow .fmeta b{font-size:11.5px;color:var(--ink);font-weight:600}
+.filerow .fmeta span{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.filerow .frm{cursor:pointer;color:var(--muted);font-size:12.5px;padding:3px 6px;border-radius:5px;flex:0 0 auto}
+.filerow .frm:hover{color:var(--bad);background:var(--badbg)}
+.audit{background:var(--soft);border-radius:7px;padding:12px 14px;font-size:10.5px;color:var(--muted);line-height:1.7;margin-top:13px}
+.audit b{color:var(--ink2)}
+
+.veil{position:fixed;inset:0;background:rgba(6,26,42,.66);display:flex;align-items:center;justify-content:center;z-index:300;padding:20px}
+.modal{background:var(--white);border-radius:11px;width:100%;max-width:440px;padding:26px;box-shadow:0 22px 60px rgba(0,0,0,.4);max-height:90vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:5px}
+.modal p{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.7}
+.otp{display:flex;gap:8px;margin-bottom:8px}
+.otp input{flex:1 1 0;min-width:0;width:100%;height:48px;padding:0;border:1px solid var(--line);border-radius:7px;
+  text-align:center;font-size:20px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:var(--ink)}
+.otp input:focus{outline:none;border-color:var(--m);box-shadow:0 0 0 2px rgba(15,92,140,.15)}
+.sig{border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--soft);margin-bottom:16px}
+.sig .nm{font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--ink);letter-spacing:.04em}
+.sig .mt{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.6}
+.keys{font-size:11.5px}
+.keys>div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--soft)}
+.keys>div:last-child{border:0}
+.keys kbd{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:var(--soft);border:1px solid var(--line);
+  border-bottom-width:2px;border-radius:5px;padding:3px 8px;color:var(--ink2);white-space:nowrap}
+.keys span{color:var(--muted)}
+
+.toasts{position:fixed;right:20px;bottom:20px;z-index:400;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--m-dark);color:#fff;border-radius:8px;padding:12px 16px;font-size:12px;max-width:350px;
+  box-shadow:0 10px 26px rgba(0,0,0,.35);border-left:3px solid var(--m-light);animation:sl .25s ease-out}
+.toast.ok{border-left-color:#4E9E75}
+.toast b{display:block;margin-bottom:2px}
+.toast small{color:#A9C4D8;font-size:10.5px;line-height:1.6;display:block;margin-top:3px}
+@keyframes sl{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+
+#tip{position:fixed;z-index:500;background:var(--m-dark);color:#fff;padding:8px 12px;border-radius:7px;
+  font-size:11px;pointer-events:none;opacity:0;transition:opacity .12s;box-shadow:0 6px 18px rgba(0,0,0,.3);white-space:nowrap}
+#tip b{display:block;font-size:12.5px;margin-bottom:2px}
+#tip span{color:#A9C4D8;font-size:10.5px}
+.hv{cursor:pointer;transition:opacity .12s}
+.hv:hover{opacity:.75}
+
+.login{display:grid;grid-template-columns:1.15fr 1fr;height:100vh;overflow:hidden}
+.login .lf{background:linear-gradient(180deg,rgba(10,40,64,.82),rgba(10,40,64,.93)),url('MOIC01.webp') center/cover no-repeat,var(--m-dark);
+  color:#fff;padding:52px 52px;display:flex;flex-direction:column;overflow-y:auto}
+.seal{width:46px;height:46px;border-radius:50%;border:2px solid var(--m-light);color:var(--m-light);
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin-bottom:24px}
+.sealrow{display:flex;align-items:center;gap:13px;margin-bottom:24px}
+.sealrow .seal{margin-bottom:0}
+.moic-logo{width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:3px}
+.brand .moic-logo{width:22px;height:22px;padding:2px;margin-right:2px}
+.login h1{font-size:27px;font-weight:600;line-height:1.4;letter-spacing:-.02em;margin-bottom:14px}
+.login h1 span{color:var(--m-light)}
+.login .sub{font-size:12.5px;color:#9EBCD1;line-height:1.9;max-width:440px}
+.login .stat{margin-top:auto;display:flex;gap:34px;padding-top:28px;border-top:1px solid #164B6C;flex-wrap:wrap}
+.login .stat .n{font-size:22px;font-weight:600;color:var(--m-light)}
+.login .stat .l{font-size:10.5px;color:#83A5BD;margin-top:3px}
+.login .rt2{background:var(--white);padding:40px 46px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
+.login .rt2 h2{font-size:17px;font-weight:600;margin-bottom:4px}
+.login .rt2 p{font-size:12px;color:var(--muted);margin-bottom:16px}
+.acct{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:7px;cursor:pointer;
+  display:flex;align-items:center;gap:11px;transition:.14s}
+.acct:hover{border-color:var(--m-light);background:var(--m-lite)}
+.acct.on{border-color:var(--m);background:var(--m-lite);box-shadow:0 0 0 2px rgba(15,92,140,.13)}
+.acct .av{width:32px;height:32px;flex:0 0 32px;border-radius:50%;background:var(--m);color:#fff;font-size:11px;
+  font-weight:600;display:flex;align-items:center;justify-content:center}
+.acct .nm{font-size:12.5px;font-weight:600}
+.acct .rl{font-size:10.5px;color:var(--muted);margin-top:1px}
+.acct .usr{margin-left:auto;font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.note{font-size:10.5px;color:var(--muted);line-height:1.7;margin-top:14px;padding-top:13px;border-top:1px solid var(--soft)}
+.note kbd{font-family:'IBM Plex Mono',monospace;font-size:9.5px;background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+
+.mstage{display:flex;gap:28px;justify-content:center;align-items:flex-start;padding:34px 20px;
+  background:var(--paper);height:100vh;overflow-y:auto;flex-wrap:wrap}
+.phone{width:296px;border:10px solid var(--m-dark);border-radius:36px;overflow:hidden;background:#fff;box-shadow:0 16px 38px rgba(0,0,0,.2)}
+.phone .sb{height:27px;background:var(--m-dark);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 15px;font-size:9.5px}
+.phone .hd{background:var(--m-dark);color:#fff;padding:0 17px 16px}
+.phone .hd .n{font-size:10.5px;color:#93B4CB}
+.phone .hd .c{font-size:14px;font-weight:600;margin-top:2px}
+.phone .bd{padding:15px 17px 18px;min-height:352px}
+.pcard{border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px}
+.pcard .l{font-size:10.5px;color:var(--muted)}
+.pcard .v{font-size:18px;font-weight:600;letter-spacing:-.02em;margin:3px 0 8px}
+.mrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid var(--soft);font-size:11.5px}
+.mnav{display:flex;border-top:1px solid var(--line)}
+.mnav div{flex:1;text-align:center;padding:9px 2px;font-size:8.5px;color:var(--muted)}
+.mnav div.on{color:var(--m);font-weight:600}
+.mnav .ic{font-size:15px;display:block;margin-bottom:2px}
+.plabel{text-align:center;font-size:11.5px;color:var(--muted);margin-top:11px}
+
+.split70{display:grid;grid-template-columns:7fr 3fr;gap:12px;margin-bottom:14px;align-items:stretch}
+@media(max-width:1100px){.split{grid-template-columns:1fr}}
+@media(max-width:900px){
+  .kpis{grid-template-columns:repeat(2,1fr)} .grid3,.login,.split70{grid-template-columns:1fr}
+  .steps{flex-direction:column} .login .lf{display:none}
+}
+</style>
+</head>
+<body>
+<div id="frame"></div>
+<div class="toasts" id="toasts"></div>
+<div id="tip"></div>
+
+<script type="module">
+/* ============================================================
+   RCMS Phase 1 — rebuilt from RCMS_Phase1_Spec.md
+   Vanilla ES5 app logic, still one HTML file. Now built with Vite
+   (see package.json) solely so real npm packages (e.g. Leaflet for
+   the map) can be imported — run `npm install` then `npm run dev`.
+   ============================================================ */
+import Leaflet from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import LOGO from './moic-logo.png';
+var D={
+lo:{
+ sysName:'ລະບົບຂຶ້ນທະບຽນ ແລະ ຕິດຕາມການປະກອບທຶນ',sysSub:'Registration and Capital Monitoring System',
+ coop:'ໂມດູນການປະກອບທຶນຈົດທະບຽນ (Phase 1) — ຮ່ວມມືລະຫວ່າງ MOIC ແລະ ທະນາຄານສົ່ງເສີມກະສິກຳ (APB)',
+ s1:'ວິສາຫະກິດຂຶ້ນທະບຽນ',s2:'ລ້ານລ້ານກີບ ທຶນຈົດທະບຽນ',s3:'ຂະບວນການທຸລະກຳ',
+ pickAcct:'ເຂົ້າສູ່ລະບົບ',loginHint:'ພິມຊື່ຜູ້ໃຊ້ (ມີລາຍຊື່ demo ໃຫ້ autocomplete) ແລ້ວໃສ່ລະຫັດຜ່ານໃດກໍ່ໄດ້',
+ loginUser:'ຊື່ຜູ້ໃຊ້',loginPass:'ລະຫັດຜ່ານ',loginNext:'ຖັດໄປ',loginBack:'← ກັບຄືນ',
+ otpTitle:'ຢືນຢັນຕົວຕົນ (MFA)',login:'ເຂົ້າສູ່ລະບົບ',
+ forgotPw:'ລືມລະຫັດຜ່ານ?',forgotTitle:'ກູ້ຄືນລະຫັດຜ່ານ',forgotIdLbl:'ອີເມວ ຫຼື ເບີໂທລະສັບ',
+ forgotIdPh:'example@moic.gov.la ຫຼື 020xxxxxxxx',sendCode:'ສົ່ງລະຫັດຢືນຢັນ',
+ codeSentNote:'ລະຫັດຢືນຢັນຖືກສົ່ງໄປແລ້ວ (ຈຳລອງ)',verifyCode:'ຢືນຢັນລະຫັດ',
+ newPwLbl:'ລະຫັດຜ່ານໃໝ່',confirmPwLbl:'ຢືນຢັນລະຫັດຜ່ານໃໝ່',setNewPw:'ຕັ້ງລະຫັດຜ່ານໃໝ່',
+ pwResetDone:'ຕັ້ງລະຫັດຜ່ານໃໝ່ສຳເລັດ',pwResetDoneS:'ນຳໃຊ້ລະຫັດຜ່ານໃໝ່ໃນຄັ້ງຕໍ່ໄປ (ຈຳລອງ)',
+ pwMismatch:'ລະຫັດຜ່ານບໍ່ກົງກັນ',unknownUser:'ບໍ່ພົບຜູ້ໃຊ້ນີ້ — ເລືອກຈາກລາຍຊື່ທີ່ແນະນຳ',errPw:'ກະລຸນາໃສ່ລະຫັດຜ່ານ',
+ qrVerify:'ກວດສອບສະຖານະວິສາຫະກິດ',qrVerifyNote:'ບໍ່ຈຳເປັນຕ້ອງເຂົ້າສູ່ລະບົບ · ຄົ້ນຫາດ້ວຍຊື່ ຫຼື ເລກທະບຽນ',
+ verifyNotFound:'ບໍ່ພົບຂໍ້ມູນວິສາຫະກິດນີ້',secNote:'ບັງຄັບ MFA ສຳລັບຜູ້ອະນຸມັດ · Session Timeout 15 ນາທີ · ຫ້າມເຂົ້າໃຊ້ຊ້ຳຊ້ອນ · Audit Trail ທຸກການເຂົ້າເຖິງ',
+ kbTitle:'ປຸ່ມລັດ',close:'ປິດ',cancel:'ຍົກເລີກ',confirm:'ຢືນຢັນ',save:'ບັນທຶກ',edit:'ແກ້ໄຂ',manage:'ຈັດການ',
+ helpCenter:'ຄູ່ມືການໃຊ້ ແລະ Helpdesk',profile:'ຂໍ້ມູນຜູ້ໃຊ້',logout:'ອອກຈາກລະບົບ',signedAs:'ເຂົ້າສູ່ລະບົບເປັນ',
+ loggedIn:'ເຂົ້າສູ່ລະບົບສຳເລັດ',resetDone:'ຣີເຊັດເດໂມແລ້ວ',resetDoneS:'ເລີ່ມຈາກໜ້າເຂົ້າສູ່ລະບົບອີກຄັ້ງ',
+ clearCache:'ລ້າງແຄດ',clearCacheConfirm:'ລ້າງແຄດ ແລະ ຣີເຊັດຂໍ້ມູນເດໂມທັງໝົດ? ທ່ານຈະຍັງເຂົ້າສູ່ລະບົບຢູ່.',
+ clearCacheDone:'ລ້າງແຄດແລ້ວ',clearCacheDoneS:'ຂໍ້ມູນເດໂມຖືກຣີເຊັດ ໂດຍທ່ານຍັງເຂົ້າສູ່ລະບົບຢູ່',
+
+ mMonitor:'ຕິດຕາມທຶນ',mQueue:'ຄິວງານ',mOther:'ອື່ນໆ',
+ dash:'ໜ້າຫຼັກ',ent:'ຄົ້ນຫາວິສາຫະກິດ',declare:'ແຈ້ງຊຳລະທຶນ',inspect:'ຄິວກວດສອບ',approveQ:'ຄິວອະນຸມັດ',
+ valQueue:'ຄິວງານປະເມີນ',valPortal:'ວຽກປະເມີນຂອງຂ້ອຍ',fin:'ການເງິນ',rep:'ລາຍງານ',set:'ຕັ້ງຄ່າລະບົບ',portal:'Portal ພາຍນອກ',
+ myCap:'ທຶນຂອງຂ້ອຍ',notif:'ການແຈ້ງເຕືອນ',markRead:'ໝາຍວ່າອ່ານແລ້ວທັງໝົດ',noNotif:'ບໍ່ມີການແຈ້ງເຕືອນ',
+
+ dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING — ລໍຊຳລະ',kPartial:'PARTIAL — ຊຳລະບາງສ່ວນ',
+ kCompleted:'COMPLETED — ຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ວິສາຫະກິດຕາມສະຖານະ',
+ heroPaidPct:'ອັດຕາການຊຳລະລວມ',heroEnts:'ວິສາຫະກິດທັງໝົດ',
+ dueSoon:'ໃກ້ຄົບກຳນົດພາຍໃນ 30 ວັນ',seeAll:'ເບິ່ງທັງໝົດ',adminUsers:'ຜູ້ໃຊ້ລະບົບ',onlineNow:'ອອນລາຍຕອນນີ້',totalUsers:'ຜູ້ໃຊ້ທັງໝົດ',
+ secCapital:'ພາບລວມທຶນຈົດທະບຽນ',secUsers:'ພາບລວມຜູ້ໃຊ້ລະບົບ',orgBreakdown:'ຈຳແນກຕາມໜ່ວຍງານ',
+
+ cEnt:'ວິສາຫະກິດ',cType:'ປະເພດ',cProv:'ແຂວງ',cRegD:'ວັນຈົດທະບຽນ',cDue:'ຄົບກຳນົດ',cCap:'ທຶນຈົດທະບຽນ',
+ cPaid:'ຊຳລະແລ້ວ',cLeft:'ຍັງເຫຼືອ',cStatus:'ສະຖານະ',cDate:'ວັນທີ',cAct:'ລາຍການ',cMode:'ຊ່ອງທາງ',
+ cAmt:'ຈຳນວນ',cBy:'ຜູ້ສົ່ງເລື່ອງ',cDoc:'ເອກະສານ',cTime:'ເວລາ',cRef:'ເລກທີ່ອ້າງອີງ',
+ hstComplete:'ສຳເລັດ',hstPending:'ລໍກວດສອບ',hstReturned:'ຕີກັບ',
+ search:'ຄົ້ນຫາຊື່ ຫຼື ເລກທະບຽນ',allSt:'ທຸກສະຖານະ',allProv:'ທຸກແຂວງ',allIsic:'ISIC ທຸກຂະແໜງ',
+ export:'ສົ່ງອອກ Excel',print:'ພິມ',showing:'ສະແດງ',of:'ຈາກ',items:'ລາຍການ',
+ noMatch:'ບໍ່ພົບລາຍການທີ່ຕົງກັບເງື່ອນໄຂ',noMatchS:'ລອງປ່ຽນເງື່ອນໄຂ ຫຼື ລ້າງຄ່າຄົ້ນຫາ',
+ filterTitle:'ຕົວກອງ',clearCriteria:'ລ້າງເງື່ອນໄຂ',fltRegNo:'ເລກທະບຽນ',fltEtype:'ປະເພດວິສາຫະກິດ',
+ fltNameLo:'ຊື່ວິສາຫະກິດ (ລາວ)',fltNameEn:'ຊື່ວິສາຫະກິດ (English)',
+ fltRegFrom:'ວັນທີ່ຈົດທະບຽນ ຈາກ',fltRegTo:'ວັນທີ່ຈົດທະບຽນ ຫາ',fltUpdFrom:'ວັນທີ່ອັບເດດ ຈາກ',fltUpdTo:'ວັນທີ່ອັບເດດ ຫາ',
+
+ entType:'ປະເພດນິຕິບຸກຄົນ',regNo:'ເລກທະບຽນ',taxrisNo:'ເລກ TaxRis',acctNo:'ບັນຊີຮັບທຶນ',
+ regCardTitle:'ລາຍລະອຽດການຈົດທະບຽນວິສາຫະກິດ',nameLoLbl:'ຊື່ວິສາຫະກິດ (ລາວ)',nameEnLbl:'ຊື່ວິສາຫະກິດ (ອັງກິດ)',
+ repLbl:'ຊື່ຜູ້ຖືທະບຽນ',regStatusLbl:'ສະຖານະ',operating:'ດຳເນີນທຸລະກິດຢູ່',districtLbl:'ເມືອງ',villageLbl:'ບ້ານ',
+ taxRegDateLbl:'ວັນທີຂຶ້ນທະບຽນອາກອນ',taxStatusLbl:'ສະຖານະອາກອນ',vatStatusLbl:'ສະຖານະອາກອນມູນຄ່າເພີ່ມ',vatRegistered:'ຂຶ້ນທະບຽນແລ້ວ',
+ mapCaption:'ແຜນທີ່ສະແດງຂອບເຂດພື້ນທີ່ຂອງວິສາຫະກິດ',mapSyncedAt:'ຂໍ້ມູນລ້າສຸດ',
+ capStatus:'ສະຖານະການປະກອບທຶນ',capBreak:'ຊຳລະແລ້ວ ທຽບກັບ ຄົງເຫຼືອ',outstanding:'ຍອດຄ້າງຊຳລະ',penaltyAmt:'ຄ່າປັບສະສົມ',
+ daysLeft:'ວັນທີ່ເຫຼືອກ່ອນຄົບກຳນົດ',
+ stPaid:'ຢືນຢັນແລ້ວ',stDue:'ລໍຊຳລະ',
+ collateral:'ລາຍການຫຼັກປະກັນ',colDetail:'ລາຍລະອຽດ',colVal:'ມູນຄ່າທີ່ຕີລາຄາ',viewReport:'ເບິ່ງບົດລາຍງານ',
+ landType:'ທີ່ດິນ',buildingType:'ອາຄານ',carType:'ລົດ',machineType:'ເຄື່ອງຈັກ',
+ auditTrail:'ປະຫວັດການຊຳລະ ແລະ ອະນຸມັດ',auditNote:'ທຸກລາຍການບັນທຶກ ຜູ້ດຳເນີນການ ວັນເວລາ ແລະ ຄ່າກ່ອນ/ຫຼັງ ກວດຍ້ອນຫຼັງໄດ້',
+ noHistory:'ຍັງບໍ່ມີການເຄື່ອນໄຫວ',noFiles:'ຍັງບໍ່ມີເອກະສານທີ່ແນບ',printData:'ພິມຂໍ້ມູນ / ໃບຢັ້ງຢືນ',addPaymentBtn:'ແຈ້ງຊຳລະທຶນເພີ່ມ',waitingOn:'ລໍຢູ່ຂັ້ນ',
+ stageChecker:'ກວດສອບ (Checker)',stageApprover:'ອະນຸມັດ (Approver)',paymentBlocked:'ຕ້ອງຊຳລະຄ່າປັບໃຫ້ຄົບກ່ອນ ຈຶ່ງຈະບັນທຶກເພີ່ມໄດ້',
+ dlPdf:'ດາວໂຫຼດ PDF',issueCert:'ອອກໃບຢັ້ງຢືນ',notifyBiz:'ແຈ້ງເຕືອນຜູ້ປະກອບການ',sendVal:'ສົ່ງເລື່ອງປະເມີນຊັບສິນ',
+
+ declareTitle:'ແຈ້ງຊຳລະທຶນຈົດທະບຽນ',channelOnline:'ຍື່ນອອນລາຍ (Owner)',channelCounter:'ຍື່ນທີ່ເຄົາເຕີ (Maker)',
+ capMode:'ຮູບແບບການປະກອບທຶນ',modeCash:'ເງິນສົດ',modeAsset:'ຊັບສິນ',
+ modeCashD:'ຊຳລະຜ່ານ QR / Mobile Banking ຫຼື ໂອນເຂົ້າບັນຊີ APB',modeAssetD:'ເລືອກປະເພດຊັບສິນ ແລະ ບໍລິສັດປະເມີນ',
+ assetCategory:'ປະເພດຊັບສິນ',
+ payMode:'ຮູບແບບການຊຳລະ',payFull:'ຊຳລະເຕັມຈຳນວນ',payPartial:'ຊຳລະບາງສ່ວນ',
+ payFullOnly:'ມີການຊຳລະບາງສ່ວນມາກ່ອນແລ້ວ — ງວດຕໍ່ໄປຕ້ອງຊຳລະຍອດຄົງເຫຼືອທັງໝົດ',
+ firmNet:'ບໍລິສັດປະເມີນ',inNet:'In-network',outNet:'Out-of-network (ບໍ່ມີ login — Maker ຄີຍ໌ແທນ)',
+ outNetShort:'Out-of-network',firmNameLbl:'ຊື່ບໍລິສັດປະເມີນ',
+ fAmt:'ຈຳນວນເງິນ',fDate:'ວັນທີຊຳລະ',fAcct:'ບັນຊີຮັບເງິນ',fRef:'ເລກທີ່ອ້າງອີງ',fDocs:'ເອກະສານຫຼັກຖານ',
+ dropT:'ກົດເພື່ອແນບໄຟລ໌ ຫຼື ລາກໄຟລ໌ມາວາງທີ່ນີ້',dropS:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ໃບນຳຝາກ / ສະລິບໂອນ / ໜັງສືຢືນຢັນ · PDF, JPG ບໍ່ເກີນ 10MB',
+ dropSVal:'ຕ້ອງແນບຢ່າງໜ້ອຍ 1 ຢ່າງ: ບົດລາຍງານປະເມີນລາຄາ / ຮູບຖ່າຍຊັບສິນ / ໃບກວດສະຖານທີ່ · PDF, JPG ບໍ່ເກີນ 10MB',
+ reqLbl:'ຈຳເປັນ',optLbl:'ບໍ່ບັງຄັບ',anyOneLbl:'ເລືອກຢ່າງໜ້ອຍ 1',docAssetPhoto:'ຮູບຖ່າຍຊັບສິນ',docSiteInspect:'ໃບກວດສະຖານທີ່',
+ submittedFields:'ຂໍ້ມູນທີ່ຍື່ນຕອນປະກອບທຶນ',
+ remainNote:'ຍັງເຫຼືອທີ່ຕ້ອງຊຳລະ',submitDeclare:'ຍື່ນເຂົ້າຄິວກວດສອບ',
+ errAmt:'ກະລຸນາໃສ່ຈຳນວນເງິນ',errOver:'ຈຳນວນເກີນຍອດຄົງເຫຼືອ',errFile:'ຕ້ອງແນບເອກະສານຢ່າງໜ້ອຍ 1 ໄຟລ໌',
+ errAssetField:'ກະລຸນາໃສ່ຂໍ້ມູນຊັບສິນທີ່ຈຳເປັນ (ຊ່ອງທີ່ມີ *)',
+ hasPending:'ມີລາຍການລໍພິຈາລະນາຢູ່ແລ້ວ',
+ hasPendingS:'ຕ້ອງລໍໃຫ້ລາຍການນີ້ຜ່ານ ຫຼື ຖືກຕີກັບກ່ອນ',sentCheck:'ຍື່ນເຂົ້າຄິວກວດສອບແລ້ວ',
+ sentCheckS:'ອອກຈາກລະບົບແລ້ວເຂົ້າດ້ວຍບັນຊີ Checker ເພື່ອກວດສອບ',
+
+ queueTitle:'ຄິວກວດສອບ',queueApprove:'ຄິວອະນຸມັດ',noTaskC:'ບໍ່ມີງານລໍກວດສອບ',noTaskA:'ບໍ່ມີງານລໍອະນຸມັດ',
+ noTaskCS:'ລໍ Maker ຫຼື ຜູ້ປະກອບການແຈ້ງຊຳລະທຶນເຂົ້າມາກ່ອນ',noTaskAS:'ງານຕ້ອງຜ່ານການກວດສອບກ່ອນຈຶ່ງມາຮອດຂັ້ນອະນຸມັດ',
+ taskOpen:'ກົດແຖວເພື່ອເປີດເບິ່ງລາຍລະອຽດ',reqDetail:'ລາຍລະອຽດຄຳຮ້ອງ',amtNow:'ຈຳນວນທີ່ຍື່ນ',
+ evidence:'ເອກະສານຫຼັກຖານ',evidenceN:'ກວດວ່າຍອດໃນເອກະສານກົງກັບຈຳນວນທີ່ຍື່ນ',
+ openDoc:'ເປີດເບິ່ງ',decide:'ການຕັດສິນໃຈ',
+ checkerNote:'Checker ຢືນຢັນຄວາມຖືກຕ້ອງຂອງຂໍ້ມູນ ແລະ ຫຼັກຖານການເງິນ ແຕ່ຍັງບໍ່ມີສິດລົງລາຍເຊັນ',
+ approverNote:'ການອະນຸມັດຕ້ອງຢືນຢັນຕົວຕົນດ້ວຍ MFA ອີກຄັ້ງ ແລ້ວລະບົບຈະລົງລາຍເຊັນດິຈິຕອນ',
+ fwdApprover:'ຢືນຢັນ ແລະ ສົ່ງຕໍ່ຜູ້ອະນຸມັດ',signApprove:'ອະນຸມັດ ແລະ ລົງລາຍເຊັນດິຈິຕອນ',sendBack:'ຕີກັບໃຫ້ແກ້ໄຂ',
+ reasonIntLbl:'ຄວາມເຫັນພາຍໃນ (ເຈົ້າໜ້າທີ່ເຫັນເທົ່ານັ້ນ)',reasonIntPh:'ບັນທຶກອ້າງອີງພາຍໃນ — ຜູ້ປະກອບການບໍ່ເຫັນ (ບໍ່ບັງຄັບ)',
+ reasonExtLbl:'ຄວາມເຫັນພາຍນອກ (ແຈ້ງໃຫ້ຜູ້ປະກອບການ)',reasonExtPh:'ລະບຸເຫດຜົນທີ່ຕີກັບ...',
+ mfaTitle:'ຢືນຢັນຕົວຕົນກ່ອນລົງລາຍເຊັນ',mfaAny:'ພິມຕົວເລກໃດກໍ່ໄດ້ 6 ຕົວ',
+ sigNote:'ລາຍເຊັນດິຈິຕອນຈາກ Signature Repository · PKI Certificate ຫມົດອາຍຸ 12/2027',
+ doneT:'ອະນຸມັດຮຽບຮ້ອຍ',statusTo:'ສະຖານະປ່ຽນເປັນ',certIssued:'ໃບຢັ້ງຢືນການຝາກທຶນ',issued:'ອອກແລ້ວ',
+ notifSent:'ແຈ້ງເຕືອນຜູ້ປະກອບການ',sent:'ສົ່ງແລ້ວ',apiSent:'ສົ່ງຂໍ້ມູນໄປ eBRS / TaxRis',success:'ສຳເລັດ',
+ goDash:'ເບິ່ງໜ້າຫຼັກ',goCert:'ເບິ່ງໃບຢັ້ງຢືນ',checkDone:'ກວດສອບຮຽບຮ້ອຍ',
+ checkDoneS:'ສົ່ງຕໍ່ຜູ້ອະນຸມັດແລ້ວ — ເຂົ້າດ້ວຍບັນຊີຜູ້ອະນຸມັດເພື່ອລົງລາຍເຊັນ',backDone:'ຕີກັບໃຫ້ແກ້ໄຂແລ້ວ',
+ backDoneS:'ງານກັບໄປຫາຜູ້ຍື່ນ · ບັນທຶກເຫດຜົນລົງ Audit Trail ແລ້ວ',apvDone:'ອະນຸມັດ ແລະ ລົງລາຍເຊັນດິຈິຕອນສຳເລັດ',
+
+ valTitle:'ຄິວງານປະເມີນຫຼັກຊັບ',valAll:'ງານທັງໝົດ',valDoing:'ກຳລັງປະເມີນ',valWait:'ລໍກວດຮັບຜົນ',valOut:'ລໍອະນຸມັດບໍລິສັດ',
+ valFirm:'ບໍລິສັດປະເມີນ',valFirmType:'ປະເພດເຄືອຂ່າຍ',valAsset:'ຊັບສິນ',valDeclared:'ມູນຄ່າທີ່ແຈ້ງ',
+ valRule:'ມູນຄ່າຈະນັບເປັນທຶນຈົດທະບຽນເມື່ອເຈົ້າໜ້າທີ່ກວດຮັບຜົນແລ້ວເທົ່ານັ້ນ',myJobs:'ວຽກປະເມີນທີ່ຮັບຜິດຊອບ',
+ submitJob:'ສົ່ງຜົນປະເມີນ',acceptResult:'ກວດຮັບຜົນປະເມີນ',approveFirm:'ອະນຸມັດບໍລິສັດນອກເຄືອຂ່າຍ',
+ jobSubmitted:'ສົ່ງຜົນປະເມີນແລ້ວ',jobSubmittedS:'ລໍເຈົ້າໜ້າທີ່ Checker ກວດຮັບຜົນ',jobAccepted:'ກວດຮັບຜົນປະເມີນແລ້ວ',
+ jobAcceptedS:'ມູນຄ່ານີ້ນັບເປັນທຶນຈົດທະບຽນແລ້ວ',firmApproved:'ອະນຸມັດບໍລິສັດແລ້ວ',firmApprovedS:'ບໍລິສັດສາມາດບັນທຶກມູນຄ່າໄດ້ແລ້ວ',
+
+ finTitle:'ການເງິນ ແລະ ຄ່າປັບ',feeTab:'ຄ່າທຳນຽມ',penTab:'ຄ່າປັບ',recTab:'ໃບຮັບເງິນເອເລັກໂຕຣນິກ',
+ penDays:'ຈຳນວນວັນທີ່ເກີນ',payStatus:'ສະຖານະຊຳລະ',feeByType:'ຄ່າທຳນຽມຕາມປະເພດວິສາຫະກິດ',
+ feeByCapital:'ຄ່າທຳນຽມຕາມມູນຄ່າທຶນຈົດທະບຽນ',feeRange:'ຊ່ວງທຶນຈົດທະບຽນ',feeAmt:'ຄ່າທຳນຽມ',penRate:'ອັດຕາຄ່າປັບຕໍ່ວັນ',
+ penRateTBD:'ອັດຕາຄ່າປັບຕໍ່ວັນຍັງບໍ່ມີກຳນົດຈາກ TOR — ລໍຢືນຢັນຈາກລູກຄ້າ',
+ feeDecreeNote:'ອ້າງອີງຮັຖບັນຍັດເລກທີ 002/ປປທ 17/06/2021 · Parameter-driven ຫ້າມ hard-code',
+ receiptNo:'ເລກທີ່ໃບຮັບເງິນ',viewReceipt:'ເບິ່ງໃບຮັບເງິນ',refund:'ຄືນເງິນ',refunded:'ຄືນເງິນແລ້ວ',refundDone:'ຄືນເງິນສຳເລັດ',
+ chQR:'QR Code',chMobile:'Mobile Banking',chCounter:'ເຄົາເຕີ APB',payChannel:'ຊ່ອງທາງຊຳລະ',paidAtLbl:'ວັນເວລາທີ່ຊຳລະ',
+ autoVerified:'ລະບົບກວດສອບການຊຳລະອັດຕະໂນມັດ',scanNote:'ສະແກນດ້ວຍແອັບທະນາຄານ ຫຼື Mobile Banking',
+ simulatePaid:'ຈຳລອງການຊຳລະສຳເລັດ',paidOk:'ຊຳລະສຳເລັດ',paidOkS:'ລະບົບກວດສອບອັດຕະໂນມັດ ບໍ່ຕ້ອງລໍການອະນຸມັດ',
+ myInvoices:'ໃບແຈ້ງໜີ້ຂອງຂ້ອຍ',cItem:'ລາຍການ',noInvoice:'ບໍ່ມີໃບແຈ້ງໜີ້ຄ້າງຊຳລະ',bizPayQR:'ຊຳລະດ້ວຍ QR',
+
+ repTitle:'ລາຍງານ ແລະ ສະຖິຕິ',repPick:'ເລືອກລາຍງານ',repRange:'ຊ່ວງເວລາ',repGen:'ສ້າງລາຍງານ',dFrom:'ຕັ້ງແຕ່',dTo:'ຫາ',
+ overdueTrend:'ຈຳນວນເກີນກຳນົດ ຍ້ອນຫຼັງ 12 ເດືອນ',overdueTrendN:'ຫຼຸດລົງນັບແຕ່ເລີ່ມແຈ້ງເຕືອນອັດຕະໂນມັດ',
+
+ setTitle:'ຕັ້ງຄ່າລະບົບ',setFee:'ຄ່າທຳນຽມ',master:'Master Data',glTitle:'ບັນຊີຮັບທຶນ (Virtual GL)',
+ setUser:'ຜູ້ໃຊ້ງານ',setApi:'API Log',glNote:'ບັນທຶກທຸກລາຍການປະກອບທຶນທີ່ອະນຸມັດແລ້ວ ໃຊ້ຕິດຕາມຍອດແຕ່ລະບັນຊີ APB',
+ addUser:'+ ເພີ່ມຜູ້ໃຊ້',addUserTitle:'ເພີ່ມຜູ້ໃຊ້ໃໝ່',uName:'ຊື່ຜູ້ໃຊ້',uOrg:'ໜ່ວຍງານ',uRole:'ບົດບາດ',
+ uActive:'ໃຊ້ງານ',uLocked:'ຖືກລະງັບ',uPwd:'ວັນປ່ຽນລະຫັດຫຼ້າສຸດ',activate:'ເປີດໃຊ້ງານ',deactivate:'ປິດໃຊ້ງານ',
+ userAdded:'ເພີ່ມຜູ້ໃຊ້ແລ້ວ',errRequired:'ກະລຸນາໃສ່ຂໍ້ມູນໃຫ້ຄົບ',apiDest:'ປາຍທາງ',apiDur:'ເວລາທີ່ໃຊ້',
+ apiNote:'ໜ້ານີ້ໃຫ້ຜູ້ດູແລລະບົບກວດສອບການ sync ກັບລະບົບພາຍນອກເທົ່ານັ້ນ',
+
+ portalTitle:'Portal ພາຍນອກ',portalNote:'ເຫັນສະເພາະຂໍ້ມູນສາທາລະນະ · ສອບຖາມ ຕິດຕາມ ຢືນຢັນ ດາວໂຫຼດເອກະສານໄດ້',copyType:'ປະເພດສະບັບ',
+
+ bizTitle:'ທຶນຈົດທະບຽນຂອງຂ້ອຍ',bizRemain:'ຍັງຕ້ອງຊຳລະ',bizDone:'ຊຳລະຄົບຖ້ວນແລ້ວ',howToPay:'ວິທີຊຳລະທຶນ',
+ copyAcct:'ກັອບປີ້',copied:'ສຳເນົາແລ້ວ',capTransferNote:'ໂອນເຂົ້າບັນຊີຂ້າງເທິງ ຫຼື ໃຊ້ຟອມແຈ້ງຊຳລະທຶນອອນລາຍ',
+ selfDeclare:'ແຈ້ງຊຳລະທຶນອອນລາຍ',myEnt:'ວິສາຫະກິດຂອງຂ້ອຍ',bizCert:'ໃບຢັ້ງຢືນການຝາກທຶນ',bizReg:'ໃບທະບຽນວິສາຫະກິດ',
+ bizVal:'ຜົນປະເມີນຊັບສິນ',bizNotYet:'ຍັງບໍ່ອອກ',bizDl:'ດາວໂຫຼດ',bizDocs:'ເອກະສານຂອງຂ້ອຍ',
+ kbMob:'ສະຫຼັບມຸມມອງມືຖື',kbLang:'ສະຫຼັບພາສາ',kbSide:'ຫຍໍ້/ຂະຫຍາຍເມນູ',kbOut:'ອອກຈາກລະບົບ',kbReset:'ຣີເຊັດເດໂມ',
+ kbHelp:'ເປີດ/ປິດໜ້ານີ້',kbNote:'ໃຊ້ໄດ້ທຸກໜ້າ ຍົກເວັ້ນຕອນພິມຂໍ້ມູນ',
+ audOwner:'ຜູ້ປະກອບການ',audStaff:'ເຈົ້າໜ້າທີ່',audExternal:'ພາກສ່ວນພາຍນອກ',ebook:'E-book / PDF',video:'Video Tutorial',
+ quickRef:'Quick Reference Guide',faq:'FAQ',inAppHelp:'ຄວາມຊ່ວຍເຫຼືອໃນລະບົບ',
+ phase2:'ຢູ່ໃນຂອບເຂດງານຈິງ',notDemo:'ຍັງບໍ່ໄດ້ເຮັດໃນເດໂມນີ້ — ຢູ່ໃນຂອບເຂດງານຈິງ'
+},
+en:{
+ sysName:'Registration and Capital Monitoring System',sysSub:'ລະບົບຂຶ້ນທະບຽນ ແລະ ຕິດຕາມການປະກອບທຶນ',
+ coop:'Capital Contribution Module (Phase 1) — a joint effort of MOIC and the Agricultural Promotion Bank (APB)',
+ s1:'Registered enterprises',s2:'Trillion LAK registered capital',s3:'Business processes',
+ pickAcct:'Sign in',loginHint:'',
+ loginUser:'Username',loginPass:'Password',loginNext:'Next',loginBack:'← Back',
+ otpTitle:'Verify identity (MFA)',login:'Sign in',
+ forgotPw:'Forgot password?',forgotTitle:'Password recovery',forgotIdLbl:'Email or phone number',
+ forgotIdPh:'example@moic.gov.la or 020xxxxxxxx',sendCode:'Send verification code',
+ codeSentNote:'A verification code has been sent (simulated)',verifyCode:'Verify code',
+ newPwLbl:'New password',confirmPwLbl:'Confirm new password',setNewPw:'Set new password',
+ pwResetDone:'Password reset successful',pwResetDoneS:'Use your new password next time (simulated)',
+ pwMismatch:'Passwords do not match',unknownUser:'User not found — pick one of the suggested accounts',errPw:'Enter your password',
+ qrVerify:'Verify enterprise status',qrVerifyNote:'No login required · search by name or registration number',
+ verifyNotFound:'No matching enterprise found',secNote:'MFA enforced for approvers · 15-minute session timeout · concurrent sessions blocked · every access written to the audit trail',
+ kbTitle:'Keyboard shortcuts',close:'Close',cancel:'Cancel',confirm:'Confirm',save:'Save',edit:'Edit',manage:'Manage',
+ helpCenter:'User Manual & Helpdesk',profile:'Profile',logout:'Sign out',signedAs:'Signed in as',
+ loggedIn:'Signed in',resetDone:'Demo reset',resetDoneS:'Starting again from the sign-in screen',
+ clearCache:'Clear cache',clearCacheConfirm:'Clear cache and reset all demo data? You will stay signed in.',
+ clearCacheDone:'Cache cleared',clearCacheDoneS:'Demo data has been reset — you are still signed in',
+
+ mMonitor:'Capital Monitoring',mQueue:'Queues',mOther:'Other',
+ dash:'Dashboard',ent:'Search Enterprises',declare:'Declare Payment',inspect:'Inspection Queue',approveQ:'Approval Queue',
+ valQueue:'Valuation Queue',valPortal:'My Valuation Jobs',fin:'Finance',rep:'Reports',set:'System Settings',portal:'External Portal',
+ myCap:'My Capital',notif:'Notifications',markRead:'Mark all as read',noNotif:'No notifications',
+
+ dashTitle:'Registered Capital Contribution Overview',kPending:'PENDING — awaiting payment',kPartial:'PARTIAL — partly paid',
+ kCompleted:'COMPLETED — paid in full',kOverdue:'OVERDUE — past deadline',byStatus:'Enterprises by status',
+ heroPaidPct:'Overall paid rate',heroEnts:'Enterprises tracked',
+ dueSoon:'Due within the next 30 days',seeAll:'View all',adminUsers:'System users',onlineNow:'Online now',totalUsers:'Total users',
+ secCapital:'Capital Overview',secUsers:'System Users Overview',orgBreakdown:'Breakdown by Organization',
+
+ cEnt:'Enterprise',cType:'Type',cProv:'Province',cRegD:'Registered',cDue:'Deadline',cCap:'Registered capital',
+ cPaid:'Paid',cLeft:'Outstanding',cStatus:'Status',cDate:'Date',cAct:'Activity',cMode:'Channel',
+ cAmt:'Amount',cBy:'Submit by',cDoc:'Files',cTime:'Time',cRef:'Reference',
+ hstComplete:'Complete',hstPending:'Pending',hstReturned:'Returned',
+ search:'Search by name or registration number',allSt:'All statuses',allProv:'All provinces',allIsic:'All ISIC sectors',
+ export:'Export to Excel',print:'Print',showing:'Showing',of:'of',items:'records',
+ noMatch:'No records match these filters',noMatchS:'Try different criteria or clear the search',
+ filterTitle:'Filter',clearCriteria:'Clear criteria',fltRegNo:'Registration number',fltEtype:'Enterprise type',
+ fltNameLo:'Enterprise name (Lao)',fltNameEn:'Enterprise name (English)',
+ fltRegFrom:'Registration date from',fltRegTo:'Registration date to',fltUpdFrom:'Last update from',fltUpdTo:'Last update to',
+
+ entType:'Entity type',regNo:'Registration no.',taxrisNo:'TaxRis no.',acctNo:'Capital account',
+ regCardTitle:'Enterprise Registration Details',nameLoLbl:'Enterprise name (Lao)',nameEnLbl:'Enterprise name (English)',
+ repLbl:'Name of registration holder',regStatusLbl:'Status',operating:'Operating',districtLbl:'District',villageLbl:'Village',
+ taxRegDateLbl:'Tax registration date',taxStatusLbl:'Tax status',vatStatusLbl:'VAT status',vatRegistered:'Registered',
+ mapCaption:'Map showing the enterprise location',mapSyncedAt:'Last synced',
+ capStatus:'Capital contribution status',capBreak:'Paid vs outstanding',outstanding:'Outstanding balance',penaltyAmt:'Accrued penalty',
+ daysLeft:'Days left before the deadline',
+ stPaid:'Confirmed',stDue:'Awaiting payment',
+ collateral:'Collateral Items',colDetail:'Details',colVal:'Appraised value',viewReport:'View report',
+ landType:'Land',buildingType:'Building',carType:'Car',machineType:'Machine',
+ auditTrail:'Payment & Approval History',auditNote:'Every entry records who acted, when, and the before/after values for full traceability',
+ noHistory:'No activity yet',noFiles:'No documents attached yet',printData:'Print data / certificate',addPaymentBtn:'Declare additional payment',waitingOn:'Waiting on',
+ stageChecker:'Verification (Checker)',stageApprover:'Approval (Approver)',paymentBlocked:'Outstanding penalties must be paid in full before another payment can be recorded',
+ dlPdf:'Download PDF',issueCert:'Issue certificate',notifyBiz:'Notify business owner',sendVal:'Send for asset valuation',
+
+ declareTitle:'Declare Capital Payment',channelOnline:'Submit online (Owner)',channelCounter:'Submit at counter (Maker)',
+ capMode:'Capital contribution mode',modeCash:'Cash',modeAsset:'Assets',
+ modeCashD:'Pay via QR / Mobile Banking or transfer to the APB account',modeAssetD:'Choose the asset category and a valuation firm',
+ assetCategory:'Asset category',
+ payMode:'Payment type',payFull:'Pay in full',payPartial:'Pay partially',
+ payFullOnly:'A partial payment was already made — the next instalment must settle the full outstanding balance',
+ firmNet:'Valuation firm',inNet:'In-network',outNet:'Out-of-network (no login — Maker keys it in)',
+ outNetShort:'Out-of-network',firmNameLbl:'Valuation firm name',
+ fAmt:'Amount',fDate:'Payment date',fAcct:'Receiving account',fRef:'Transaction reference',fDocs:'Supporting documents',
+ dropT:'Click to attach, or drag and drop files here',dropS:'Attach at least 1: deposit slip / transfer receipt / confirmation letter · PDF, JPG up to 10MB',
+ dropSVal:'Attach at least 1: appraisal report / asset photos / site inspection form · PDF, JPG up to 10MB',
+ reqLbl:'Required',optLbl:'Optional',anyOneLbl:'Choose at least 1',docAssetPhoto:'Asset photos',docSiteInspect:'Site inspection form',
+ submittedFields:'Fields submitted at capital declaration',
+ remainNote:'Outstanding balance',submitDeclare:'Submit for verification',
+ errAmt:'Enter the amount',errOver:'Amount exceeds the outstanding balance',errFile:'Attach at least one supporting document',
+ errAssetField:'Please fill in the required asset details (marked with *)',
+ hasPending:'A submission is already awaiting a decision',
+ hasPendingS:'This case must be approved or returned before another submission can be made',sentCheck:'Submitted for verification',
+ sentCheckS:'Sign out and sign back in as the Checker to verify it',
+
+ queueTitle:'Inspection Queue',queueApprove:'Approval Queue',noTaskC:'Nothing waiting for verification',noTaskA:'Nothing waiting for approval',
+ noTaskCS:'Waiting for a Maker or business owner to submit a capital payment first',noTaskAS:'A case must clear verification before it reaches approval',
+ taskOpen:'Click a row to open the full case',reqDetail:'Case detail',amtNow:'Amount submitted',
+ evidence:'Supporting documents',evidenceN:'Check that the amount on file matches the submitted amount',
+ openDoc:'Open',decide:'Decision',
+ checkerNote:'The Checker confirms the figures and financial evidence but cannot apply a signature.',
+ approverNote:'Approval requires MFA again, after which the system applies a digital signature.',
+ fwdApprover:'Verify and forward to the approver',signApprove:'Approve and sign digitally',sendBack:'Return for correction',
+ reasonIntLbl:'Internal note (staff only)',reasonIntPh:'For internal reference — the business owner will not see this (optional)',
+ reasonExtLbl:'External note (shown to the business owner)',reasonExtPh:'State why this is being returned...',
+ mfaTitle:'Verify your identity before signing',mfaAny:'Any 6 digits will do in this demo',
+ sigNote:'Digital signature from the Signature Repository · PKI certificate valid until 12/2027',
+ doneT:'Approved',statusTo:'Status changed to',certIssued:'Capital deposit certificate',issued:'Issued',
+ notifSent:'Business owner notified',sent:'Sent',apiSent:'Data pushed to eBRS / TaxRis',success:'Success',
+ goDash:'View dashboard',goCert:'View certificate',checkDone:'Verification complete',
+ checkDoneS:'Forwarded to the approver — sign in as the approver to apply the signature',backDone:'Returned for correction',
+ backDoneS:'The case is back with the submitter · reason written to the audit trail',apvDone:'Approved and digitally signed',
+
+ valTitle:'Asset Valuation Queue',valAll:'Total jobs',valDoing:'In progress',valWait:'Awaiting acceptance',valOut:'Awaiting firm approval',
+ valFirm:'Valuation firm',valFirmType:'Network type',valAsset:'Asset',valDeclared:'Declared value',
+ valRule:'A value only counts toward registered capital once an officer has accepted the result.',myJobs:'Jobs assigned to me',
+ submitJob:'Submit valuation result',acceptResult:'Accept valuation result',approveFirm:'Approve out-of-network firm',
+ jobSubmitted:'Valuation result submitted',jobSubmittedS:'Awaiting acceptance by the Checker',jobAccepted:'Valuation result accepted',
+ jobAcceptedS:'This value now counts toward registered capital',firmApproved:'Firm approved',firmApprovedS:'The firm can now record valuations',
+
+ finTitle:'Finance & Penalties',feeTab:'Fees',penTab:'Penalties',recTab:'E-Receipts',
+ penDays:'Days overdue',payStatus:'Payment status',feeByType:'Fee by enterprise type',
+ feeByCapital:'Fee by registered capital',feeRange:'Registered capital band',feeAmt:'Fee',penRate:'Penalty rate per day',
+ penRateTBD:'The daily penalty rate is not yet defined in the TOR — pending client confirmation',
+ feeDecreeNote:'Per decree 002/ປປທ dated 17 June 2021 · Parameter-driven, never hard-coded',
+ receiptNo:'Receipt no.',viewReceipt:'View receipt',refund:'Refund',refunded:'Refunded',refundDone:'Refund completed',
+ chQR:'QR Code',chMobile:'Mobile Banking',chCounter:'APB Counter',payChannel:'Payment channel',paidAtLbl:'Paid at',
+ autoVerified:'Payment verified automatically by the system',scanNote:'Scan with your banking app or Mobile Banking',
+ simulatePaid:'Simulate successful payment',paidOk:'Payment successful',paidOkS:'Verified automatically by the system — no approval needed',
+ myInvoices:'My Invoices',cItem:'Item',noInvoice:'No outstanding invoices',bizPayQR:'Pay by QR',
+
+ repTitle:'Reports & Statistics',repPick:'Choose a report',repRange:'Date range',repGen:'Generate report',dFrom:'From',dTo:'To',
+ overdueTrend:'Overdue enterprises, last 12 months',overdueTrendN:'Down since automated reminders started',
+
+ setTitle:'System Settings',setFee:'Fees',master:'Master Data',glTitle:'Virtual GL',
+ setUser:'Users',setApi:'API Log',glNote:'Records every approved capital contribution to track each APB account balance',
+ addUser:'+ Add user',addUserTitle:'Add new user',uName:'User',uOrg:'Organisation',uRole:'Role',
+ uActive:'Active',uLocked:'Suspended',uPwd:'Days since password change',activate:'Activate',deactivate:'Deactivate',
+ userAdded:'User added',errRequired:'Please fill in all fields',apiDest:'Destination',apiDur:'Duration',
+ apiNote:'This page exists only so administrators can confirm whether external syncs succeeded',
+
+ portalTitle:'External Portal',portalNote:'Shows public information only · inquire, track, confirm and download documents',copyType:'Copy type',
+
+ bizTitle:'My Registered Capital',bizRemain:'Still to be paid',bizDone:'Capital fully paid',howToPay:'How to pay',
+ copyAcct:'Copy',copied:'Copied',capTransferNote:'Transfer to the account above, or use the online declaration form',
+ selfDeclare:'Declare capital payment online',myEnt:'My enterprise',bizCert:'Capital deposit certificate',bizReg:'Enterprise registration certificate',
+ bizVal:'Asset valuation result',bizNotYet:'Not issued',bizDl:'Download',bizDocs:'My Documents',
+ kbMob:'Toggle mobile view',kbLang:'Switch language',kbSide:'Collapse/expand the sidebar',kbOut:'Sign out',kbReset:'Reset the demo',
+ kbHelp:'Show/hide this panel',kbNote:'Works everywhere except while typing in a field',
+ audOwner:'Business owners',audStaff:'Officers',audExternal:'External parties',ebook:'E-book / PDF',video:'Video tutorial',
+ quickRef:'Quick reference guide',faq:'FAQ',inAppHelp:'In-app help',
+ phase2:'In the real scope of work',notDemo:'Not built in this demo — included in the real scope of work'
+}};
+var lang='lo';
+function t(k){return (D[lang]&&D[lang][k])||D.en[k]||k}
+
+/* ================= helpers ================= */
+var $=function(s,r){return (r||document).querySelector(s)};
+var fmt=function(n){return Number(n).toLocaleString('en-US')};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var L=function(o){return o?(o[lang]||o.en||o.lo||''):''};
+var parseD=function(s){if(!s)return 0;var p=s.split('/');return Number(p[2]+p[1]+p[0])};
+function lastUpd(e){var d=e.reg;e.hist.forEach(function(h){if(parseD(h.d)>parseD(d))d=h.d});return d}
+var ST={COMPLETED:['kCompleted','p-ok'],PARTIAL:['kPartial','p-warn'],PENDING:['kPending','p-idle'],OVERDUE:['kOverdue','p-bad']};
+function stName(s){return ST[s]?t(ST[s][0]).split(' — ')[1]||t(ST[s][0]):s}
+function pill(s){var x=ST[s]||['','p-idle'];return '<span class="pill '+x[1]+'">'+stName(s)+'</span>'}
+var HST={complete:['hstComplete','p-ok'],pending:['hstPending','p-warn'],returned:['hstReturned','p-bad']};
+function histPill(s){var x=HST[s]||HST.complete;return '<span class="pill '+x[1]+'">'+t(x[0])+'</span>'}
+function modeLbl(m){return t(m==='cash'?'modeCash':'modeAsset')}
+function toast(a,b,ok){
+  var d=document.createElement('div');d.className='toast'+(ok?' ok':'');
+  d.innerHTML='<b>'+a+'</b>'+(b?'<small>'+b+'</small>':'');
+  $('#toasts').appendChild(d);
+  setTimeout(function(){d.style.transition='.3s';d.style.opacity='0';setTimeout(function(){d.remove()},320)},4300);
+}
+
+/* ---------- donut charts (replaces all progress-bar style visuals) ---------- */
+function donutPct(pct,color){
+  var R=42,C=2*Math.PI*R,len=pct/100*C;
+  return '<svg viewBox="0 0 100 100" style="width:118px;height:118px;flex:0 0 118px">'+
+   '<circle cx="50" cy="50" r="'+R+'" fill="none" stroke="var(--soft)" stroke-width="13"/>'+
+   '<circle cx="50" cy="50" r="'+R+'" fill="none" stroke="'+(color||'#1B6E45')+'" stroke-width="13" stroke-linecap="round" '+
+   'stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" transform="rotate(-90 50 50)"/>'+
+   '<text x="50" y="47" text-anchor="middle" font-size="19" font-weight="700" fill="var(--ink)" font-family="IBM Plex Mono,monospace">'+pct+'%</text>'+
+   '<text x="50" y="62" text-anchor="middle" font-size="8.5" fill="var(--muted)">'+t('cPaid')+'</text></svg>';
+}
+function donutSegs(segs,centerLabel){
+  var tot=segs.reduce(function(a,s){return a+s[0]},0)||1,R=48,C=2*Math.PI*R,off=0;
+  var arcs=segs.map(function(s){
+    var len=s[0]/tot*C;
+    var d='<circle class="hv" cx="64" cy="64" r="'+R+'" fill="none" stroke="'+s[1]+'" stroke-width="17" '+
+      'stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" stroke-dashoffset="'+(-off).toFixed(1)+'" '+
+      'transform="rotate(-90 64 64)" data-tip="'+s[2]+'|'+fmt(s[0])+' ('+(s[0]/tot*100).toFixed(1)+'%)"></circle>';
+    off+=len;return d}).join('');
+  return '<svg viewBox="0 0 128 128" style="width:130px;height:130px;flex:0 0 130px">'+arcs+
+   '<text x="64" y="60" text-anchor="middle" font-size="19" font-weight="700" fill="var(--ink)" font-family="IBM Plex Mono,monospace">'+fmt(tot)+'</text>'+
+   '<text x="64" y="76" text-anchor="middle" font-size="8.5" fill="var(--muted)">'+(centerLabel||'')+'</text></svg>';
+}
+function donutLegend(segs){
+  var tot=segs.reduce(function(a,s){return a+s[0]},0)||1;
+  return '<div class="dlegend">'+segs.map(function(s){
+    var pc=s[0]/tot*100;
+    return '<div class="row"><div class="bar" style="width:'+pc.toFixed(1)+'%;background:'+s[1]+'"></div>'+
+    '<i style="background:'+s[1]+'"></i><span class="nm">'+s[2]+'</span>'+
+    '<span class="ct">'+fmt(s[0])+'</span><span class="pc">'+pc.toFixed(0)+'%</span></div>'}).join('')+'</div>';
+}
+var KPI_ICON={PENDING:'◷',PARTIAL:'◐',COMPLETED:'✓',OVERDUE:'⚠'};
+function kpiTile(cls,icon,label,val,tab){
+  return '<div class="kpi dkpi '+cls+'"'+(tab?' data-tab="'+tab+'"':'')+'><div class="ic">'+icon+'</div>'+
+   '<div class="k">'+label+'</div><div class="v num">'+val+'</div></div>';
+}
+function capHero(){
+  var totalCap=0,totalPaid=0;
+  S.ents.forEach(function(e){totalCap+=e.cap;totalPaid+=e.paid});
+  var pct=totalCap?Math.round(totalPaid/totalCap*100):0;
+  return '<div class="hero"><div><div class="hpct num">'+pct+'%</div><div class="hpctl">'+t('heroPaidPct')+'</div></div>'+
+   '<div class="hstats">'+
+   '<div class="hstat"><div class="k">'+t('heroEnts')+'</div><div class="v">'+fmt(S.ents.length)+'</div></div>'+
+   '<div class="hstat"><div class="k">'+t('cCap')+'</div><div class="v">'+fmt(totalCap)+' LAK</div></div>'+
+   '<div class="hstat"><div class="k">'+t('cPaid')+'</div><div class="v">'+fmt(totalPaid)+' LAK</div></div>'+
+   '</div></div>';
+}
+function barChart(labels,values,color,unit){
+  var max=Math.max.apply(null,values)||1,W=760,H=150,PL=6,PR=6,PT=20,BASE=H-24,step=(W-PL-PR)/labels.length;
+  var grid=[0.25,0.5,0.75,1].map(function(f){var y=BASE-(BASE-PT)*f;
+    return '<line x1="0" y1="'+y.toFixed(1)+'" x2="'+W+'" y2="'+y.toFixed(1)+'" stroke="var(--line)" stroke-width="1" stroke-dasharray="2 3"/>'}).join('');
+  var peak=values.indexOf(max);
+  var bars=values.map(function(v,i){
+    var bw=step*0.56,x=PL+i*step+(step-bw)/2,h=v/max*(BASE-PT);
+    return '<rect class="hv" x="'+x.toFixed(1)+'" y="'+(BASE-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" '+
+      'fill="url(#barGrad)" rx="4" data-tip="'+labels[i]+'|'+fmt(v)+' '+(unit||'')+'"></rect>'+
+      '<text x="'+(x+bw/2).toFixed(1)+'" y="'+(BASE-h-6).toFixed(1)+'" text-anchor="middle" font-size="9.5" '+
+      'font-family="IBM Plex Mono,monospace" fill="'+(i===peak?color:'var(--muted)')+'" font-weight="'+(i===peak?'700':'400')+'">'+fmt(v)+'</text>'+
+      '<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10" fill="var(--muted)">'+labels[i]+'</text>'}).join('');
+  return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:160px">'+
+   '<defs><linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">'+
+   '<stop offset="0%" stop-color="'+color+'"/><stop offset="100%" stop-color="'+color+'" stop-opacity=".5"/></linearGradient></defs>'+
+   grid+'<line x1="0" y1="'+BASE+'" x2="'+W+'" y2="'+BASE+'" stroke="var(--line)"/>'+bars+'</svg>';
+}
+
+/* ================= accounts (RBAC per spec §2) ================= */
+var ACCTS=[
+ {id:'owner',user:'lao.agri',nm:'ອິນຟີນິເທັກ',rl:{lo:'ຜູ້ປະກອບການ · Owner',en:'Business owner · Owner'},av:'IT'},
+ {id:'maker',user:'khamla.p',nm:'ນ. ຄຳລາ',rl:{lo:'ພະນັກງານໜ້າເຄົາເຕີ APB · Maker',en:'APB counter officer · Maker'},av:'ຄລ'},
+ {id:'valfirm',user:'lao.valuation',nm:'Lao Valuation Co., Ltd.',rl:{lo:'ບໍລິສັດປະເມີນ · In-network Firm',en:'Valuation firm · In-network'},av:'LV'},
+ {id:'checker',user:'sivilay.a',nm:'ນ. ສີວິໄລ',rl:{lo:'ເຈົ້າໜ້າທີ່ກວດສອບ · Checker',en:'Inspection officer · Checker'},av:'ສວ'},
+ {id:'approver',user:'head.moic',nm:'ຫົວໜ້າພະແນກ',rl:{lo:'ຜູ້ອະນຸມັດ · Approver + E-Sign',en:'Division head · Approver + E-Sign'},av:'ຫພ'},
+ {id:'external',user:'mof.gov',nm:'ກະຊວງການເງິນ',rl:{lo:'ໜ່ວຍງານພາຍນອກ · External Agency',en:'External agency'},av:'MOF'},
+ {id:'admin',user:'bounmy.m',nm:'ທ. ບຸນມີ',rl:{lo:'ຜູ້ດູແລລະບົບ · System Admin',en:'System administrator'},av:'ບມ'}
+];
+function who(){var a=ACCTS.filter(function(x){return x.id===S.role})[0]||ACCTS[0];
+  return {n:a.nm,r:a.rl[lang]||a.rl.en,av:a.av}}
+function matchAcct(){var u=(S.loginUser||'').trim().toLowerCase();return ACCTS.filter(function(a){return a.user.toLowerCase()===u})[0]}
+
+/* ================= seed data ================= */
+function seedEnts(){return[
+ {id:'ELN-2025-1001',name:'ບໍລິສັດ ອິນຟີນິເທັກ ຈຳກັດຜູ້ດຽວ',nameEn:'Infinitech Sole Co., Ltd',rep:'ທ່ານ Chat Wattanasirikiat',
+  village:{lo:'ບ້ານຫາຍໂສກ',en:'Ban Hai Sok'},lat:17.9583196,lng:102.5931644,taxRegDate:'12/10/2022',
+  type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ນະຄອນຫຼວງວຽງຈັນ',en:'Vientiane Capital'},isic:'0111',
+  reg:'16/10/2024',due:'18/08/2026',cap:1000000000,paid:300000000,status:'PARTIAL',acct:'APB 010-2-88471-6',taxris:'741202588000',
+  collateral:[{type:'land',label:{lo:'ທີ່ດິນ 2 ຕອນ',en:'2 land plots'},detail:{lo:'ເນື້ອທີ່ 1.5 ha · ໃບຕາດິນເລກທີ 4471-A, 4471-B',en:'Area 1.5 ha · Land title nos. 4471-A, 4471-B'},value:700000000,
+   fields:{deedNo:'4471-A, 4471-B',landParcelNo:'PL-4471',totalArea:'15,000',landEstimatedPrice:'700,000,000'}}],
+  insts:[{no:1,amt:300000000,state:'paid',meta:{lo:'ເງິນສົດ · ໂອນເຂົ້າບັນຊີ APB 010-2-88471-6 · ຢືນຢັນໂດຍ Checker 02/11/2025',en:'Cash · transferred to APB 010-2-88471-6 · confirmed by the Checker on 02/11/2025'}},
+         {no:2,amt:700000000,state:'due',meta:{lo:'ແຈ້ງເປັນຊັບສິນ (ທີ່ດິນ 2 ຕອນ) · ລໍຜົນປະເມີນ',en:'Declared as assets (2 land plots) · awaiting appraisal'}}],
+  hist:[{d:'02/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1 (ເງິນສົດ)',en:'Capital instalment 1 received (cash)'},m:'cash',v:300000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter',st:'complete'}]},
+ {id:'ELN-2025-1002',name:'ວຽງຈັນ ການຄ້າ',nameEn:'Vientiane Trading',rep:'ນ. ວັນນະລີ ສີສະຫວາດ',
+  type:{lo:'ຫຸ້ນສ່ວນ',en:'Partnership'},prov:{lo:'ນະຄອນຫຼວງວຽງຈັນ',en:'Vientiane Capital'},isic:'4630',
+  reg:'22/08/2025',due:'22/08/2026',cap:450000000,paid:0,status:'PENDING',acct:'APB 010-2-90233-1',taxris:'207451201',collateral:[],
+  insts:[{no:1,amt:135000000,state:'due',meta:{lo:'ຍັງບໍ່ມີການຊຳລະ',en:'No payment received yet'}},
+         {no:2,amt:315000000,state:'wait',meta:{lo:'ລໍຊຳລະງວດທີ 1 ກ່ອນ',en:'Waiting on instalment 1'}}],hist:[]},
+ {id:'ELN-2025-1003',name:'ສະຫວັນ ໂລຈິສຕິກ',nameEn:'Savan Logistics Co., Ltd.',rep:'ທ. ພອນສະຫວັນ ແກ້ວມະນີ',
+  type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ສະຫວັນນະເຂດ',en:'Savannakhet'},isic:'4923',
+  reg:'29/08/2025',due:'29/08/2026',cap:2800000000,paid:1260000000,status:'PARTIAL',acct:'APB 021-4-11902-3',taxris:'206649931',
+  collateral:[{type:'building',label:{lo:'ອາຄານສາງສິນຄ້າ',en:'Warehouse building'},detail:{lo:'ພື້ນທີ່ໃຊ້ສອຍ 2,400 ຕ.ມ. · ສ້າງປີ 2018 · ເລກທະບຽນອາຄານ 330-WB-12',en:'Usage area 2,400 sq.m · built 2018 · building registration no. 330-WB-12'},value:1540000000,
+   fields:{buildingName:'Savan Logistics Warehouse',noOfFloor:'1',usageArea:'2,400',estimatedYear:'2018',totalPrice:'1,540,000,000'}}],
+  insts:[{no:1,amt:1260000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 15/12/2025',en:'Confirmed 15/12/2025'}},
+         {no:2,amt:1540000000,state:'due',meta:{lo:'ຍັງບໍ່ແຈ້ງຮູບແບບການຊຳລະ',en:'Payment form not yet declared'}}],
+  hist:[{d:'15/12/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1260000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter',st:'complete'}]},
+ {id:'ELN-2024-1004',name:'ຈຳປາສັກ ອາຫານ ຈຳກັດ',nameEn:'Champasak Food Co., Ltd.',rep:'ນ. ສຸກສະຫວັນ ບົວທອງ',
+  type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຈຳປາສັກ',en:'Champasak'},isic:'1079',
+  reg:'12/06/2025',due:'12/06/2026',cap:760000000,paid:228000000,status:'OVERDUE',acct:'APB 033-1-55210-8',taxris:'205433181',collateral:[],
+  insts:[{no:1,amt:228000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 20/09/2025',en:'Confirmed 20/09/2025'}},
+         {no:2,amt:532000000,state:'over',meta:{lo:'ເກີນກຳນົດ 53 ວັນ · ຄ່າປັບສະສົມ <b style="color:var(--bad)">15,960,000 ກີບ</b>',en:'53 days overdue · accrued penalty <b style="color:var(--bad)">15,960,000 LAK</b>'}}],
+  hist:[{d:'20/09/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:228000000,u:'ນ. ສີວິໄລ',f:'2',ch:'chCounter',st:'complete'},
+        {d:'13/06/2026',a:{lo:'ເຂົ້າສະຖານະເກີນກຳນົດ (ອັດຕະໂນມັດ)',en:'Flagged overdue (automatic)'},m:'',v:0,u:'System',f:'—',ch:'',st:'complete'}]},
+ {id:'ELN-2025-1005',name:'ຫຼວງພະບາງ ທ່ອງທ່ຽວ',nameEn:'Luang Prabang Tourism',rep:'ທ. ບຸນເຮັງ ວິໄລວົງ',
+  type:{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},prov:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},isic:'7911',
+  reg:'31/08/2025',due:'31/08/2026',cap:180000000,paid:180000000,status:'COMPLETED',acct:'APB 044-2-77410-5',taxris:'207450441',
+  collateral:[{type:'land',label:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},detail:{lo:'ເນື້ອທີ່ 0.4 ha · ໃບຕາດິນເລກທີ 5518-C',en:'Area 0.4 ha · Land title no. 5518-C'},value:180000000,
+   fields:{deedNo:'5518-C',landParcelNo:'PL-5518',totalArea:'4,000',landEstimatedPrice:'180,000,000'}}],
+  insts:[{no:1,amt:180000000,state:'paid',meta:{lo:'ຊຳລະຄັ້ງດຽວເຕັມຈຳນວນ · ອອກໃບຢັ້ງຢືນແລ້ວ',en:'Paid in full in one transfer · certificate issued'}},
+         {no:2,amt:0,state:'na',meta:{lo:'',en:''}}],
+  hist:[{d:'05/09/2025',a:{lo:'ຊຳລະທຶນເຕັມຈຳນວນ',en:'Capital paid in full'},m:'cash',v:180000000,u:'ນ. ສີວິໄລ',f:'3',ch:'chCounter',st:'complete'}]},
+ {id:'ELN-2025-1006',name:'ຄຳມ່ວນ ກໍ່ສ້າງ ຈຳກັດ',nameEn:'Khammouane Construction Co., Ltd.',rep:'ທ. ສົມພອນ ໄຊຍະວົງ',
+  type:{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},prov:{lo:'ຄຳມ່ວນ',en:'Khammouane'},isic:'4100',
+  reg:'04/09/2025',due:'04/09/2026',cap:5400000000,paid:1620000000,status:'PARTIAL',acct:'APB 052-3-30188-7',taxris:'206447021',
+  collateral:[{type:'machine',label:{lo:'ເຄື່ອງຈັກຜະລິດວັດສະດຸກໍ່ສ້າງ 6 ລາຍການ',en:'6 construction-material machinery items'},detail:{lo:'ຜູ້ຜະລິດ XCMG · ກຳລັງຜະລິດ 50 ໜ່ວຍ/ຊມ',en:'Manufacturer XCMG · Capacity 50 units/hr'},value:3780000000,
+   fields:{machineName:'XCMG Batching Plant Set (6 units)',machinePledgeType:'Chattel mortgage',manufactory:'XCMG',capacity:'50 units/hr',estimatedPrice:'3,780,000,000'}}],
+  insts:[{no:1,amt:1620000000,state:'paid',meta:{lo:'ຢືນຢັນແລ້ວ 28/11/2025',en:'Confirmed 28/11/2025'}},
+         {no:2,amt:3780000000,state:'due',meta:{lo:'ລໍປະເມີນເຄື່ອງຈັກ · In-network Firm',en:'Machinery appraisal pending · in-network firm'}}],
+  hist:[{d:'28/11/2025',a:{lo:'ຊຳລະທຶນງວດທີ 1',en:'Capital instalment 1 received'},m:'cash',v:1620000000,u:'ນ. ສີວິໄລ',f:'4',ch:'chCounter',st:'complete'}]}
+];}
+
+function seedInv(){return[
+ {id:'INV-2026-1180',ent:'ELN-2025-1001',kind:'fee',title:{lo:'ຄ່າທຳນຽມຂຶ້ນທະບຽນ',en:'Registration fee'},
+  amt:850000,due:'25/08/2026',status:'PAID',paidAt:'12/08/2025',receipt:'RCP-2025-0417',channel:'chCounter'},
+ {id:'INV-2026-1191',ent:'ELN-2025-1001',kind:'penalty',title:{lo:'ຄ່າປັບປະກອບທຶນລ່າຊ້າ',en:'Late capital contribution penalty'},
+  amt:2400000,due:'25/08/2026',status:'UNPAID',paidAt:null,receipt:null,channel:''}
+];}
+
+var VALJOBS=[
+ {id:'VAL-2026-0341',ent:'ELN-2025-1001',asset:{lo:'ທີ່ດິນ 2 ຕອນ',en:'2 land plots'},firm:'Lao Valuation Co., Ltd.',net:'in',amt:700000000,status:'doing'},
+ {id:'VAL-2026-0338',ent:'ELN-2025-1006',asset:{lo:'ເຄື່ອງຈັກ 6 ລາຍການ',en:'6 machinery items'},firm:'Mekong Appraisal',net:'in',amt:3780000000,status:'wait',
+  files:['valuation-report-VAL-2026-0338.pdf','asset-photos.pdf']},
+ {id:'VAL-2026-0330',ent:'ELN-2025-1003',asset:{lo:'ອາຄານສາງສິນຄ້າ',en:'Warehouse building'},firm:'Indochina Asset',net:'out',amt:1540000000,status:'outapprove',
+  files:['valuation-report-VAL-2026-0330.pdf','site-inspection.jpg']},
+ {id:'VAL-2026-0318',ent:'ELN-2025-1005',asset:{lo:'ດິນ 1 ຕອນ',en:'1 land plot'},firm:'Lao Valuation Co., Ltd.',net:'in',amt:180000000,status:'accepted',
+  files:['valuation-report-VAL-2026-0318.pdf','asset-photos.pdf','site-inspection.jpg']}
+];
+var VAL_LBL={doing:['valDoing','p-warn'],wait:['valWait','p-rev'],outapprove:['valOut','p-idle'],accepted:['stPaid','p-ok']};
+
+var USERS_SEED=[
+ {nm:'ນ. ສີວິໄລ',org:'APB',role:'Checker',active:1,pwd:'12',online:1},
+ {nm:'ນ. ຄຳລາ',org:'APB',role:'Maker',active:1,pwd:'8',online:1},
+ {nm:'ຫົວໜ້າພະແນກ',org:'MOIC',role:'Approver + E-Sign',active:1,pwd:'3',online:1},
+ {nm:'ທ. ບຸນມີ',org:'MOIC',role:'System Admin',active:1,pwd:'45',online:1},
+ {nm:'Lao Valuation Co., Ltd.',org:'VAL',role:'In-network firm',active:1,pwd:'78',online:0},
+ {nm:'ນ. ຄຳພອນ',org:'APB',role:'Checker',active:0,pwd:'92',online:0}
+];
+
+var ROLE_OPT={APB:['Maker','Checker'],MOIC:['Approver + E-Sign','System Admin'],VAL:['In-network firm']};
+var ASSET_FIELDS={
+ land:[
+  ['deedNo',{lo:'ເລກທີ່ໂຉນດ *',en:'Deed No. *'},'text'],
+  ['landParcelNo',{lo:'ເລກແປງທີ່ດິນ',en:'Land parcel No.'},'text'],
+  ['totalArea',{lo:'ເນື້ອທີ່ລວມ (ຕ.ມ.)',en:'Total area (sq.m)'},'number'],
+  ['address',{lo:'ທີ່ຢູ່ທີ່ດິນ',en:'Land address'},'text'],
+  ['landEstimatedPrice',{lo:'ລາຄາປະເມີນ (ກີບ)',en:'Estimated price (LAK)'},'number']
+ ],
+ building:[
+  ['buildingName',{lo:'ຊື່ອາຄານ *',en:'Building name *'},'text'],
+  ['buildingType',{lo:'ປະເພດອາຄານ',en:'Building type'},'text'],
+  ['noOfFloor',{lo:'ຈຳນວນຊັ້ນ',en:'Number of floors'},'number'],
+  ['usageArea',{lo:'ພື້ນທີ່ໃຊ້ສອຍ (ຕ.ມ.)',en:'Usage area (sq.m)'},'number'],
+  ['estimatedYear',{lo:'ປີກໍ່ສ້າງ',en:'Year built'},'number'],
+  ['totalPrice',{lo:'ລາຄາປະເມີນລວມ (ກີບ)',en:'Total estimated price (LAK)'},'number']
+ ],
+ car:[
+  ['licenseNo',{lo:'ເລກທະບຽນລົດ *',en:'License plate No. *'},'text'],
+  ['chassisNo',{lo:'ເລກຕົວຖັງ (Chassis No.)',en:'Chassis No.'},'text'],
+  ['manufactory',{lo:'ຍີ່ຫໍ້ / ຮຸ່ນ',en:'Make / model'},'text'],
+  ['modelYear',{lo:'ປີລົດ',en:'Model year'},'number'],
+  ['carColor',{lo:'ສີລົດ',en:'Color'},'text'],
+  ['estimatedPrice',{lo:'ລາຄາປະເມີນ (ກີບ)',en:'Estimated price (LAK)'},'number']
+ ],
+ machine:[
+  ['machineName',{lo:'ຊື່ເຄື່ອງຈັກ *',en:'Machine name *'},'text'],
+  ['machinePledgeType',{lo:'ປະເພດການວາງຫຼັກປະກັນ *',en:'Pledge type *'},'text'],
+  ['manufactory',{lo:'ຜູ້ຜະລິດ / ຍີ່ຫໍ້',en:'Manufacturer / brand'},'text'],
+  ['model',{lo:'ຮຸ່ນ',en:'Model'},'text'],
+  ['capacity',{lo:'ຂະໜາດ / ກຳລັງການຜະລິດ',en:'Capacity'},'text'],
+  ['estimatedPrice',{lo:'ລາຄາປະເມີນ (ກີບ)',en:'Estimated price (LAK)'},'number']
+ ]
+};
+var ASSET_REQ={land:'deedNo',building:'buildingName',car:'licenseNo',machine:'machineName'};
+var ASSET_PRICE_KEY={land:'landEstimatedPrice',building:'totalPrice',car:'estimatedPrice',machine:'estimatedPrice'};
+var MASTER={
+ isic:[['0111','ກະສິກຳ, ປູກຝັງ'],['4630','ຄ້າສົ່ງ'],['4923','ຂົນສົ່ງສິນຄ້າທາງບົກ'],['1079','ຜະລິດອາຫານ'],['4100','ກໍ່ສ້າງອາຄານ'],['7911','ບໍລິການທ່ອງທ່ຽວ']],
+ prov:['ນະຄອນຫຼວງວຽງຈັນ','ສະຫວັນນະເຂດ','ຈຳປາສັກ','ຫຼວງພະບາງ','ຄຳມ່ວນ'],
+ etype:[{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},{lo:'ຫຸ້ນສ່ວນ',en:'Partnership'},{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'}],
+ doctype:[{lo:'ໃບນຳຝາກ',en:'Deposit slip'},{lo:'ສະລິບໂອນ',en:'Transfer receipt'},{lo:'ໜັງສືຢືນຢັນ',en:'Confirmation letter'},{lo:'ບົດລາຍງານປະເມີນ',en:'Valuation report'}],
+ valfirms:[{nm:'Lao Valuation Co., Ltd.',net:'in'},{nm:'Mekong Appraisal',net:'in'},{nm:'Indochina Asset',net:'out'}]
+};
+var PROV_META={
+ 'ນະຄອນຫຼວງວຽງຈັນ':{lat:17.9757,lng:102.6331,district:{lo:'ຈັນທະບູລີ',en:'Chanthabuly'},village:{lo:'ບ້ານໂສກ',en:'Ban Sok'}},
+ 'ສະຫວັນນະເຂດ':{lat:16.5570,lng:104.7500,district:{lo:'ໄກສອນ ພົມວິຫານ',en:'Kaysone Phomvihane'},village:{lo:'ບ້ານທ່າແຮ່',en:'Ban Thahae'}},
+ 'ຈຳປາສັກ':{lat:15.1202,lng:105.7988,district:{lo:'ປາກເຊ',en:'Pakse'},village:{lo:'ບ້ານວັດຫຼວງ',en:'Ban Vat Luang'}},
+ 'ຫຼວງພະບາງ':{lat:19.8856,lng:102.1347,district:{lo:'ຫຼວງພະບາງ',en:'Luang Prabang'},village:{lo:'ບ້ານວັດແສນ',en:'Ban Vat Sene'}},
+ 'ຄຳມ່ວນ':{lat:17.4085,lng:104.8078,district:{lo:'ທ່າແຂກ',en:'Thakhek'},village:{lo:'ບ້ານທ່າແຂກ',en:'Ban Thakhek'}}
+};
+
+/* TOR §5.1/5.2 real fee schedule — decree 002/ປປທ 17/06/2021 */
+var FEES={
+ byType:[[{lo:'ວິສາຫະກິດສ່ວນບຸກຄົນ',en:'Sole proprietorship'},40000],[{lo:'ບໍລິສັດຈຳກັດຜູ້ດຽວ',en:'Single-member limited company'},80000],
+  [{lo:'ວິສາຫະກິດຫຸ້ນສ່ວນສາມັນ',en:'General partnership'},100000],[{lo:'ວິສາຫະກິດຫຸ້ນສ່ວນຈຳກັດ',en:'Limited partnership'},100000],
+  [{lo:'ບໍລິສັດຈຳກັດ',en:'Limited company'},100000],[{lo:'ບໍລິສັດມະຫາຊົນ',en:'Public company'},100000],
+  [{lo:'ວິສາຫະກິດຂອງລັດ',en:'State enterprise'},100000],[{lo:'ວິສາຫະກິດປະສົມ',en:'Mixed enterprise'},100000]],
+ byCapital:[['≤ 1,000,000',0],['1,000,001 – 10,000,000',20000],['10,000,001 – 20,000,000',50000],
+  ['20,000,001 – 50,000,000',100000],['50,000,001 – 100,000,000',300000],['100,000,001 – 400,000,000',500000],
+  ['400,000,001 – 1,000,000,000',1000000],['1,000,000,001 – 10,000,000,000',2600000],
+  ['10,000,000,001 – 20,000,000,000',4000000],['> 20,000,000,000',6000000]]
+};
+
+var MOCK_MONTHS={lo:['ກ.ຍ.','ຕ.ລ.','ພ.ຈ.','ທ.ວ.','ມ.ກ.','ກ.ພ.','ມີ.ນ.','ເມ.ສ.','ພ.ພ.','ມິ.ຖ.','ກ.ລ.','ສ.ຫ.'],
+ en:['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug']};
+var MOCK_OVERDUE=[128,141,152,163,171,166,158,147,133,121,109,98];
+
+var STAFF_N=[
+ {t:{lo:'3 ວິສາຫະກິດເຂົ້າສະຖານະເກີນກຳນົດມື້ນີ້',en:'3 enterprises became overdue today'},
+  s:{lo:'ລະບົບຄິດໄລ່ຄ່າປັບອັດຕະໂນມັດແລ້ວ ລໍເຈົ້າໜ້າທີ່ກວດສອບ',en:'Penalties calculated automatically, awaiting officer review'},x:'09:02',c:'var(--bad)'},
+ {t:{lo:'ຜົນປະເມີນຊັບສິນ VAL-2026-0338 ສົ່ງເຂົ້າມາແລ້ວ',en:'Valuation result VAL-2026-0338 submitted'},
+  s:{lo:'Mekong Appraisal ສົ່ງຜົນປະເມີນເຄື່ອງຈັກ 6 ລາຍການ',en:'Mekong Appraisal submitted an appraisal for 6 machinery items'},x:'08:41',c:'var(--warn)'},
+ {t:{lo:'eBRS sync ສຳເລັດ',en:'eBRS sync completed'},
+  s:{lo:'ດຶງຂໍ້ມູນວິສາຫະກິດ 1,284 ລາຍການ',en:'1,284 enterprise records pulled'},x:'09:15',c:'var(--line)'},
+ {t:{lo:'ພະຍາຍາມເຂົ້າສູ່ລະບົບຜິດພາດ 5 ຄັ້ງຕິດ',en:'5 failed sign-in attempts detected'},
+  s:{lo:'ບັນຊີ ນ. ຄຳພອນ ຖືກລະງັບຊົ່ວຄາວອັດຕະໂນມັດ',en:'The account for ນ. ຄຳພອນ was auto-suspended'},x:'07:48',c:'var(--bad)'},
+ {t:{lo:'ໃກ້ຄົບ SLA ກວດສອບ 24 ຊົ່ວໂມງ',en:'24-hour verification SLA approaching'},
+  s:{lo:'ມີ 4 ລາຍການໃນຄິວກວດສອບໃກ້ເກີນເວລາ',en:'4 cases in the inspection queue are approaching the SLA'},x:'07:30',c:'var(--warn)'}
+];
+function bizNotifs(){return S.notif.concat([
+  {t:{lo:'ເຫຼືອອີກ 14 ວັນກ່ອນຄົບກຳນົດ',en:'14 days left before the deadline'},
+   s:{lo:'ຫາກບໍ່ຊຳລະທັນເວລາ ລະບົບຈະປ່ຽນສະຖານະເປັນ OVERDUE ອັດຕະໂນມັດ',en:'If not paid in time the status automatically changes to OVERDUE'},x:'07:00',c:'var(--bad)'},
+  {t:{lo:'ບໍລິສັດປະເມີນຮັບງານແລ້ວ',en:'Valuation firm has accepted the job'},
+   s:{lo:'Lao Valuation ເລີ່ມປະເມີນທີ່ດິນ 2 ຕອນ',en:'Lao Valuation began appraising the 2 land plots'},x:'30/07',c:'var(--line)'}])}
+function notifs(){return S.role==='owner'?bizNotifs():STAFF_N}
+function pendingOf(id){var f=S.tasks.filter(function(x){return x.ent.id===id});return f.length?f[0]:null}
+
+/* ================= state ================= */
+var S={};
+function reset(){
+  S={role:null,pick:null,view:'login',mobile:false,sel:null,tab:'ALL',q:'',mini:false,
+     ents:seedEnts(),invs:seedInv(),tasks:[],taskI:0,form:null,modal:null,notif:[],
+     read:false,bell:false,umenu:false,setTab:'fee',finTab:'fee',certCopy:false,
+     valjobs:JSON.parse(JSON.stringify(VALJOBS)),users:JSON.parse(JSON.stringify(USERS_SEED)),
+     backReasonInt:'',backReasonExt:'',loginStep:'cred',loginUser:'',loginPass:'',loginErr:'',tx:null,valI:0,valForm:{val:null,files:[],err:'',docType:'valReport',docErr:''},
+     adv:{regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''}};
+  render();
+}
+function clearCache(){
+  S.ents=seedEnts();S.invs=seedInv();S.tasks=[];S.taskI=0;S.form=null;S.modal=null;S.notif=[];
+  S.read=false;S.bell=false;S.umenu=false;S.certCopy=false;
+  S.valjobs=JSON.parse(JSON.stringify(VALJOBS));S.users=JSON.parse(JSON.stringify(USERS_SEED));
+  S.backReasonInt='';S.backReasonExt='';S.tx=null;S.valI=0;S.valForm={val:null,files:[],err:'',docType:'valReport',docErr:''};
+  S.adv={regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''};
+  if(S.view==='declare')S.view=S.sel?'detail':'dash';
+  render();
+}
+
+/* ================= app shell ================= */
+function menus(){
+  var Tc=S.tasks.filter(function(x){return x.stage==='checker'}).length;
+  var Ta=S.tasks.filter(function(x){return x.stage==='approve'}).length;
+  var FIN_SUB=[['fee','feeTab'],['pen','penTab'],['rec','recTab']];
+  var SET_SUB=[['fee','setFee'],['master','master'],['gl','glTitle'],['user','setUser'],['api','setApi']];
+  if(S.role==='owner')return [['mMonitor'],['dash','▦','myCap']];
+  if(S.role==='maker')return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent']];
+  if(S.role==='valfirm')return [['mMonitor'],['valfirm','◫','valPortal']];
+  if(S.role==='external')return [['mMonitor'],['portal','⛁','portal']];
+  if(S.role==='checker')return [['mQueue'],['inspect','⌸','inspect',Tc],['mMonitor'],['dash','▦','dash'],
+    ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin',null,FIN_SUB],['rep','◱','rep']];
+  if(S.role==='approver')return [['mQueue'],['approveQ','✓','approveQ',Ta],['mMonitor'],['dash','▦','dash'],
+    ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin',null,FIN_SUB],['rep','◱','rep']];
+  return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent'],['mOther'],['rep','◱','rep'],['set','⚙','set',null,SET_SUB]];
+}
+function bellPanel(){
+  var ns=notifs(),un=S.read?0:ns.length;
+  var rows=ns.length?ns.map(function(n){
+    return '<div class="nrow" data-soon="'+esc(L(n.t))+'"><span class="dot" style="background:'+
+    (S.read?'var(--line)':n.c)+'"></span><div><div class="nt">'+L(n.t)+'</div>'+
+    '<div class="ns">'+L(n.s)+'</div><div class="nx num">'+(n.x||'')+'</div></div></div>'}).join('')
+    :'<div class="empty" style="padding:30px">'+t('noNotif')+'</div>';
+  var ico='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '+
+    'stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>'+
+    '<path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
+  return '<div class="bellwrap"><div class="bell'+(S.bell?' open':'')+'" data-bell>'+ico+
+    (un?'<b>'+un+'</b>':'')+'</div>'+
+    (S.bell?'<div class="panel" id="panel"><div class="ph"><h4>'+t('notif')+'</h4>'+
+      '<span data-read>'+t('markRead')+'</span></div><div class="pb">'+rows+'</div></div>':'')+'</div>';
+}
+function shell(title,crumb,inner,right){
+  var m=menus().map(function(it){
+    if(it.length===1)return '<div class="sect">'+t(it[0])+'</div>';
+    var on=it[0]===S.view||(it[0]==='ent'&&(S.view==='detail'||S.view==='declare'||S.view==='cert'||S.view==='tx'))||
+      (it[0]==='dash'&&S.role==='owner'&&S.view==='tx')||
+      ((it[0]==='inspect'||it[0]==='approveQ')&&S.view==='task')||(it[0]==='valfirm'&&S.view==='valjobdetail');
+    var cnt=it[3]?'<span class="cnt">'+it[3]+'</span>':'';
+    var row='<div class="mi'+(on?' on':'')+'" data-nav="'+it[0]+'">'+
+      '<span class="ic">'+it[1]+'</span><span class="lbl">'+t(it[2])+'</span>'+cnt+'</div>';
+    if(it[4]&&on){
+      var curSub=it[0]==='fin'?S.finTab:S.setTab;
+      row+=it[4].map(function(s){return '<div class="mi sub'+(curSub===s[0]?' on':'')+'" data-subtab="'+it[0]+':'+s[0]+'">'+
+        '<span class="lbl">'+t(s[1])+'</span></div>'}).join('');
+    }
+    return row}).join('');
+  var w=who();
+  return '<div class="app'+(S.mini?' mini':'')+'">'+
+   '<div class="side"><div class="sh"><button class="burger" data-burger>☰</button>'+
+   '<div class="brand"><img class="moic-logo" src="'+LOGO+'" alt="MOIC">RCMS</div></div>'+m+'</div>'+
+   '<div class="main"><div class="top"><div>'+
+   (crumb?'<div class="crumb" data-nav="'+crumb[1]+'">← '+crumb[0]+'</div>':'')+
+   '<div class="title">'+title+'</div></div><div class="rt">'+(right||'')+
+   '<div class="lang"><span'+(lang==='lo'?' class="on"':'')+' data-lang="lo">ລາວ</span>'+
+   '<span'+(lang==='en'?' class="on"':'')+' data-lang="en">EN</span></div>'+
+   '<div class="bell" data-clearcache title="'+t('clearCache')+'">⟳</div>'+
+   '<div class="bell" data-help title="'+t('helpCenter')+'" style="font-weight:700">?</div>'+
+   bellPanel()+
+   '<div class="uinfo"><b>'+w.n+'</b><br><span>'+w.r+'</span></div>'+
+   '<div class="bellwrap"><div class="avatar" data-user>'+w.av+'</div>'+
+   (S.umenu?'<div class="upanel"><div class="uh"><div class="t2">'+t('signedAs')+'</div>'+
+     '<div class="n2">'+w.n+'</div><div class="r2">'+w.r+'</div></div>'+
+     '<div class="ui" data-soon="'+t('profile')+'">◵ '+t('profile')+'</div>'+
+     '<div class="ui out" data-logout>⏻ '+t('logout')+'</div></div>':'')+
+   '</div></div></div>'+
+   '<div class="body"><div class="wrap">'+inner+'</div></div></div></div>';
+}
+
+/* ================= views ================= */
+function vLogin(){
+  var step=S.loginStep||'cred';
+  var matched=matchAcct();
+  var dl=ACCTS.map(function(a){return '<option value="'+a.user+'" label="'+a.nm+' — '+(a.rl[lang]||a.rl.en)+'">';}).join('');
+  var credBody=
+   '<h2>'+t('pickAcct')+'</h2><p>'+t('loginHint')+'</p>'+
+   '<div class="field"><label>'+t('loginUser')+'</label>'+
+   '<input id="loginUser" list="userlist" autocomplete="off" placeholder="lao.agri" value="'+esc(S.loginUser||'')+'"></div>'+
+   '<datalist id="userlist">'+dl+'</datalist>'+
+   '<div class="field"><label>'+t('loginPass')+'</label>'+
+   '<input id="loginPass" type="password" placeholder="••••••••" value="'+esc(S.loginPass||'')+'"></div>'+
+   (S.loginErr?'<div class="hint err" style="margin:-8px 0 12px">'+S.loginErr+'</div>':'')+
+   '<div style="text-align:right;margin-top:-6px"><span style="font-size:11px;color:var(--m);cursor:pointer" data-forgot="1">'+t('forgotPw')+'</span></div>'+
+   '<button class="btn" style="width:100%;padding:12px;margin-top:13px" id="doCred">'+t('loginNext')+'</button>';
+  var otpBody=
+   '<h2>'+t('otpTitle')+'</h2><p>'+(matched?matched.nm+' · '+(matched.rl[lang]||matched.rl.en):'')+'</p>'+
+   '<div class="otp" id="otp">'+[0,1,2,3,4,5].map(function(){return '<input maxlength="1" size="1" inputmode="numeric">'}).join('')+'</div>'+
+   '<button class="btn" style="width:100%;padding:12px;margin-top:13px" id="doLogin" disabled>'+t('login')+'</button>'+
+   '<div style="margin-top:12px;font-size:11px;color:var(--m);cursor:pointer" data-backcred="1">'+t('loginBack')+'</div>';
+  return '<div class="login"><div class="lf"><div class="sealrow"><img class="moic-logo" src="'+LOGO+'" alt="MOIC"><div class="seal">ລ</div></div>'+
+  '<h1>'+t('sysName')+'<br><span>RCMS</span></h1>'+
+  '<div class="sub">'+t('sysSub')+' — '+t('coop')+'</div>'+
+  '<div class="stat"><div><div class="n num">218,622</div><div class="l">'+t('s1')+'</div></div>'+
+  '<div><div class="n num">1.15</div><div class="l">'+t('s2')+'</div></div>'+
+  '<div><div class="n num">5</div><div class="l">'+t('s3')+'</div></div></div>'+
+  '<div style="margin-top:20px"><span style="font-size:11.5px;color:var(--m-light);cursor:pointer;text-decoration:underline" data-verify="1">◎ '+t('qrVerify')+'</span></div></div>'+
+  '<div class="rt2"><div class="lang" style="align-self:flex-end;margin-bottom:16px">'+
+  '<span'+(lang==='lo'?' class="on"':'')+' data-lang="lo">ລາວ</span>'+
+  '<span'+(lang==='en'?' class="on"':'')+' data-lang="en">EN</span></div>'+
+  (step==='otp'?otpBody:credBody)+
+  '<div class="note">'+t('secNote')+'<br><br><kbd>Alt</kbd> + <kbd>/</kbd> — '+t('kbTitle')+'</div></div></div>';
+}
+
+function counts(){
+  var c={PENDING:0,PARTIAL:0,COMPLETED:0,OVERDUE:0};
+  S.ents.forEach(function(e){c[e.status]++});
+  return c;
+}
+function daysLeft(dueStr){
+  var p=dueStr.split('/'),due=new Date(p[2],p[1]-1,p[0]),today=new Date(2026,7,4);
+  return Math.round((due-today)/86400000);
+}
+
+function vDash(){
+  if(S.role==='owner')return vOwnerDash();
+  if(S.role==='admin')return vAdminDash();
+  return vStaffDash();
+}
+
+function vStaffDash(){
+  var c=counts();
+  var segs=[[c.COMPLETED,'#1B6E45',stName('COMPLETED')],[c.PARTIAL,'#B06A05',stName('PARTIAL')],
+    [c.PENDING,'#8E9CB0',stName('PENDING')],[c.OVERDUE,'#B03127',stName('OVERDUE')]];
+  var dueSoon=S.ents.filter(function(e){return e.status!=='COMPLETED'}).slice(0,5);
+  var rows=dueSoon.map(function(e){
+    return '<tr data-open="'+e.id+'"><td style="padding-left:16px"><span class="co">'+e.name+'<small>'+e.id+'</small></span></td>'+
+    '<td>'+L(e.type)+'</td><td class="num">'+e.due+'</td><td class="r num">'+fmt(e.cap)+'</td>'+
+    '<td class="r" style="padding-right:16px">'+pill(e.status)+'</td></tr>'}).join('');
+  var mm=MOCK_MONTHS[lang]||MOCK_MONTHS.en;
+  var inner=capHero()+
+   '<div class="grid3" style="grid-template-columns:3fr 7fr">'+
+   '<div class="card"><div class="h"><h3>'+t('byStatus')+'</h3></div><div class="c">'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(segs,t('cEnt'))+donutLegend(segs)+
+   '</div></div></div>'+
+   '<div class="card"><div class="h"><h3>'+t('overdueTrend')+'</h3></div><div class="c">'+
+   barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
+   '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
+   '<div class="card"><div class="h"><h3>'+t('dueSoon')+'</h3><span class="more" data-nav="ent">'+t('seeAll')+' →</span></div>'+
+   '<div class="c" style="padding:12px 0 0">'+(rows?'<table><thead><tr><th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('cType')+'</th>'+
+   '<th>'+t('cDue')+'</th><th class="r">'+t('cCap')+'</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+rows+'</tbody></table>'
+   :'<div class="empty">'+t('noMatch')+'</div>')+'</div></div>';
+  return shell(t('dashTitle'),'',inner);
+}
+
+function sechead(txt,first){
+  return '<div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;'+
+   'margin:'+(first?'0':'26px')+' 0 12px'+(first?'':';padding-top:20px;border-top:1px solid var(--line)')+'">'+txt+'</div>';
+}
+function vAdminDash(){
+  var c=counts();
+  var capSegs=[[c.COMPLETED,'#1B6E45',stName('COMPLETED')],[c.PARTIAL,'#B06A05',stName('PARTIAL')],
+    [c.PENDING,'#8E9CB0',stName('PENDING')],[c.OVERDUE,'#B03127',stName('OVERDUE')]];
+  var mm=MOCK_MONTHS[lang]||MOCK_MONTHS.en;
+  var online=S.users.filter(function(u){return u.online}).length;
+  var byOrg={};S.users.forEach(function(u){byOrg[u.org]=(byOrg[u.org]||0)+1});
+  var userSegs=Object.keys(byOrg).map(function(k,i){return [byOrg[k],['#0F5C8C','#1B6E45','#B06A05'][i%3],k]});
+  var orgRows=Object.keys(byOrg).map(function(k){
+    var us=S.users.filter(function(u){return u.org===k});
+    var onl=us.filter(function(u){return u.online}).length,lck=us.filter(function(u){return !u.active}).length;
+    return '<tr><td style="padding-left:16px">'+k+'</td><td class="r num">'+us.length+'</td>'+
+    '<td class="r num" style="color:var(--ok)">'+onl+'</td>'+
+    '<td class="r num" style="padding-right:16px;color:'+(lck?'var(--bad)':'var(--muted)')+'">'+lck+'</td></tr>'}).join('');
+  var inner=
+   capHero()+
+   sechead(t('secCapital'),true)+
+   '<div class="grid3" style="grid-template-columns:3fr 7fr">'+
+   '<div class="card"><div class="h"><h3>'+t('byStatus')+'</h3></div><div class="c">'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(capSegs,t('cEnt'))+donutLegend(capSegs)+
+   '</div></div></div>'+
+   '<div class="card"><div class="h"><h3>'+t('overdueTrend')+'</h3></div><div class="c">'+
+   barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
+   '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
+   sechead(t('secUsers'))+
+   '<div class="kpis" style="grid-template-columns:repeat(3,1fr)">'+
+   kpiTile('','◈',t('totalUsers'),S.users.length)+
+   kpiTile('ok','✓',t('onlineNow'),online)+
+   kpiTile('warn',KPI_ICON.OVERDUE,t('uLocked'),S.users.filter(function(u){return !u.active}).length)+'</div>'+
+   '<div class="grid3" style="grid-template-columns:1fr 1fr;margin-top:12px">'+
+   '<div class="card"><div class="h"><h3>'+t('adminUsers')+'</h3></div><div class="c">'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(userSegs,t('totalUsers'))+donutLegend(userSegs)+
+   '</div></div></div>'+
+   '<div class="card"><div class="h"><h3>'+t('orgBreakdown')+'</h3></div><div class="c" style="padding:10px 0 0">'+
+   '<table><thead><tr><th style="padding-left:16px">'+t('uOrg')+'</th><th class="r">'+t('totalUsers')+'</th>'+
+   '<th class="r">'+t('onlineNow')+'</th><th class="r" style="padding-right:16px">'+t('uLocked')+'</th></tr></thead>'+
+   '<tbody>'+orgRows+'</tbody></table></div></div></div>';
+  return shell(t('dashTitle'),'',inner);
+}
+
+function vOwnerDash(){
+  var e=S.ents[0],remain=e.cap-e.paid,pct=Math.round(e.paid/e.cap*100),pend=pendingOf(e.id);
+  var myInv=S.invs.filter(function(x){return x.ent===e.id});
+  var invRows=myInv.map(function(iv){
+    return '<tr><td style="padding-left:16px" class="num">'+iv.id+'</td><td>'+L(iv.title)+'</td>'+
+    '<td class="r num">'+fmt(iv.amt)+'</td><td class="num">'+iv.due+'</td>'+
+    '<td class="r" style="padding-right:16px">'+(iv.status==='UNPAID'
+     ?'<span class="pill p-warn">'+t('stDue')+'</span> <button class="btn" style="padding:5px 10px;font-size:11px;margin-left:6px" data-payinv="'+iv.id+'">'+t('bizPayQR')+'</button>'
+     :'<span class="pill p-ok">'+t('stPaid')+'</span> <span style="color:var(--m);cursor:pointer;font-size:11px;margin-left:6px" data-viewrec="'+iv.id+'">'+t('viewReceipt')+'</span>')+'</td></tr>'}).join('');
+  var days=daysLeft(e.due);
+  var payBtn=(remain>0)?(pend?'<button class="btn ghost" disabled>'+t('waitingOn')+' '+(pend.stage==='checker'?t('stageChecker'):t('stageApprover'))+'…</button>'
+    :'<button class="btn" data-selfpay="1">'+t('selfDeclare')+'</button>'):'';
+  var capStatusCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('capStatus')+'</h3></div>'+
+   '<div class="c"><div class="donutrow">'+donutPct(pct,'#1B6E45')+
+   '<div class="dstat">'+
+   '<div class="cell"><div class="k">'+t('cCap')+'</div><div class="v">'+fmt(e.cap)+'</div></div>'+
+   '<div class="cell"><div class="k">'+t('cPaid')+'</div><div class="v" style="color:var(--ok)">'+fmt(e.paid)+'</div></div>'+
+   '<div class="cell"><div class="k">'+(remain>0?t('bizRemain'):t('bizDone'))+'</div><div class="v" style="color:'+(remain>0?'var(--warn)':'var(--ok)')+'">'+fmt(remain)+'</div></div>'+
+   '<div class="cell"><div class="k">'+t('cDue')+'</div><div class="v" style="color:'+(days<0?'var(--bad)':'var(--ink)')+';font-size:13px">'+e.due+'</div>'+
+   '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">'+(lang==='lo'?days+' ວັນ':days+' days')+'</div></div>'+
+   '</div></div></div></div>';
+  var inner=regDetailCard(e)+capStatusCard+
+   (remain>0&&!pend?'<div class="card" style="margin:14px 0"><div class="h"><h3>'+t('howToPay')+'</h3></div><div class="c">'+
+    '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">'+
+    '<div class="num" style="font-size:18px;font-weight:600">'+e.acct+'</div>'+
+    '<button class="btn ghost" style="padding:6px 12px;font-size:11px" data-copyacct="'+e.acct+'">'+t('copyAcct')+'</button></div>'+
+    '<div style="font-size:11.5px;color:var(--muted);line-height:1.7;margin-bottom:14px">'+t('capTransferNote')+'</div>'+payBtn+'</div></div>':'')+
+   historySection(e)+
+   '<div class="card" style="margin:14px 0"><div class="h"><h3>'+t('myInvoices')+'</h3></div><div class="c" style="padding:12px 0 0">'+
+   (invRows?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cItem')+'</th>'+
+    '<th class="r">'+t('cAmt')+' (LAK)</th><th>'+t('cDue')+'</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+invRows+'</tbody></table>'
+   :'<div class="empty">'+t('noInvoice')+'</div>')+'</div></div>';
+  return shell(t('bizTitle'),'',inner);
+}
+
+function vList(){
+  var c=counts(),tot=S.ents.length,adv=S.adv;
+  var stOpts=[['ALL',t('allSt'),tot],['PENDING',t('kPending').split(' — ')[1],c.PENDING],['PARTIAL',t('kPartial').split(' — ')[1],c.PARTIAL],
+    ['COMPLETED',t('kCompleted').split(' — ')[1],c.COMPLETED],['OVERDUE',t('kOverdue').split(' — ')[1],c.OVERDUE]]
+    .map(function(o){return '<option value="'+o[0]+'"'+(S.tab===o[0]?' selected':'')+'>'+o[1]+' ('+fmt(o[2])+')</option>'}).join('');
+  var list=S.ents.filter(function(e){
+    if(S.tab!=='ALL'&&e.status!==S.tab)return false;
+    if(adv.regNo&&e.id.toLowerCase().indexOf(adv.regNo.trim().toLowerCase())<0)return false;
+    if(adv.etype&&L(e.type)!==adv.etype)return false;
+    if(adv.nameLo&&e.name.toLowerCase().indexOf(adv.nameLo.trim().toLowerCase())<0)return false;
+    if(adv.nameEn&&e.name.toLowerCase().indexOf(adv.nameEn.trim().toLowerCase())<0)return false;
+    if(adv.prov&&L(e.prov)!==adv.prov)return false;
+    if(adv.isic&&e.isic!==adv.isic)return false;
+    if(adv.regFrom&&parseD(e.reg)<Number(adv.regFrom.replace(/-/g,'')))return false;
+    if(adv.regTo&&parseD(e.reg)>Number(adv.regTo.replace(/-/g,'')))return false;
+    var upd=lastUpd(e);
+    if(adv.updFrom&&parseD(upd)<Number(adv.updFrom.replace(/-/g,'')))return false;
+    if(adv.updTo&&parseD(upd)>Number(adv.updTo.replace(/-/g,'')))return false;
+    return true});
+  var rows=list.map(function(e){var lf=e.cap-e.paid;
+    return '<tr data-open="'+e.id+'"><td style="padding-left:16px"><span class="co">'+e.name+'<small>'+e.id+'</small></span></td>'+
+    '<td>'+L(e.type)+'</td><td>'+L(e.prov)+'</td><td class="num">'+e.reg+'</td><td class="num">'+e.due+'</td>'+
+    '<td class="r num">'+fmt(e.cap)+'</td><td class="r num">'+fmt(e.paid)+'</td>'+
+    '<td class="r num"'+(lf?' style="color:var(--'+(e.status==='OVERDUE'?'bad':'warn')+')"':'')+'>'+fmt(lf)+'</td>'+
+    '<td class="r" style="padding-right:16px">'+pill(e.status)+'</td></tr>'}).join('');
+  var body=rows?'<table><thead><tr><th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('cType')+'</th><th>'+t('cProv')+'</th>'+
+    '<th>'+t('cRegD')+'</th><th>'+t('cDue')+'</th><th class="r">'+t('cCap')+' (LAK)</th><th class="r">'+t('cPaid')+'</th>'+
+    '<th class="r">'+t('cLeft')+'</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    :'<div class="empty"><b>'+t('noMatch')+'</b>'+t('noMatchS')+'</div>';
+  var etypeOpts=MASTER.etype.map(function(x){return '<option'+(adv.etype===L(x)?' selected':'')+'>'+L(x)+'</option>'}).join('');
+  var provOpts=MASTER.prov.map(function(p){return '<option'+(adv.prov===p?' selected':'')+'>'+p+'</option>'}).join('');
+  var isicOpts=MASTER.isic.map(function(i){return '<option'+(adv.isic===i[0]?' selected':'')+'>'+i[0]+'</option>'}).join('');
+  var panel='<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('filterTitle')+'</h3>'+
+   '<span class="more" data-clearadv="1">'+t('clearCriteria')+'</span></div>'+
+   '<div class="c" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 16px">'+
+   '<div class="field"><label>'+t('fltRegNo')+'</label><input id="advRegNo" value="'+esc(adv.regNo)+'"></div>'+
+   '<div class="field"><label>'+t('fltEtype')+'</label><select id="advEtype"><option value="">—</option>'+etypeOpts+'</select></div>'+
+   '<div class="field"><label>'+t('fltNameLo')+'</label><input id="advNameLo" value="'+esc(adv.nameLo)+'"></div>'+
+   '<div class="field"><label>'+t('fltNameEn')+'</label><input id="advNameEn" value="'+esc(adv.nameEn)+'"></div>'+
+   '<div class="field"><label>'+t('cProv')+'</label><select id="advProv"><option value="">'+t('allProv')+'</option>'+provOpts+'</select></div>'+
+   '<div class="field"><label>ISIC</label><select id="advIsic"><option value="">'+t('allIsic')+'</option>'+isicOpts+'</select></div>'+
+   '<div class="field"><label>'+t('cStatus')+'</label><select id="stSel">'+stOpts+'</select></div>'+
+   '<div class="field"></div>'+
+   '<div class="field"><label>'+t('fltRegFrom')+'</label><input type="date" id="advRegFrom" value="'+adv.regFrom+'"></div>'+
+   '<div class="field"><label>'+t('fltRegTo')+'</label><input type="date" id="advRegTo" value="'+adv.regTo+'"></div>'+
+   '<div class="field"><label>'+t('fltUpdFrom')+'</label><input type="date" id="advUpdFrom" value="'+adv.updFrom+'"></div>'+
+   '<div class="field"><label>'+t('fltUpdTo')+'</label><input type="date" id="advUpdTo" value="'+adv.updTo+'"></div>'+
+   '</div><div class="c" style="padding-top:0"><div class="acts"><button class="btn ghost" data-soon="'+t('export')+'">'+t('export')+'</button>'+
+   '<button class="btn ghost" data-soon="'+t('print')+'">'+t('print')+'</button></div></div></div>';
+  var inner=panel+'<div class="card"><div class="c" style="padding:0">'+body+'</div></div>'+
+  '<div style="font-size:11.5px;color:var(--muted);margin-top:12px">'+t('showing')+' '+list.length+' '+t('of')+' '+fmt(tot)+' '+t('items')+'</div>';
+  return shell(t('ent'),'',inner);
+}
+
+function regDetailCard(e){
+  var pm=PROV_META[e.prov.lo]||PROV_META['ນະຄອນຫຼວງວຽງຈັນ'];
+  var lat=e.lat||pm.lat,lng=e.lng||pm.lng;
+  var district=e.district?L(e.district):L(pm.district),village=e.village?L(e.village):L(pm.village);
+  var entInvs=S.invs.filter(function(x){return x.ent===e.id});
+  var unpaidInvs=entInvs.filter(function(x){return x.status==='UNPAID'});
+  var unpaidAmt=unpaidInvs.reduce(function(a,x){return a+x.amt},0);
+  var finVal='<span style="color:'+(unpaidInvs.length?'var(--bad)':'var(--ok)')+'">'+
+    (unpaidInvs.length?(unpaidInvs.length+' · '+fmt(unpaidAmt)+' LAK'):t('stPaid'))+'</span>';
+  var rows=[
+    [t('regNo'),e.id],[t('nameLoLbl'),e.name],[t('nameEnLbl'),e.nameEn||'—'],[t('repLbl'),e.rep||'—'],
+    [t('cRegD'),e.reg],[t('regStatusLbl'),t('operating')],[t('entType'),L(e.type)],
+    [t('cProv'),L(e.prov)],[t('districtLbl'),district],[t('villageLbl'),village],
+    ['ISIC',e.isic],[t('acctNo'),e.acct],
+    [t('taxrisNo'),e.taxris],[t('taxRegDateLbl'),e.taxRegDate||e.reg],[t('taxStatusLbl'),t('operating')],
+    [t('vatStatusLbl'),t('vatRegistered')],[t('finTitle'),finVal]
+  ];
+  return '<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('regCardTitle')+'</h3>'+
+    '<span style="margin-left:auto;display:flex;align-items:center;gap:10px">'+pill(e.status)+
+    '<span style="font-size:10.5px;color:var(--muted)">'+t('mapSyncedAt')+' 09:15</span></span></div>'+
+    '<div class="c" style="display:flex;gap:16px;flex-wrap:wrap">'+
+    '<div class="reglist">'+rows.map(function(r,i){return '<div class="regrow"><span class="k">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>'}).join('')+'</div>'+
+    '<div class="regmap"><div id="regmap" data-lat="'+lat+'" data-lng="'+lng+'" style="width:100%;flex:1;min-height:260px;border-radius:8px;border:1px solid var(--line)"></div>'+
+    '<div class="cap">'+t('mapCaption')+' — '+lat.toFixed(4)+', '+lng.toFixed(4)+'</div></div>'+
+    '</div></div>';
+}
+var regMapInst=null;
+function mountRegMap(){
+  if(regMapInst){regMapInst.remove();regMapInst=null}
+  var el=$('#regmap');if(!el)return;
+  var lat=Number(el.dataset.lat),lng=Number(el.dataset.lng);
+  regMapInst=Leaflet.map(el,{attributionControl:true}).setView([lat,lng],15);
+  Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19,attribution:'&copy; OpenStreetMap contributors'
+  }).addTo(regMapInst);
+  Leaflet.marker([lat,lng]).addTo(regMapInst);
+}
+function docsErrMsg(f){
+  if(f.mode==='asset'){
+    if(!f.files.some(function(x){return x.k==='valReport'}))
+      return t('errFile')+' — '+t('reqLbl')+': '+L(MASTER.doctype[3]);
+  }else if(!f.files.length){
+    return t('errFile')+' — '+t('anyOneLbl')+': '+MASTER.doctype.slice(0,3).map(L).join(' / ');
+  }
+  return '';
+}
+function docTypeOptions(mode){
+  return mode==='asset'
+    ?[{k:'valReport',lbl:L(MASTER.doctype[3])},{k:'assetPhoto',lbl:t('docAssetPhoto')}]
+    :MASTER.doctype.slice(0,3).map(function(d,i){return {k:'doc'+i,lbl:L(d)}});
+}
+var DOC_MOCKS={doc0:'bank-slip-20260804.pdf',doc1:'transfer-receipt.pdf',doc2:'confirmation-letter.pdf',
+  valReport:'valuation-report.pdf',assetPhoto:'asset-photos.jpg'};
+function valDocTypeOptions(){
+  return [{k:'valReport',lbl:L(MASTER.doctype[3])},{k:'assetPhoto',lbl:t('docAssetPhoto')},{k:'siteInspect',lbl:t('docSiteInspect')}];
+}
+function valDocMocks(jobId){
+  return {valReport:'valuation-report-'+jobId+'.pdf',assetPhoto:'asset-photos.pdf',siteInspect:'site-inspection.jpg'};
+}
+function valDocsErrMsg(f){
+  if(!f.files.length)return t('errFile')+' — '+t('anyOneLbl')+': '+valDocTypeOptions().map(function(o){return o.lbl}).join(' / ');
+  return '';
+}
+function wireDropTyped(el,f,opts,mocks){
+  if(!el)return;
+  var push=function(name){
+    var o=opts.filter(function(x){return x.k===f.docType})[0]||opts[0];
+    f.files=f.files.filter(function(x){return x.k!==o.k});
+    f.files.push({k:o.k,lbl:o.lbl,name:name});
+    f.docErr='';
+    render();
+  };
+  el.onclick=function(){push(mocks[f.docType]||'document.pdf')};
+  el.ondragover=function(ev){ev.preventDefault();el.classList.add('drag')};
+  el.ondragleave=function(){el.classList.remove('drag')};
+  el.ondrop=function(ev){ev.preventDefault();el.classList.remove('drag');
+    var dt=ev.dataTransfer&&ev.dataTransfer.files;
+    push(dt&&dt.length?dt[0].name:(mocks[f.docType]||'document.pdf'))};
+}
+function stepCircles(steps){
+  return '<div class="card" style="margin-bottom:14px"><div class="c"><div class="stepc">'+steps.map(function(s,i){
+    var state=s[0],label=s[1];
+    var circle='<div class="scwrap"><div class="sc '+state+'">'+(state==='done'?'✓':(i+1))+'</div><div class="scl'+(state==='now'?' on':'')+'">'+label+'</div></div>';
+    var line=i<steps.length-1?'<div class="scline'+(state==='done'?' done':'')+'"></div>':'';
+    return circle+line}).join('')+'</div></div></div>';
+}
+function historySection(e){
+  var hist=e.hist.length?e.hist.map(function(h,idx){
+    var clickable=!!h.v;
+    return '<tr'+(clickable?' data-histrow="'+e.id+'|'+idx+'"':'')+'><td style="padding-left:16px" class="num">'+h.d+'</td><td>'+L(h.a)+
+    (h.internal?'<div style="font-size:10px;color:var(--muted);margin-top:2px"><i style="font-style:normal;color:var(--m)">'+t('reasonIntLbl')+':</i> '+esc(h.internal)+'</div>':'')+'</td>'+
+    '<td>'+(h.m?modeLbl(h.m):'—')+'</td>'+
+    '<td class="r num">'+(h.v?fmt(h.v):'—')+'</td><td>'+histPill(h.st)+'</td><td>'+h.u+'</td>'+
+    '<td class="r" style="padding-right:16px">'+(h.v&&e.status==='COMPLETED'?'<span style="color:var(--m);cursor:pointer" data-cert="1">'+t('dlPdf')+'</span>':h.f)+'</td></tr>'}).join('')
+    :'<tr><td colspan="7" style="padding:24px;text-align:center;color:var(--muted)">'+t('noHistory')+'</td></tr>';
+  return '<div class="card"><div class="h"><h3>'+t('auditTrail')+'</h3></div>'+
+    '<div class="c" style="padding:12px 0 0"><table><thead><tr><th style="padding-left:16px">'+t('cDate')+'</th><th>'+t('cAct')+'</th>'+
+    '<th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+' (LAK)</th><th>'+t('cStatus')+'</th><th>'+t('cBy')+'</th>'+
+    '<th class="r" style="padding-right:16px">'+t('cDoc')+'</th></tr></thead><tbody>'+hist+'</tbody></table>'+
+    '<div class="audit" style="margin:14px 16px 16px"><b>'+t('auditTrail')+'</b> — '+t('auditNote')+'</div></div></div>';
+}
+function vTxDetail(){
+  var tx=S.tx;if(!tx)return vList();
+  var e=S.ents.filter(function(x){return x.id===tx.ent})[0];if(!e)return vList();
+  var h=e.hist[tx.idx];if(!h)return vList();
+  var col=e.collateral||[];
+  var typeLbl={land:'landType',building:'buildingType',car:'carType',machine:'machineType'};
+  var cItem=h.m==='asset'?(col.filter(function(c){return c.value===h.v})[0]||col[0]):null;
+  var pbar=stepCircles([['done',h.ch?t(h.ch):t('channelOnline').split(' (')[0]],['done',t('stageChecker')],['done',t('stageApprover')]]);
+  var txCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('reqDetail')+'</h3></div><div class="c"><div class="kv">'+
+   '<div><span class="k">'+t('cDate')+'</span><span class="v num">'+h.d+'</span></div>'+
+   '<div><span class="k">'+t('cAct')+'</span><span class="v">'+L(h.a)+'</span></div>'+
+   '<div><span class="k">'+t('cMode')+'</span><span class="v">'+(h.m?modeLbl(h.m):'—')+'</span></div>'+
+   '<div><span class="k">'+t('cAmt')+'</span><span class="v num">'+fmt(h.v)+' LAK</span></div>'+
+   '<div><span class="k">'+t('cStatus')+'</span><span class="v">'+histPill(h.st)+'</span></div>'+
+   '<div><span class="k">'+t('cBy')+'</span><span class="v">'+h.u+'</span></div>'+
+   (h.ch?'<div><span class="k">'+t('payChannel')+'</span><span class="v">'+t(h.ch)+'</span></div>':'')+
+   '</div></div></div>';
+  var payFieldsCard=h.m==='cash'?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('declareTitle')+'</h3></div><div class="c"><div class="kv">'+
+   '<div><span class="k">'+t('fDate')+'</span><span class="v num">'+h.d+'</span></div>'+
+   '<div><span class="k">'+t('fAcct')+'</span><span class="v num">'+e.acct+'</span></div>'+
+   '<div><span class="k">'+t('fRef')+'</span><span class="v num">TRX-'+h.d.split('/').reverse().join('')+'-'+('00000'+(h.v%100000)).slice(-5)+'</span></div>'+
+   '</div></div></div>':'';
+  var colCard=cItem?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('collateral')+'</h3></div><div class="c"><div class="kv">'+
+   '<div><span class="k">'+t('cType')+'</span><span class="v">'+t(typeLbl[cItem.type]||'cType')+'</span></div>'+
+   '<div><span class="k">'+t('cItem')+'</span><span class="v" style="text-align:right;max-width:260px">'+L(cItem.label)+'</span></div>'+
+   '<div><span class="k">'+t('colDetail')+'</span><span class="v" style="text-align:right;max-width:260px">'+L(cItem.detail)+'</span></div>'+
+   '<div><span class="k">'+t('colVal')+'</span><span class="v num">'+fmt(cItem.value)+' LAK</span></div></div>'+
+   '<div class="acts" style="margin-top:14px"><button class="btn ghost" data-soon="'+t('viewReport')+'">'+t('viewReport')+'</button></div>'+
+   '</div></div>':'';
+  var docPool=h.m==='asset'?['valuation-report.pdf','asset-photos.pdf','site-inspection.jpg']:['bank-slip.pdf','confirmation-letter.pdf','deposit-receipt.jpg'];
+  var docCount=h.f&&h.f!=='—'?Number(h.f):0;
+  var mockDocs=docCount?docPool.slice(0,Math.min(docCount,docPool.length)):[];
+  var filesCard=mockDocs.length?'<div class="card"><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+
+   mockDocs.map(function(f){return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
+   '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+f+'</span>'+
+   '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div></div>':'';
+  var inner=pbar+regDetailCard(e)+txCard+payFieldsCard+colCard+filesCard;
+  return shell(t('reqDetail'),[e.name,tx.back||'detail'],inner);
+}
+function vDetail(){
+  var e=S.ents.filter(function(x){return x.id===S.sel})[0];
+  var entInvs=S.invs.filter(function(x){return x.ent===e.id});
+  var unpaidInvs=entInvs.filter(function(x){return x.status==='UNPAID'});
+  var unpaidAmt=unpaidInvs.reduce(function(a,x){return a+x.amt},0);
+  var unpaidPen=entInvs.filter(function(x){return x.kind==='penalty'&&x.status==='UNPAID'});
+  var penAmt=unpaidPen.reduce(function(a,x){return a+x.amt},0);
+  var pend=pendingOf(e.id),remain=e.cap-e.paid,pct=Math.round(e.paid/e.cap*100);
+  var days=daysLeft(e.due);
+
+  var payBtn=(e.status!=='COMPLETED'&&S.role==='maker')?(pend
+    ?'<button class="btn ghost" disabled>'+t('waitingOn')+' '+(pend.stage==='checker'?t('stageChecker'):t('stageApprover'))+'…</button>'
+    :(unpaidPen.length?'<button class="btn ghost" disabled>'+t('addPaymentBtn')+'</button>':'<button class="btn" data-pay="1">'+t('addPaymentBtn')+'</button>'))
+    :'';
+  var blockedHint=(e.status!=='COMPLETED'&&S.role==='maker'&&!pend&&unpaidPen.length)?
+    '<div class="hint err" style="margin:-8px 0 14px">'+t('paymentBlocked')+'</div>':'';
+  var actionBar='<div class="acts" style="margin-bottom:'+(blockedHint?'0':'14px')+'"><button class="btn ghost" data-soon="'+t('printData')+'">'+t('printData')+'</button>'+payBtn+'</div>'+blockedHint;
+
+  var banner=pend?'<div class="alert" style="background:var(--m-lite);border-color:#C8DDEC;border-left-color:var(--m)">'+
+    '<div><div class="t" style="color:var(--m)">'+t('hasPending')+' — '+pend.ref+' · '+fmt(pend.amt)+' LAK</div>'+
+    '<div class="s" style="color:var(--ink2)">'+t('waitingOn')+' '+(pend.stage==='checker'?t('stageChecker'):t('stageApprover'))+'</div></div></div>':'';
+
+  var capStatusCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('capStatus')+'</h3></div>'+
+    '<div class="c"><div class="donutrow">'+donutPct(pct,e.status==='OVERDUE'?'#B03127':'#1B6E45')+
+    '<div style="flex:1;min-width:220px"><div class="kv">'+
+    '<div><span class="k">'+t('cCap')+'</span><span class="v num">'+fmt(e.cap)+' LAK</span></div>'+
+    '<div><span class="k">'+t('outstanding')+'</span><span class="v num" style="color:'+(remain?'var(--warn)':'var(--ok)')+'">'+fmt(remain)+' LAK</span></div>'+
+    (unpaidPen.length?'<div><span class="k">'+t('penaltyAmt')+'</span><span class="v num" style="color:var(--bad)">'+fmt(penAmt)+' LAK</span></div>':'')+
+    '<div><span class="k">'+t('cDue')+'</span><span class="v num" style="color:'+(days<0?'var(--bad)':'var(--ink)')+'">'+e.due+' ('+(lang==='lo'?days+' ວັນ':days+' days')+')</span></div>'+
+    '</div></div></div></div></div>';
+  var inner=regDetailCard(e)+capStatusCard+actionBar+banner+historySection(e);
+  return shell(e.name,[t('ent'),'ent'],inner,pill(e.status));
+}
+
+function vDeclare(){
+  var e=S.ents.filter(function(x){return x.id===S.sel})[0],f=S.form,remain=e.cap-e.paid;
+  var isOwner=S.role==='owner',canPartial=e.paid===0;
+  if(!canPartial&&f.payMode!=='full'){f.payMode='full';if(f.mode==='cash')f.amt=fmt(remain)}
+  var inner=
+  regDetailCard(e)+
+  '<div class="card"><div class="c">'+
+  '<div style="font-size:11px;color:var(--muted);margin-bottom:9px">'+t('capMode')+'</div>'+
+  '<div class="radio"><div class="opt'+(f.mode==='cash'?' on':'')+'" data-mode="cash"><div class="t">'+t('modeCash')+'</div>'+
+  '<div class="s">'+t('modeCashD')+'</div></div>'+
+  '<div class="opt'+(f.mode==='asset'?' on':'')+'" data-mode="asset"><div class="t">'+t('modeAsset')+'</div>'+
+  '<div class="s">'+t('modeAssetD')+'</div></div></div>'+
+  (canPartial?'<div style="display:flex;align-items:center;gap:10px;margin:14px 0 4px">'+
+   '<span style="font-size:11px;color:var(--muted)">'+t('payMode')+'</span>'+
+   '<div class="lang"><span'+(f.payMode==='full'?' class="on"':'')+' data-paymode="full">'+t('payFull')+'</span>'+
+   '<span'+(f.payMode==='partial'?' class="on"':'')+' data-paymode="partial">'+t('payPartial')+'</span></div></div>'
+   :'<div class="hint" style="margin-top:10px">'+t('payFullOnly')+'</div>')+
+  (f.mode==='cash'?
+   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
+   '<div class="field"><label>'+t('fAmt')+' (LAK)</label><input class="big num" id="fAmt" value="'+f.amt+'"'+(f.payMode==='full'?' disabled':'')+'>'+
+   '<div class="hint'+(f.err?' err':'')+'">'+(f.err||(t('remainNote')+' '+fmt(remain)+' LAK'))+'</div></div>'+
+   '<div class="field"><label>'+t('fDate')+'</label><input value="04/08/2026" class="num"></div>'+
+   '<div class="field"><label>'+t('fAcct')+'</label><input value="'+e.acct+'"></div>'+
+   '<div class="field"><label>'+t('fRef')+'</label><input class="num" value="TRX-20260804-00913"></div></div>'
+   :'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
+   '<div class="field"><label>'+t('fRef')+'</label><input class="num" value="TRX-20260804-00913"></div></div>')+
+  (f.mode==='asset'?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
+   '<div class="field"><label>'+t('assetCategory')+'</label><select id="assetCat">'+
+   ['land','building','car','machine'].map(function(k){return '<option value="'+k+'"'+(f.assetCat===k?' selected':'')+'>'+t(k+'Type')+'</option>'}).join('')+'</select></div>'+
+   '</div>'+
+   '<div class="field" style="margin-top:14px"><label>'+t('firmNet')+'</label>'+
+   '<div style="display:flex;flex-direction:column;gap:8px">'+
+   '<div style="display:flex;align-items:center;gap:10px">'+
+   '<label style="display:flex;align-items:center;gap:5px;font-size:11.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto">'+
+   '<input type="radio" name="firmType" data-firmtype="in"'+(f.firmType!=='out'?' checked':'')+'>'+t('inNet')+'</label>'+
+   (f.firmType!=='out'?'<select id="firmName" style="flex:1;min-width:180px">'+
+     MASTER.valfirms.filter(function(vf){return vf.net==='in'}).map(function(vf){return '<option value="'+vf.nm+'"'+(f.firmName===vf.nm?' selected':'')+'>'+vf.nm+'</option>'}).join('')+'</select>':'')+
+   '</div>'+
+   '<div style="display:flex;align-items:center;gap:10px">'+
+   '<label style="display:flex;align-items:center;gap:5px;font-size:11.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto">'+
+   '<input type="radio" name="firmType" data-firmtype="out"'+(f.firmType==='out'?' checked':'')+'>'+t('outNetShort')+'</label>'+
+   (f.firmType==='out'?'<input list="outFirmList" id="firmName" style="flex:1;min-width:180px" placeholder="'+t('firmNameLbl')+'" value="'+esc(f.firmName||'')+'">'+
+     '<datalist id="outFirmList">'+MASTER.valfirms.filter(function(vf){return vf.net==='out'}).map(function(vf){return '<option value="'+vf.nm+'">'}).join('')+'</datalist>':'')+
+   '</div></div>'+
+   '</div>'+
+   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">'+
+   ASSET_FIELDS[f.assetCat].map(function(af){var k=af[0],lbl=L(af[1]),v=(f.assetVals&&f.assetVals[k])||'';
+     return '<div class="field"><label>'+lbl+'</label><input class="'+(af[2]==='number'?'num':'')+'" data-assetfield="'+k+'" value="'+esc(v)+'"></div>'}).join('')+
+   '</div>'+
+   (f.err?'<div class="hint err" style="margin-top:8px">'+f.err+'</div>':'')
+   :'')+
+  '<div class="field"><label>'+t('fDocs')+'</label>'+
+  '<select id="docType" style="width:100%;margin-bottom:10px">'+docTypeOptions(f.mode).map(function(o){
+    return '<option value="'+o.k+'"'+(f.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
+  '<div class="drop" id="drop"><span class="dropIcon">⬆</span><b>'+t('dropT')+'</b></div>'+
+  '<div class="filelist">'+(f.files.length?f.files.map(function(fl){
+    return '<div class="filerow"><span class="fic">✓</span>'+
+    '<div class="fmeta"><b>'+fl.lbl+'</b><span>'+fl.name+'</span></div>'+
+    '<span class="frm" data-rmfile="'+fl.k+'" title="'+t('cancel')+'">✕</span></div>'}).join('')
+    :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div>'+
+  (f.docErr?'<div class="hint err" style="margin-top:8px">'+f.docErr+'</div>':'')+'</div>'+
+  '<div class="audit"><b>'+t('auditTrail')+'</b> — '+who().n+' · 04/08/2026 09:47</div>'+
+  '<div class="acts" style="margin-top:16px"><button class="btn" id="submitDeclare">'+t('submitDeclare')+'</button>'+
+  '<button class="btn ghost" data-nav="'+(isOwner?'dash':'ent')+'">'+t('cancel')+'</button></div></div></div>';
+  return shell(t('declareTitle'),[e.name,isOwner?'dash':'detail'],inner);
+}
+
+function vQueue(){
+  var stage=S.role==='checker'?'checker':'approve',isC=stage==='checker';
+  var mine=[];S.tasks.forEach(function(x,i){if(x.stage===stage)mine.push([x,i])});
+  var rows=mine.map(function(p){var x=p[0];
+    return '<tr data-task="'+p[1]+'"><td style="padding-left:16px" class="num">'+x.ref+'</td>'+
+    '<td><span class="co">'+x.ent.name+'<small>'+x.ent.id+'</small></span></td>'+
+    '<td>'+modeLbl(x.mode)+'</td>'+
+    '<td class="r num">'+fmt(x.amt)+'</td><td>'+x.by+'</td><td class="num">'+x.at+'</td>'+
+    '<td class="r" style="padding-right:16px"><span class="pill p-rev">'+(isC?t('stageChecker'):t('stageApprover'))+'</span></td></tr>'}).join('');
+  var inner=rows?'<div class="card"><div class="c" style="padding:0"><table><thead><tr>'+
+    '<th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+'</th><th>'+t('cMode')+'</th>'+
+    '<th class="r">'+t('cAmt')+' (LAK)</th><th>'+t('cBy')+'</th><th>'+t('cTime')+'</th>'+
+    '<th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>'+
+    '<div style="font-size:11.5px;color:var(--muted);margin-top:12px">'+t('taskOpen')+'</div>'
+    :'<div class="card"><div class="empty"><b>'+(isC?t('noTaskC'):t('noTaskA'))+'</b>'+(isC?t('noTaskCS'):t('noTaskAS'))+'</div></div>';
+  return shell(isC?t('queueTitle'):t('queueApprove'),'',inner);
+}
+
+function vTask(){
+  var x=S.tasks[S.taskI];if(!x)return vQueue();
+  var e=x.ent,isC=x.stage==='checker';
+  var cls=function(n){return isC?(n===1?'done':(n===2?'now':'')):(n<3?'done':'now')};
+  var files=x.files.length?x.files.map(function(f){
+    return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);'+
+    'border-radius:7px;margin-bottom:6px"><span style="color:var(--bad)">▤</span>'+
+    '<span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
+    '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join(''):'—';
+  var inner=
+  stepCircles([[cls(1),t('channelOnline').split(' (')[0]],[cls(2),t('stageChecker')],[cls(3),t('stageApprover')]])+
+  regDetailCard(e)+
+  '<div class="split"><div><div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('reqDetail')+'</h3></div>'+
+  '<div class="c"><div class="kv">'+
+  '<div><span class="k">'+t('cRef')+'</span><span class="v num">'+x.ref+'</span></div>'+
+  '<div><span class="k">'+t('cEnt')+'</span><span class="v">'+e.name+'</span></div>'+
+  '<div><span class="k">'+t('cCap')+'</span><span class="v num">'+fmt(e.cap)+' LAK</span></div>'+
+  '<div><span class="k">'+t('cPaid')+'</span><span class="v num">'+fmt(e.paid)+' ('+Math.round(e.paid/e.cap*100)+'%)</span></div>'+
+  '<div><span class="k">'+t('amtNow')+'</span><span class="v num" style="color:var(--m);font-size:14px">'+fmt(x.amt)+' LAK</span></div>'+
+  '<div><span class="k">'+t('cMode')+'</span><span class="v">'+modeLbl(x.mode)+'</span></div>'+
+  '</div></div></div>'+
+  '<div class="card"><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+files+
+  '<div class="audit">'+t('evidenceN')+'</div></div></div></div>'+
+  '<div><div class="card"><div class="h"><h3>'+t('decide')+'</h3></div><div class="c">'+
+  '<div style="font-size:11.5px;color:var(--muted);line-height:1.7">'+(isC?t('checkerNote'):t('approverNote'))+'</div>'+
+  '</div></div></div></div>'+
+  '<div class="acts" style="margin-top:14px">'+
+  '<button class="btn danger" data-openback="1">'+t('sendBack')+'</button>'+
+  (isC?'<button class="btn" data-fwd="1">'+t('fwdApprover')+'</button>'
+      :'<button class="btn" data-sign="1">'+t('signApprove')+'</button>')+
+  '</div>';
+  return shell(x.ref,[isC?t('queueTitle'):t('queueApprove'),isC?'inspect':'approveQ'],inner);
+}
+
+function vValFirm(){
+  var mine=S.valjobs.filter(function(x){return x.firm===who().n});
+  var rows=mine.map(function(j){
+    var idx=S.valjobs.indexOf(j),lbl=VAL_LBL[j.status];
+    return '<tr data-valjobfirm="'+idx+'"><td style="padding-left:16px" class="num">'+j.id+'</td>'+
+    '<td><span class="co">'+(S.ents.filter(function(y){return y.id===j.ent})[0]||{}).name+'<small>'+L(j.asset)+'</small></span></td>'+
+    '<td><span class="pill '+(j.net==='in'?'p-ok':'p-idle')+'">'+(j.net==='in'?t('inNet'):t('outNet').split(' (')[0])+'</span></td>'+
+    '<td class="r num">'+fmt(j.amt)+'</td>'+
+    '<td class="r" style="padding-right:16px"><span class="pill '+lbl[1]+'">'+t(lbl[0])+'</span></td></tr>'}).join('');
+  var inner='<div class="card"><div class="h"><h3>'+t('myJobs')+'</h3></div>'+
+   '<div class="c" style="padding:12px 0 0">'+
+   (rows?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+' / '+t('valAsset')+'</th>'+
+     '<th>'+t('valFirmType')+'</th><th class="r">'+t('valDeclared')+' (LAK)</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    :'<div class="empty">'+t('noMatch')+'</div>')+'</div></div>';
+  return shell(t('valPortal'),'',inner);
+}
+
+function vValJobDetail(){
+  var j=S.valjobs[S.valI];if(!j)return vValFirm();
+  var e=S.ents.filter(function(x){return x.id===j.ent})[0];
+  var lbl=VAL_LBL[j.status],canSubmit=j.status==='doing';
+  var typeLbl={land:'landType',building:'buildingType',car:'carType',machine:'machineType'};
+  var col=e&&e.collateral?e.collateral.filter(function(c){return L(c.label)===L(j.asset)})[0]:null;
+  var colCard=col?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('collateral')+'</h3></div><div class="c"><div class="kv">'+
+   '<div><span class="k">'+t('cType')+'</span><span class="v">'+t(typeLbl[col.type]||'cType')+'</span></div>'+
+   '<div><span class="k">'+t('cItem')+'</span><span class="v" style="text-align:right;max-width:280px">'+L(col.label)+'</span></div>'+
+   '<div><span class="k">'+t('colDetail')+'</span><span class="v" style="text-align:right;max-width:280px">'+L(col.detail)+'</span></div>'+
+   '<div><span class="k">'+t('colVal')+'</span><span class="v num">'+fmt(col.value)+' LAK</span></div>'+
+   '</div></div></div>':'';
+  var fieldsCard=(col&&col.fields)?'<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('submittedFields')+'</h3></div><div class="c"><div class="kv">'+
+   (ASSET_FIELDS[col.type]||[]).filter(function(af){return col.fields[af[0]]}).map(function(af){
+     return '<div><span class="k">'+L(af[1])+'</span><span class="v num">'+col.fields[af[0]]+'</span></div>'}).join('')+
+   '</div></div></div>':'';
+  var jobCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('reqDetail')+'</h3><span style="margin-left:auto"><span class="pill '+lbl[1]+'">'+t(lbl[0])+'</span></span></div><div class="c"><div class="kv">'+
+   '<div><span class="k">'+t('cRef')+'</span><span class="v num">'+j.id+'</span></div>'+
+   '<div><span class="k">'+t('cEnt')+'</span><span class="v">'+(e?e.name:j.ent)+'</span></div>'+
+   '<div><span class="k">'+t('valAsset')+'</span><span class="v">'+L(j.asset)+'</span></div>'+
+   '<div><span class="k">'+t('valFirmType')+'</span><span class="v">'+(j.net==='in'?t('inNet'):t('outNet').split(' (')[0])+'</span></div>'+
+   '<div><span class="k">'+t('valDeclared')+'</span><span class="v num">'+fmt(j.amt)+' LAK</span></div>'+
+   '</div></div></div>';
+  var filesCard='<div class="card"'+(canSubmit?'':' style="margin-bottom:14px"')+'><div class="h"><h3>'+t('evidence')+'</h3></div><div class="c">'+
+   (j.files&&j.files.length?'<div style="max-height:360px;overflow-y:auto;padding-right:2px">'+j.files.map(function(f){
+    return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
+    '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
+    '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div>'
+    :'<div class="empty">—</div>')+'</div></div>';
+  var formCard=canSubmit?'<div class="card"><div class="h"><h3>'+t('submitJob')+'</h3></div><div class="c">'+
+   '<div class="field"><label>'+t('valDeclared')+' (LAK)</label>'+
+   '<input class="big num" id="fjVal" value="'+(S.valForm.val!=null?S.valForm.val:j.amt)+'"></div>'+
+   (S.valForm.err?'<div class="hint err" style="margin-top:-8px;margin-bottom:10px">'+S.valForm.err+'</div>':'')+
+   '<div class="field"><label>'+t('fDocs')+'</label>'+
+   '<select id="valDocType" style="width:100%;margin-bottom:10px">'+valDocTypeOptions().map(function(o){
+     return '<option value="'+o.k+'"'+(S.valForm.docType===o.k?' selected':'')+'>'+o.lbl+'</option>'}).join('')+'</select>'+
+   '<div class="drop" id="fjDrop"><span class="dropIcon">⬆</span><b>'+t('dropT')+'</b></div>'+
+   '<div class="filelist">'+(S.valForm.files.length?S.valForm.files.map(function(fl){
+     return '<div class="filerow"><span class="fic">✓</span>'+
+     '<div class="fmeta"><b>'+fl.lbl+'</b><span>'+fl.name+'</span></div>'+
+     '<span class="frm" data-rmvalfile="'+fl.k+'" title="'+t('cancel')+'">✕</span></div>'}).join('')
+     :'<div class="empty" style="padding:12px 0;font-size:11px">'+t('noFiles')+'</div>')+'</div>'+
+   (S.valForm.docErr?'<div class="hint err" style="margin-top:8px">'+S.valForm.docErr+'</div>':'')+'</div>'+
+   '<button class="btn" style="width:100%;margin-top:6px" data-submitjob="'+S.valI+'">'+t('submitJob')+'</button>'+
+   '</div></div>':'';
+  var filesFormRow=canSubmit
+   ?'<div style="display:grid;grid-template-columns:4fr 6fr;gap:14px;margin-bottom:14px">'+filesCard+formCard+'</div>'
+   :filesCard;
+  var inner=jobCard+colCard+fieldsCard+filesFormRow;
+  return shell(j.id,[t('valPortal'),'valfirm'],inner);
+}
+
+function vValQueue(){
+  var rows=S.valjobs.map(function(j){
+    var idx=S.valjobs.indexOf(j),ent=S.ents.filter(function(y){return y.id===j.ent})[0],lbl=VAL_LBL[j.status];
+    return '<tr data-valjob="'+idx+'"><td style="padding-left:16px" class="num">'+j.id+'</td>'+
+    '<td><span class="co">'+(ent?ent.name:j.ent)+'<small>'+L(j.asset)+'</small></span></td><td>'+j.firm+'</td>'+
+    '<td>'+(j.net==='in'?'<span class="pill p-ok">'+t('inNet')+'</span>':'<span class="pill p-warn">'+t('outNet').split(' (')[0]+'</span>')+'</td>'+
+    '<td class="r num">'+fmt(j.amt)+'</td><td class="r" style="padding-right:16px"><span class="pill '+lbl[1]+'">'+t(lbl[0])+'</span></td></tr>'}).join('');
+  var counts={doing:0,wait:0,outapprove:0,accepted:0};
+  S.valjobs.forEach(function(j){counts[j.status]++});
+  var inner='<div class="kpis">'+
+   '<div class="kpi"><div class="k">'+t('valAll')+'</div><div class="v num">'+S.valjobs.length+'</div></div>'+
+   '<div class="kpi warn"><div class="k">'+t('valDoing')+'</div><div class="v num">'+counts.doing+'</div></div>'+
+   '<div class="kpi"><div class="k">'+t('valWait')+'</div><div class="v num">'+counts.wait+'</div></div>'+
+   '<div class="kpi bad"><div class="k">'+t('valOut')+'</div><div class="v num">'+counts.outapprove+'</div></div></div>'+
+   '<div class="card"><div class="h"><h3>'+t('valTitle')+'</h3></div>'+
+   '<div class="c" style="padding:12px 0 0"><table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th>'+
+   '<th>'+t('cEnt')+' / '+t('valAsset')+'</th><th>'+t('valFirm')+'</th><th>'+t('valFirmType')+'</th>'+
+   '<th class="r">'+t('valDeclared')+' (LAK)</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead>'+
+   '<tbody>'+rows+'</tbody></table><div class="audit" style="margin:14px 16px 16px">'+t('valRule')+'</div></div></div>';
+  return shell(t('valTitle'),'',inner);
+}
+
+function vFin(){
+  var tab=S.finTab,subLbl={fee:'feeTab',pen:'penTab',rec:'recTab'}[tab];
+  var body;
+  if(tab==='pen'){
+    var realPen=S.invs.filter(function(x){return x.kind==='penalty'}).map(function(x){
+      var ent=S.ents.filter(function(y){return y.id===x.ent})[0];
+      return [ent?ent.name:x.ent,x.ent,'—',x.amt,x.status]});
+    var penMock=[['ຈຳປາສັກ ອາຫານ ຈຳກັດ','ELN-2024-1004',53,15960000,'UNPAID']];
+    var pen=realPen.concat(penMock);
+    body='<div class="card"><div class="c" style="padding:0"><table><thead><tr>'+
+     '<th style="padding-left:16px">'+t('cEnt')+'</th><th class="r">'+t('penDays')+'</th>'+
+     '<th class="r">'+t('penaltyAmt')+' (LAK)</th><th class="r" style="padding-right:16px">'+t('payStatus')+'</th></tr></thead><tbody>'+
+     pen.map(function(x){var paid=x[4]==='PAID';
+     return '<tr><td style="padding-left:16px"><span class="co">'+x[0]+'<small>'+x[1]+'</small></span></td>'+
+     '<td class="r num">'+x[2]+'</td><td class="r num" style="color:var(--'+(paid?'ok':'bad')+')">'+fmt(x[3])+'</td>'+
+     '<td class="r" style="padding-right:16px"><span class="pill '+(paid?'p-ok':'p-bad')+'">'+(paid?t('stPaid'):t('stDue'))+'</span></td></tr>'}).join('')+
+     '</tbody></table></div></div>';
+  } else if(tab==='rec'){
+    var paidInvs=S.invs.filter(function(x){return x.status==='PAID'||x.status==='REFUNDED'});
+    if(paidInvs.length){
+      var recRows=paidInvs.map(function(x){
+        var ent=S.ents.filter(function(y){return y.id===x.ent})[0];
+        return '<tr><td style="padding-left:16px" class="num">'+x.receipt+'</td>'+
+        '<td><span class="co">'+(ent?ent.name:x.ent)+'</span></td><td>'+L(x.title)+
+        (x.status==='REFUNDED'?' <span class="pill p-idle">'+t('refunded')+'</span>':'')+'</td>'+
+        '<td class="r num">'+fmt(x.amt)+'</td><td class="num">'+x.paidAt+'</td>'+
+        '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-viewrec="'+x.id+'">'+t('viewReceipt')+'</td></tr>'}).join('');
+      body='<div class="card"><div class="c" style="padding:0"><table><thead><tr>'+
+       '<th style="padding-left:16px">'+t('receiptNo')+'</th><th>'+t('cEnt')+'</th><th>'+t('cItem')+'</th>'+
+       '<th class="r">'+t('cAmt')+' (LAK)</th><th>'+t('cDate')+'</th>'+
+       '<th class="r" style="padding-right:16px">'+t('manage')+'</th></tr></thead><tbody>'+recRows+'</tbody></table></div></div>';
+    } else {
+      body='<div class="card"><div class="empty"><b>'+t('recTab')+'</b>'+t('noHistory')+'</div></div>';
+    }
+  } else {
+    var realFee=S.invs.filter(function(x){return x.kind==='fee'}).map(function(x){
+      var ent=S.ents.filter(function(y){return y.id===x.ent})[0];
+      return [ent?ent.name:x.ent,x.id,x.amt,x.status==='PAID'?1:0]});
+    var feeMock=[['ວຽງຈັນ ການຄ້າ','INV-2026-1181',450000,0]];
+    var fee=realFee.concat(feeMock);
+    body='<div class="card"><div class="c" style="padding:0"><table><thead><tr>'+
+     '<th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('cRef')+'</th>'+
+     '<th class="r">'+t('feeAmt')+' (LAK)</th><th class="r" style="padding-right:16px">'+t('payStatus')+'</th></tr></thead><tbody>'+
+     fee.map(function(x){return '<tr><td style="padding-left:16px"><span class="co">'+x[0]+'</span></td>'+
+     '<td class="num">'+x[1]+'</td><td class="r num">'+fmt(x[2])+'</td>'+
+     '<td class="r" style="padding-right:16px"><span class="pill '+(x[3]?'p-ok':'p-warn')+'">'+(x[3]?t('stPaid'):t('stDue'))+'</span></td></tr>'}).join('')+
+     '</tbody></table></div></div>';
+  }
+  return shell(t('finTitle')+' — '+t(subLbl),'',body);
+}
+
+function vRep(){
+  var mm=MOCK_MONTHS[lang]||MOCK_MONTHS.en;
+  var c=counts();
+  var segs=[[c.COMPLETED,'#1B6E45',stName('COMPLETED')],[c.PARTIAL,'#B06A05',stName('PARTIAL')],
+    [c.PENDING,'#8E9CB0',stName('PENDING')],[c.OVERDUE,'#B03127',stName('OVERDUE')]];
+  var reps=[{lo:'ສະຖິຕິວິສາຫະກິດຕາມຂະແໜງ ISIC',en:'Enterprises by ISIC sector'},
+    {lo:'ລາຍງານການປະກອບທຶນຈົດທະບຽນ',en:'Registered capital contribution report'},
+    {lo:'ລາຍງານຄ່າທຳນຽມ ແລະ ຄ່າປັບ',en:'Fees and penalties report'},
+    {lo:'ລາຍງານປະສິດທິພາບງານ (Turnaround Time)',en:'Turnaround time report'}];
+  var inner='<div class="grid3" style="grid-template-columns:3fr 7fr">'+
+   '<div class="card"><div class="h"><h3>'+t('byStatus')+'</h3></div><div class="c">'+
+   '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(segs,t('cEnt'))+donutLegend(segs)+
+   '</div></div></div>'+
+   '<div class="card"><div class="h"><h3>'+t('overdueTrend')+'</h3></div><div class="c">'+
+   barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
+   '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
+   '<div class="card"><div class="h"><h3>'+t('repPick')+'</h3></div><div class="c">'+
+   '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:9px">'+
+   reps.map(function(r,i){return '<div class="acct'+(i===1?' on':'')+'" style="margin:0" data-soon="'+esc(L(r))+'">'+
+   '<div class="av">◱</div><div><div class="nm">'+L(r)+'</div></div></div>'}).join('')+'</div>'+
+   '<div style="display:flex;gap:14px;align-items:flex-end;margin-top:18px;flex-wrap:wrap">'+
+   '<div class="field" style="flex:0 1 190px;margin:0"><label>'+t('repRange')+' — '+t('dFrom')+'</label><input type="date" value="2026-01-01"></div>'+
+   '<div class="field" style="flex:0 1 190px;margin:0"><label>'+t('dTo')+'</label><input type="date" value="2026-08-04"></div>'+
+   '<div class="acts"><button class="btn" data-soon="'+t('repGen')+'">'+t('repGen')+'</button>'+
+   '<button class="btn ghost" data-soon="'+t('export')+'">'+t('export')+'</button></div></div></div></div>';
+  return shell(t('repTitle'),'',inner);
+}
+
+function vSet(){
+  var tab=S.setTab,subLbl={fee:'setFee',master:'master',gl:'glTitle',user:'setUser',api:'setApi'}[tab];
+  var body;
+  if(tab==='fee'){
+    body='<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('feeByType')+'</h3></div><div class="c" style="padding:12px 0 0">'+
+     '<table><thead><tr><th style="padding-left:16px">'+t('entType')+'</th><th class="r">'+t('feeAmt')+' (LAK)</th>'+
+     '<th class="r" style="padding-right:16px">'+t('manage')+'</th></tr></thead><tbody>'+
+     FEES.byType.map(function(x){return '<tr><td style="padding-left:16px">'+L(x[0])+'</td><td class="r num">'+fmt(x[1])+'</td>'+
+     '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('')+
+     '</tbody></table></div></div>'+
+     '<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('feeByCapital')+'</h3></div><div class="c" style="padding:12px 0 0">'+
+     '<table><thead><tr><th style="padding-left:16px">'+t('feeRange')+' (LAK)</th><th class="r">'+t('feeAmt')+' (LAK)</th>'+
+     '<th class="r" style="padding-right:16px">'+t('manage')+'</th></tr></thead><tbody>'+
+     FEES.byCapital.map(function(x){return '<tr><td style="padding-left:16px" class="num">'+x[0]+'</td><td class="r num">'+fmt(x[1])+'</td>'+
+     '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('')+
+     '</tbody></table><div class="audit" style="margin:14px 16px 16px">'+t('feeDecreeNote')+'</div></div></div>'+
+     '<div class="card"><div class="h"><h3>'+t('penRate')+'</h3></div><div class="c"><div class="empty" style="padding:20px"><b>'+t('penRateTBD')+'</b></div></div></div>';
+  } else if(tab==='master'){
+    var mini=function(title,rows){return '<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+title+'</h3></div>'+
+      '<div class="c" style="padding:12px 0 0"><table><tbody>'+rows+'</tbody></table></div></div>'};
+    var isicRows=MASTER.isic.map(function(x){return '<tr><td style="padding-left:16px" class="num">'+x[0]+'</td><td>'+x[1]+'</td>'+
+      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
+    var provRows=MASTER.prov.map(function(p){return '<tr><td style="padding-left:16px">'+p+'</td>'+
+      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
+    var etypeRows=MASTER.etype.map(function(x){return '<tr><td style="padding-left:16px">'+L(x)+'</td>'+
+      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
+    var doctypeRows=MASTER.doctype.map(function(x){return '<tr><td style="padding-left:16px">'+L(x)+'</td>'+
+      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
+    var firmRows=MASTER.valfirms.map(function(x){return '<tr><td style="padding-left:16px"><span class="co">'+x.nm+'</span></td>'+
+      '<td>'+(x.net==='in'?'<span class="pill p-ok">'+t('inNet')+'</span>':'<span class="pill p-warn">'+t('outNet').split(' (')[0]+'</span>')+'</td>'+
+      '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-soon="'+t('edit')+'">'+t('edit')+'</td></tr>'}).join('');
+    body=mini('ISIC Code',isicRows)+mini(t('cProv'),provRows)+mini(t('entType'),etypeRows)+
+      mini(t('cDoc'),doctypeRows)+mini(t('valFirm'),firmRows);
+  } else if(tab==='gl'){
+    var glRows=[];
+    S.ents.forEach(function(e){e.hist.forEach(function(h){
+      if((h.m==='cash'||h.m==='asset')&&h.v)glRows.push({ent:e.name,acct:e.acct,d:h.d,m:h.m,v:h.v,u:h.u})})});
+    body='<div class="card"><div class="h"><h3>'+t('glTitle')+'</h3></div><div class="c" style="padding:12px 0 0">'+
+     (glRows.length?'<table><thead><tr><th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('acctNo')+'</th>'+
+     '<th>'+t('cDate')+'</th><th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+' (LAK)</th>'+
+     '<th class="r" style="padding-right:16px">'+t('cBy')+'</th></tr></thead><tbody>'+
+     glRows.map(function(g){return '<tr><td style="padding-left:16px"><span class="co">'+g.ent+'</span></td>'+
+     '<td class="num" style="font-size:10.5px">'+g.acct+'</td><td class="num">'+g.d+'</td>'+
+     '<td>'+modeLbl(g.m)+'</td><td class="r num">'+fmt(g.v)+'</td>'+
+     '<td class="r" style="padding-right:16px">'+g.u+'</td></tr>'}).join('')+'</tbody></table>'
+      :'<div class="empty">'+t('noHistory')+'</div>')+
+     '<div class="audit" style="margin:14px 16px 16px">'+t('glNote')+'</div></div></div>';
+  } else if(tab==='user'){
+    body='<div class="card"><div class="h"><h3>'+t('setUser')+'</h3><span class="more" data-adduser="1">'+t('addUser')+'</span></div><div class="c" style="padding:12px 0 0">'+
+     '<table><thead><tr><th style="padding-left:16px">'+t('uName')+'</th><th>'+t('uOrg')+'</th><th>'+t('uRole')+'</th>'+
+     '<th>'+t('onlineNow')+'</th><th>'+t('cStatus')+'</th><th>'+t('uPwd')+'</th><th class="r" style="padding-right:16px">'+t('manage')+'</th></tr></thead><tbody>'+
+     S.users.map(function(u,i){return '<tr><td style="padding-left:16px"><span class="co">'+u.nm+'</span></td><td>'+u.org+'</td><td>'+u.role+'</td>'+
+     '<td>'+(u.online?'<span class="pill p-ok">●</span>':'<span class="pill p-idle">○</span>')+'</td>'+
+     '<td>'+(u.active?'<span class="pill p-ok">'+t('uActive')+'</span>':'<span class="pill p-bad">'+t('uLocked')+'</span>')+'</td>'+
+     '<td class="num" style="'+(Number(u.pwd)>90?'color:var(--bad)':'')+'">'+u.pwd+'</td>'+
+     '<td class="r" style="padding-right:16px;color:var(--m);cursor:pointer" data-toggleuser="'+i+'">'+(u.active?t('deactivate'):t('activate'))+'</td></tr>'}).join('')+
+     '</tbody></table></div></div>';
+  } else {
+    var logs=[['09:15:02','eBRS','sync 1,284',1,'1.2s'],['09:15:04','TaxRis','12',1,'0.8s'],['09:12:44','FinLink','Virtual GL',1,'2.1s']];
+    body='<div class="card"><div class="h"><h3>'+t('setApi')+'</h3></div><div class="c" style="padding:12px 0 0">'+
+     '<table><thead><tr><th style="padding-left:16px">'+t('cTime')+'</th><th>'+t('apiDest')+'</th><th>'+t('cAct')+'</th>'+
+     '<th>'+t('cStatus')+'</th><th class="r" style="padding-right:16px">'+t('apiDur')+'</th></tr></thead><tbody>'+
+     logs.map(function(l){return '<tr><td style="padding-left:16px" class="num">'+l[0]+'</td><td>'+l[1]+'</td><td>'+l[2]+'</td>'+
+     '<td><span class="pill p-ok">'+t('success')+'</span></td><td class="r num" style="padding-right:16px">'+l[4]+'</td></tr>'}).join('')+
+     '</tbody></table><div class="audit" style="margin:14px 16px 16px">'+t('apiNote')+'</div></div></div>';
+  }
+  return shell(t('setTitle')+' — '+t(subLbl),'',body);
+}
+
+function vPortal(){
+  var q=(S.q||'').trim().toLowerCase();
+  var list=S.ents.filter(function(e){return !q||e.name.toLowerCase().indexOf(q)>=0||e.id.toLowerCase().indexOf(q)>=0});
+  var rows=list.map(function(e){
+    return '<tr><td style="padding-left:16px"><span class="co">'+e.name+'<small>'+e.id+'</small></span></td>'+
+    '<td>'+L(e.prov)+'</td><td class="num">'+e.due+'</td>'+
+    '<td class="r" style="padding-right:16px">'+pill(e.status)+' <span style="color:var(--m);cursor:pointer;font-size:11px;margin-left:6px" data-soon="'+t('dlPdf')+'">'+t('dlPdf')+'</span></td></tr>'}).join('');
+  var inner='<div class="filters"><input class="inp" id="q" placeholder="'+t('search')+'" value="'+esc(S.q||'')+'"></div>'+
+   '<div class="card"><div class="c" style="padding:0">'+
+   (rows?'<table><thead><tr><th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('cProv')+'</th>'+
+     '<th>'+t('cDue')+'</th><th class="r" style="padding-right:16px">'+t('cStatus')+'</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    :'<div class="empty"><b>'+t('noMatch')+'</b>'+t('noMatchS')+'</div>')+'</div></div>'+
+   '<div class="audit" style="margin-top:12px">'+t('portalNote')+'</div>';
+  return shell(t('portalTitle'),'',inner);
+}
+
+function vCert(){
+  var e=S.ents.filter(function(x){return x.id===S.sel})[0]||S.ents[0];
+  var inner='<div class="split" style="grid-template-columns:minmax(0,1fr) 310px">'+
+  '<div class="card"><div class="c" style="background:#E4EBF2;padding:26px;display:flex;justify-content:center">'+
+  '<div style="width:100%;max-width:470px;background:#fff;padding:34px 38px;box-shadow:0 3px 14px rgba(0,0,0,.13);position:relative">'+
+  (S.certCopy?'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">'+
+   '<span style="font-size:56px;font-weight:700;color:rgba(176,49,39,.13);transform:rotate(-24deg)">COPY</span></div>':'')+
+  '<div style="text-align:center;border-bottom:1.5px solid var(--m-dark);padding-bottom:14px;margin-bottom:16px">'+
+  '<div style="width:40px;height:40px;border-radius:50%;border:2px solid var(--m);color:var(--m);margin:0 auto 9px;'+
+  'display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700">ລ</div>'+
+  '<div style="font-size:10px;color:var(--muted)">ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ</div>'+
+  '<div style="font-size:15px;font-weight:600;margin-top:6px">ໃບຢັ້ງຢືນການຝາກທຶນຈົດທະບຽນ</div>'+
+  '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">Capital Deposit Certificate</div></div>'+
+  '<div class="kv" style="font-size:11px">'+
+  '<div><span class="k">ຊື່ວິສາຫະກິດ</span><span class="v">'+e.name+'</span></div>'+
+  '<div><span class="k">ເລກທະບຽນ</span><span class="v num">'+e.id+'</span></div>'+
+  '<div><span class="k">ທຶນຈົດທະບຽນ</span><span class="v num">'+fmt(e.cap)+' ກີບ</span></div>'+
+  '<div><span class="k">ຊຳລະຄົບຖ້ວນ</span><span class="v num">'+fmt(e.paid)+' ກີບ</span></div>'+
+  '<div><span class="k">ວັນທີຢັ້ງຢືນ</span><span class="v num">04/08/2026</span></div></div>'+
+  '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:26px">'+
+  '<div style="width:60px;height:60px;background:linear-gradient(45deg,#08324D 25%,transparent 25%,transparent 75%,#08324D 75%),'+
+  'linear-gradient(45deg,#08324D 25%,transparent 25%,transparent 75%,#08324D 75%);background-size:12px 12px;'+
+  'background-position:0 0,6px 6px;outline:1px solid var(--line)"></div>'+
+  '<div style="text-align:center"><div style="font-family:IBM Plex Mono,monospace;font-size:12px;'+
+  'border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:5px">ຫົວໜ້າພະແນກ</div>'+
+  '<div style="font-size:9px;color:var(--muted)">Digitally signed · PKI</div></div></div>'+
+  '<div style="font-size:8.5px;color:var(--muted);text-align:center;margin-top:15px">verify.rcms.gov.la</div>'+
+  '</div></div></div>'+
+  '<div><div class="card"><div class="h"><h3>'+t('print')+'</h3></div><div class="c">'+
+  '<div class="field"><label>'+t('copyType')+'</label><div class="radio" style="gap:8px">'+
+  '<div class="opt'+(S.certCopy?'':' on')+'" data-copy="0" style="padding:10px"><div class="t" style="font-size:12px;margin:0">Original</div></div>'+
+  '<div class="opt'+(S.certCopy?' on':'')+'" data-copy="1" style="padding:10px"><div class="t" style="font-size:12px;margin:0">Copy</div></div></div></div>'+
+  '<div class="acts"><button class="btn" style="flex:1" data-soon="'+t('dlPdf')+'">'+t('dlPdf')+'</button>'+
+  '<button class="btn ghost" data-soon="'+t('print')+'">'+t('print')+'</button></div></div></div></div></div>';
+  return shell(t('certIssued'),[e.name,'detail'],inner);
+}
+
+function fakeQR(seed){
+  var n=17,cell=10,size=n*cell,seedNum=0,i;
+  for(i=0;i<seed.length;i++)seedNum+=seed.charCodeAt(i)*(i+1);
+  function h(x,y){return (x*31+y*17+seedNum)%7}
+  function finder(fx,fy){
+    return '<rect x="'+fx+'" y="'+fy+'" width="'+(7*cell)+'" height="'+(7*cell)+'" style="fill:var(--m-dark)"/>'+
+    '<rect x="'+(fx+cell)+'" y="'+(fy+cell)+'" width="'+(5*cell)+'" height="'+(5*cell)+'" fill="#fff"/>'+
+    '<rect x="'+(fx+2*cell)+'" y="'+(fy+2*cell)+'" width="'+(3*cell)+'" height="'+(3*cell)+'" style="fill:var(--m-dark)"/>';
+  }
+  var cells='',x,y;
+  for(y=0;y<n;y++){for(x=0;x<n;x++){
+    var inF=(x<7&&y<7)||(x>=n-7&&y<7)||(x<7&&y>=n-7);
+    if(inF)continue;
+    if(h(x,y)%2===0)cells+='<rect x="'+(x*cell)+'" y="'+(y*cell)+'" width="'+cell+'" height="'+cell+'" style="fill:var(--m-dark)"/>';
+  }}
+  return '<svg viewBox="0 0 '+size+' '+size+'" style="width:180px;height:180px;background:#fff">'+
+   '<rect x="0" y="0" width="'+size+'" height="'+size+'" fill="#fff"/>'+cells+
+   finder(0,0)+finder((n-7)*cell,0)+finder(0,(n-7)*cell)+'</svg>';
+}
+
+function vModal(){
+  if(!S.modal)return '';
+  var m=S.modal;
+  if(m.type==='approve'){
+    var x=S.tasks[m.i];if(!x)return '';
+    return '<div class="veil" id="veil"><div class="modal"><h3>'+t('mfaTitle')+'</h3>'+
+    '<p>'+x.ent.name+' · '+fmt(x.amt)+' LAK</p>'+
+    '<div class="otp" id="otp2">'+[0,1,2,3,4,5].map(function(){return '<input maxlength="1" size="1" inputmode="numeric">'}).join('')+'</div>'+
+    '<div class="hint" style="margin-bottom:16px">'+t('mfaAny')+'</div>'+
+    '<div class="sig"><div class="nm">ຫົວໜ້າພະແນກ ທະບຽນວິສາຫະກິດ</div><div class="mt">'+t('sigNote')+'</div></div>'+
+    '<div class="acts"><button class="btn" id="doApprove" disabled style="flex:1">'+t('signApprove')+'</button>'+
+    '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
+  }
+  if(m.type==='done'){
+    return '<div class="veil" id="veil"><div class="modal" style="text-align:center">'+
+    '<div style="width:54px;height:54px;border-radius:50%;background:var(--okbg);color:var(--ok);font-size:25px;'+
+    'display:flex;align-items:center;justify-content:center;margin:0 auto 15px">✓</div>'+
+    '<h3>'+t('doneT')+'</h3><p>'+m.name+'<br>'+t('statusTo')+' '+m.status+'</p>'+
+    '<div class="kv" style="text-align:left;margin-bottom:18px">'+
+    '<div><span class="k">'+t('certIssued')+'</span><span class="v" style="color:var(--ok)">'+t('issued')+'</span></div>'+
+    '<div><span class="k">'+t('notifSent')+'</span><span class="v" style="color:var(--ok)">'+t('sent')+'</span></div>'+
+    '<div><span class="k">'+t('apiSent')+'</span><span class="v" style="color:var(--ok)">'+t('success')+'</span></div></div>'+
+    '<div class="acts"><button class="btn" style="flex:1" data-after="dash">'+t('goDash')+'</button>'+
+    '<button class="btn ghost" data-after="cert">'+t('goCert')+'</button></div></div></div>';
+  }
+  if(m.type==='clearcache'){
+    return '<div class="veil" id="veil"><div class="modal" style="max-width:380px"><h3>'+t('clearCache')+'</h3>'+
+    '<p>'+t('clearCacheConfirm')+'</p>'+
+    '<div class="acts"><button class="btn" style="flex:1" data-doclearcache>'+t('confirm')+'</button>'+
+    '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
+  }
+  if(m.type==='keys'){
+    var rows=[['Alt + L','kbLang'],['Alt + M','kbMob'],['Alt + B','kbSide'],
+              ['Alt + Q','kbOut'],['Alt + R','kbReset'],['Alt + /','kbHelp']]
+      .map(function(k){return '<div><span>'+t(k[1])+'</span><kbd>'+k[0]+'</kbd></div>'}).join('');
+    return '<div class="veil" id="veil"><div class="modal" style="max-width:390px"><h3>'+t('kbTitle')+'</h3>'+
+    '<p>'+t('kbNote')+'</p><div class="keys">'+rows+'</div>'+
+    '<button class="btn ghost" style="width:100%;margin-top:18px" data-close>'+t('close')+'</button></div></div>';
+  }
+  if(m.type==='qr'){
+    var inv=S.invs.filter(function(x){return x.id===m.inv})[0];if(!inv)return '';
+    var ch=m.channel||'qr';
+    var chBtn=function(v,lbl){return '<div class="opt'+(ch===v?' on':'')+'" data-pickch="'+v+'" style="padding:9px;text-align:center"><div class="t" style="font-size:11px;margin:0">'+lbl+'</div></div>'};
+    return '<div class="veil" id="veil"><div class="modal" style="text-align:center">'+
+    '<h3>'+L(inv.title)+'</h3>'+
+    '<div class="num" style="font-size:26px;font-weight:600;margin-bottom:14px">'+fmt(inv.amt)+
+    ' <span style="font-size:12px;color:var(--muted);font-weight:400">LAK</span></div>'+
+    '<div class="radio" style="margin-bottom:14px">'+chBtn('qr',t('chQR'))+chBtn('mobile',t('chMobile'))+chBtn('counter',t('chCounter'))+'</div>'+
+    (ch==='qr'?'<div style="display:flex;justify-content:center;margin-bottom:14px">'+fakeQR(inv.id)+'</div>':'')+
+    '<p>'+t('scanNote')+'</p>'+
+    '<div class="acts" style="flex-direction:column">'+
+    '<button class="btn" id="doSimPay" data-inv="'+inv.id+'">'+t('simulatePaid')+'</button>'+
+    '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
+  }
+  if(m.type==='receipt'){
+    var rInv=S.invs.filter(function(x){return x.id===m.inv})[0];if(!rInv)return '';
+    var rEnt=S.ents.filter(function(x){return x.id===rInv.ent})[0];
+    var chLbl={qr:t('chQR'),mobile:t('chMobile'),counter:t('chCounter')}[rInv.channel]||t('chQR');
+    return '<div class="veil" id="veil"><div class="modal">'+
+    '<h3>'+t('recTab')+'</h3><p>'+t('autoVerified')+(rInv.status==='REFUNDED'?' · <b style="color:var(--bad)">'+t('refunded')+'</b>':'')+'</p>'+
+    '<div class="kv">'+
+    '<div><span class="k">'+t('receiptNo')+'</span><span class="v num">'+rInv.receipt+'</span></div>'+
+    '<div><span class="k">'+t('cEnt')+'</span><span class="v">'+(rEnt?rEnt.name:rInv.ent)+'</span></div>'+
+    '<div><span class="k">'+t('cItem')+'</span><span class="v">'+L(rInv.title)+'</span></div>'+
+    '<div><span class="k">'+t('cAmt')+'</span><span class="v num">'+fmt(rInv.amt)+' LAK</span></div>'+
+    '<div><span class="k">'+t('paidAtLbl')+'</span><span class="v num">'+rInv.paidAt+'</span></div>'+
+    '<div><span class="k">'+t('payChannel')+'</span><span class="v">'+chLbl+'</span></div></div>'+
+    '<div class="acts" style="margin-top:16px"><button class="btn" style="flex:1" data-soon="'+t('dlPdf')+'">'+t('dlPdf')+'</button>'+
+    (S.role&&S.role!=='owner'&&rInv.status==='PAID'?'<button class="btn ghost" data-refundinv="'+rInv.id+'">'+t('refund')+'</button>':'')+
+    '<button class="btn ghost" data-close>'+t('close')+'</button></div></div></div>';
+  }
+  if(m.type==='valjob'){
+    var j=S.valjobs[m.i];if(!j)return '';
+    var jEnt=S.ents.filter(function(x){return x.id===j.ent})[0],jLbl=VAL_LBL[j.status];
+    return '<div class="veil" id="veil"><div class="modal">'+
+    '<h3>'+j.id+'</h3><p>'+(jEnt?jEnt.name:j.ent)+' · '+L(j.asset)+'</p>'+
+    '<div class="kv">'+
+    '<div><span class="k">'+t('valFirm')+'</span><span class="v">'+j.firm+'</span></div>'+
+    '<div><span class="k">'+t('valFirmType')+'</span><span class="v">'+(j.net==='in'?t('inNet'):t('outNet').split(' (')[0])+'</span></div>'+
+    '<div><span class="k">'+t('valDeclared')+'</span><span class="v num">'+fmt(j.amt)+' LAK</span></div>'+
+    '<div><span class="k">'+t('cStatus')+'</span><span class="v"><span class="pill '+jLbl[1]+'">'+t(jLbl[0])+'</span></span></div></div>'+
+    (j.files&&j.files.length?'<div class="files" style="margin-top:12px">'+j.files.map(function(f){
+      return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
+      '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
+      '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div>':'')+
+    '<div class="audit" style="margin-top:12px">'+t('valRule')+'</div>'+
+    '<div class="acts" style="margin-top:16px">'+
+    (j.status==='wait'?'<button class="btn" style="flex:1" data-acceptjob="'+m.i+'">'+t('acceptResult')+'</button>':'')+
+    (j.status==='outapprove'?'<button class="btn" style="flex:1" data-approvefirm="'+m.i+'">'+t('approveFirm')+'</button>':'')+
+    '<button class="btn ghost" data-close>'+t('close')+'</button></div></div></div>';
+  }
+  if(m.type==='help'){
+    var groups=[['audOwner',['ebook','video','quickRef']],['audStaff',['ebook','video','quickRef','faq','inAppHelp']],['audExternal',['ebook','faq']]];
+    var gh=groups.map(function(g){return '<div style="margin-bottom:14px"><div style="font-size:11.5px;font-weight:600;margin-bottom:7px">'+t(g[0])+'</div>'+
+      '<div class="acts">'+g[1].map(function(k){return '<button class="btn ghost" style="font-size:11px;padding:7px 11px" data-soon="'+t(k)+'">'+t(k)+'</button>'}).join('')+'</div></div>'}).join('');
+    return '<div class="veil" id="veil"><div class="modal" style="max-width:420px"><h3>'+t('helpCenter')+'</h3>'+gh+
+    '<button class="btn ghost" style="width:100%;margin-top:6px" data-close>'+t('close')+'</button></div></div>';
+  }
+  if(m.type==='forgot'){
+    var fstep=m.step||'id',fbody;
+    if(fstep==='id'){
+      fbody='<div class="field"><label>'+t('forgotIdLbl')+'</label>'+
+       '<input id="forgotId" placeholder="'+t('forgotIdPh')+'" value="'+esc(m.idv||'')+'"></div>'+
+       '<div class="acts"><button class="btn" style="flex:1" id="doSendCode">'+t('sendCode')+'</button>'+
+       '<button class="btn ghost" data-close>'+t('cancel')+'</button></div>';
+    } else if(fstep==='otp'){
+      fbody='<p>'+t('codeSentNote')+(m.idv?' — '+esc(m.idv):'')+'</p>'+
+       '<div class="otp" id="otp3">'+[0,1,2,3,4,5].map(function(){return '<input maxlength="1" size="1" inputmode="numeric">'}).join('')+'</div>'+
+       '<div class="acts" style="margin-top:8px"><button class="btn" style="flex:1" id="doVerifyCode" disabled>'+t('verifyCode')+'</button>'+
+       '<button class="btn ghost" data-close>'+t('cancel')+'</button></div>';
+    } else {
+      fbody='<div class="field"><label>'+t('newPwLbl')+'</label><input id="newPw1" type="password"></div>'+
+       '<div class="field"><label>'+t('confirmPwLbl')+'</label><input id="newPw2" type="password"></div>'+
+       (m.err?'<div class="hint err">'+m.err+'</div>':'')+
+       '<div class="acts"><button class="btn" style="flex:1" id="doSetPw">'+t('setNewPw')+'</button>'+
+       '<button class="btn ghost" data-close>'+t('cancel')+'</button></div>';
+    }
+    return '<div class="veil" id="veil"><div class="modal"><h3>'+t('forgotTitle')+'</h3>'+fbody+'</div></div>';
+  }
+  if(m.type==='adduser'){
+    return '<div class="veil" id="veil"><div class="modal"><h3>'+t('addUserTitle')+'</h3>'+
+    '<div class="field"><label>'+t('uName')+'</label><input id="newUName" value="'+esc(m.nm||'')+'"></div>'+
+    '<div class="field"><label>'+t('uOrg')+'</label><select id="newUOrg"><option'+(m.org==='APB'?' selected':'')+'>APB</option>'+
+    '<option'+(m.org==='MOIC'?' selected':'')+'>MOIC</option><option'+(m.org==='VAL'?' selected':'')+'>VAL</option></select></div>'+
+    '<div class="field"><label>'+t('uRole')+'</label><select id="newURole">'+
+    (ROLE_OPT[m.org]||[]).map(function(r){return '<option'+(m.role===r?' selected':'')+'>'+r+'</option>'}).join('')+'</select></div>'+
+    (m.err?'<div class="hint err">'+m.err+'</div>':'')+
+    '<div class="acts"><button class="btn" style="flex:1" id="doSaveUser">'+t('save')+'</button>'+
+    '<button class="btn ghost" data-close>'+t('cancel')+'</button></div></div></div>';
+  }
+  if(m.type==='backreason'){
+    return '<div class="veil" id="veil"><div class="modal"><h3>'+t('sendBack')+'</h3>'+
+    '<div class="field" style="margin-top:12px;margin-bottom:8px"><label>'+t('reasonIntLbl')+'</label>'+
+    '<textarea id="reasonIntTxt" rows="2" placeholder="'+t('reasonIntPh')+'">'+esc(S.backReasonInt||'')+'</textarea></div>'+
+    '<div class="field" style="margin-bottom:8px"><label>'+t('reasonExtLbl')+'</label>'+
+    '<textarea id="reasonExtTxt" rows="2" placeholder="'+t('reasonExtPh')+'">'+esc(S.backReasonExt||'')+'</textarea></div>'+
+    (m.err?'<div class="hint err">'+m.err+'</div>':'')+
+    '<div class="acts" style="margin-top:14px"><button class="btn ghost" data-close>'+t('cancel')+'</button>'+
+    '<button class="btn danger" style="flex:1" data-back="1">'+t('confirm')+'</button></div></div></div>';
+  }
+  if(m.type==='verify'){
+    var vq=(m.q||'').trim().toLowerCase();
+    var vmatch=vq?S.ents.filter(function(x){return x.name.toLowerCase().indexOf(vq)>=0||x.id.toLowerCase().indexOf(vq)>=0})[0]:null;
+    return '<div class="veil" id="veil"><div class="modal"><h3>'+t('qrVerify')+'</h3><p>'+t('qrVerifyNote')+'</p>'+
+    '<div class="field"><input id="verifyQ" placeholder="'+t('search')+'" value="'+esc(m.q||'')+'"></div>'+
+    (vq?(vmatch?
+      '<div class="kv"><div><span class="k">'+t('cEnt')+'</span><span class="v">'+vmatch.name+'</span></div>'+
+      '<div><span class="k">'+t('regNo')+'</span><span class="v num">'+vmatch.id+'</span></div>'+
+      '<div><span class="k">'+t('cStatus')+'</span><span class="v">'+pill(vmatch.status)+'</span></div>'+
+      '<div><span class="k">'+t('cDue')+'</span><span class="v num">'+vmatch.due+'</span></div></div>'+
+      '<div style="font-size:9.5px;color:var(--muted);text-align:center;margin-top:12px">verify.rcms.gov.la</div>'
+      :'<div class="empty" style="padding:20px">'+t('verifyNotFound')+'</div>')
+     :'')+
+    '<button class="btn ghost" style="width:100%;margin-top:14px" data-close>'+t('close')+'</button></div></div>';
+  }
+  return '';
+}
+
+/* ================= render / navigation ================= */
+function render(){
+  var bodyEl=document.querySelector('.body'),prevTop=bodyEl?bodyEl.scrollTop:0;
+  var keepScroll=render._key===S.view+':'+S.mobile;
+  document.body.className=(lang==='lo'?'lo':'');
+  document.documentElement.lang=lang;
+  var h;
+  if(S.view==='login')h=vLogin();
+  else if(S.mobile)h=vMobile();
+  else if(S.view==='dash')h=vDash();
+  else if(S.view==='ent')h=vList();
+  else if(S.view==='detail')h=vDetail();
+  else if(S.view==='tx')h=vTxDetail();
+  else if(S.view==='declare')h=vDeclare();
+  else if(S.view==='inspect')h=vQueue();
+  else if(S.view==='approveQ')h=vQueue();
+  else if(S.view==='task')h=vTask();
+  else if(S.view==='valfirm')h=vValFirm();
+  else if(S.view==='valjobdetail')h=vValJobDetail();
+  else if(S.view==='valQueue')h=vValQueue();
+  else if(S.view==='fin')h=vFin();
+  else if(S.view==='rep')h=vRep();
+  else if(S.view==='set')h=vSet();
+  else if(S.view==='portal')h=vPortal();
+  else if(S.view==='cert')h=vCert();
+  else h=vDash();
+  $('#frame').innerHTML=h;
+  var v=$('#veil');if(v)v.remove();
+  if(S.modal)document.body.insertAdjacentHTML('beforeend',vModal());
+  bind();
+  if(keepScroll){
+    var newBody=document.querySelector('.body');
+    if(newBody)newBody.scrollTop=prevTop;
+    setTimeout(function(){var b=document.querySelector('.body');if(b)b.scrollTop=prevTop},0);
+  }
+  render._key=S.view+':'+S.mobile;
+}
+function go(v){S.view=v;S.mobile=false;S.bell=false;S.umenu=false;render()}
+function logout(){S.role=null;S.view='login';S.mobile=false;S.bell=false;S.umenu=false;S.modal=null;
+  S.loginStep='cred';S.loginUser='';S.loginPass='';S.loginErr='';render()}
+
+function otpWire(box,cb){
+  var ins=box.querySelectorAll('input');
+  ins.forEach(function(inp,i){
+    inp.oninput=function(){inp.value=inp.value.replace(/[^0-9]/g,'');
+      if(inp.value&&ins[i+1])ins[i+1].focus();
+      cb(Array.prototype.every.call(ins,function(x){return x.value}))};
+    inp.onkeydown=function(ev){if(ev.key==='Backspace'&&!inp.value&&ins[i-1])ins[i-1].focus()}});
+  ins[0].focus();
+}
+
+function approve(i){
+  var x=S.tasks[i];if(!x)return;
+  var e=x.ent,before=e.status;
+  e.paid+=x.amt;
+  e.status=e.paid>=e.cap?'COMPLETED':'PARTIAL';
+  if(e.insts[1]){e.insts[1].state='paid';
+    e.insts[1].meta={lo:'ອະນຸມັດໂດຍ ຫົວໜ້າພະແນກ 04/08/2026 · ລົງລາຍເຊັນດິຈິຕອນແລ້ວ',en:'Approved by the division head on 04/08/2026 · digitally signed'}}
+  e.hist.push({d:'04/08/2026',a:{lo:'ອະນຸມັດ ແລະ ລົງລາຍເຊັນດິຈິຕອນ',en:'Approved and digitally signed'},m:'',v:0,u:who().n,f:'1',ch:'',st:'complete'});
+  S.notif.unshift({t:{lo:'ທຶນຈົດທະບຽນຄົບຖ້ວນແລ້ວ',en:'Registered capital fully paid'},
+    s:{lo:'ອະນຸມັດແລ້ວ · ໃບຢັ້ງຢືນການຝາກທຶນພ້ອມດາວໂຫຼດ',en:'Approved · the capital deposit certificate is ready to download'},x:'10:12',c:'var(--ok)'});
+  S.tasks.splice(i,1);
+  S.sel=e.id;S.view='approveQ';
+  S.modal={type:'done',name:e.name,status:stName(e.status)};
+  render();toast(t('apvDone'),t('statusTo')+' '+stName(e.status),true);
+}
+
+document.addEventListener('click',function(ev){
+  if((S.bell||S.umenu)&&!ev.target.closest('.bellwrap')){S.bell=false;S.umenu=false;render()}});
+
+document.addEventListener('keydown',function(ev){
+  if(ev.key==='Escape'&&(S.modal||S.bell||S.umenu)){S.modal=null;S.bell=false;S.umenu=false;render();return}
+  if(!ev.altKey||ev.ctrlKey||ev.metaKey)return;
+  var tag=(ev.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='select'||tag==='textarea')return;
+  var k=ev.key.toLowerCase();
+  if(k==='l'){ev.preventDefault();lang=lang==='lo'?'en':'lo';render()}
+  else if(k==='m'){ev.preventDefault();if(S.role==='owner'){S.mobile=!S.mobile;render()}else toast(t('kbMob'),'')}
+  else if(k==='b'){ev.preventDefault();if(S.role){S.mini=!S.mini;render()}}
+  else if(k==='q'){ev.preventDefault();if(S.role)logout()}
+  else if(k==='r'){ev.preventDefault();reset();toast(t('resetDone'),t('resetDoneS'))}
+  else if(k==='/'||ev.key==='?'){ev.preventDefault();S.modal=S.modal&&S.modal.type==='keys'?null:{type:'keys'};render()}
+});
+
+function vMobile(){
+  var e=S.ents[0],remain=e.cap-e.paid,pct=Math.round(e.paid/e.cap*100);
+  var unpaid=S.invs.filter(function(x){return x.ent===e.id&&x.status==='UNPAID'})[0];
+  var nav=function(on){return '<div class="mnav"><div'+(on===0?' class="on"':'')+'><span class="ic">▦</span>'+t('myCap')+'</div>'+
+    '<div'+(on===1?' class="on"':'')+'><span class="ic">◷</span>'+t('notif')+'</div></div>'};
+  return '<div class="mstage"><div><div class="phone"><div class="sb"><span class="num">09:41</span><span>▮▮▮ ⌁</span></div>'+
+  '<div class="hd"><div class="n">'+t('myEnt')+'</div><div class="c">'+e.name+'</div></div><div class="bd">'+
+  '<div class="pcard" style="border-color:#C8DDEC;background:var(--m-lite)"><div class="l">'+(remain>0?t('bizRemain'):t('bizDone'))+'</div>'+
+  '<div class="v num" style="color:var(--'+(remain>0?'warn':'ok')+')">'+fmt(remain>0?remain:e.cap)+' LAK</div>'+
+  '<div style="font-size:10px;color:var(--muted)">'+t('cPaid')+' '+pct+'% · '+t('cDue')+' '+e.due+'</div></div>'+
+  '<div class="mrow"><span>'+t('cStatus')+'</span>'+pill(e.status)+'</div>'+
+  '<div class="mrow"><span>'+t('bizVal')+'</span><span style="color:var(--muted)">—</span></div>'+
+  '<div class="mrow" style="border:0"><span>'+t('bizReg')+'</span><span style="color:var(--m)">'+t('bizDl')+'</span></div>'+
+  (unpaid?'<div class="pcard" style="border-color:#F0CBC6;background:var(--badbg);margin-top:12px">'+
+    '<div class="l">'+L(unpaid.title)+'</div><div class="v num" style="color:var(--bad)">'+fmt(unpaid.amt)+' LAK</div>'+
+    '<button class="btn" style="width:100%;margin-top:6px;padding:10px" data-payinv="'+unpaid.id+'">'+t('bizPayQR')+'</button></div>'
+   :'<div class="pcard" style="margin-top:12px"><div class="l">'+t('noInvoice')+'</div></div>')+
+  '</div>'+nav(0)+'</div><div class="plabel">'+t('myCap')+'</div></div>'+
+  '<div><div class="phone"><div class="sb"><span class="num">09:41</span><span>▮▮▮ ⌁</span></div>'+
+  '<div class="hd"><div class="n">'+t('notif')+'</div><div class="c">'+t('myEnt')+'</div></div><div class="bd">'+
+  bizNotifs().map(function(n){return '<div class="pcard" style="border-left:3px solid '+n.c+'">'+
+  '<div style="font-size:12px;font-weight:600">'+L(n.t)+'</div>'+
+  '<div style="font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.7">'+L(n.s)+'</div></div>'}).join('')+
+  '</div>'+nav(1)+'</div><div class="plabel">'+t('notif')+'</div></div></div>';
+}
+
+function bind(){
+  mountRegMap();
+  document.querySelectorAll('[data-lang]').forEach(function(b){b.onclick=function(){lang=b.dataset.lang;render()}});
+  document.querySelectorAll('[data-nav]').forEach(function(el){el.onclick=function(ev){
+    ev.stopPropagation();go(el.dataset.nav)}});
+  document.querySelectorAll('[data-subtab]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();var p=b.dataset.subtab.split(':');
+    if(p[0]==='fin'){S.finTab=p[1];go('fin')}else{S.setTab=p[1];go('set')}}});
+  document.querySelectorAll('[data-burger]').forEach(function(b){b.onclick=function(){S.mini=!S.mini;render()}});
+  document.querySelectorAll('[data-open]').forEach(function(r){r.onclick=function(){S.sel=r.dataset.open;go('detail')}});
+  document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.dataset.tab;go('ent')}});
+  document.querySelectorAll('[data-soon]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();toast(b.dataset.soon,t('notDemo'))}});
+  document.querySelectorAll('[data-mode]').forEach(function(b){b.onclick=function(){
+    S.form.mode=b.dataset.mode;
+    if(S.form.mode==='asset'){
+      if(!S.form.assetCat){S.form.assetCat='land';S.form.assetVals={}}
+      S.form.amt=(S.form.assetVals&&S.form.assetVals[ASSET_PRICE_KEY[S.form.assetCat]])||'';
+      if(!S.form.firmType){S.form.firmType='in';S.form.firmName=MASTER.valfirms.filter(function(vf){return vf.net==='in'})[0].nm}
+    }else{
+      var ce=S.ents.filter(function(x){return x.id===S.sel})[0];
+      if(ce)S.form.amt=S.form.payMode==='full'?fmt(ce.cap-ce.paid):'';
+    }
+    var okKeys=docTypeOptions(S.form.mode).map(function(o){return o.k});
+    S.form.files=S.form.files.filter(function(fl){return okKeys.indexOf(fl.k)>-1});
+    S.form.docType=okKeys[0];S.form.docErr='';S.form.err='';
+    render()}});
+  var dts=$('#docType');if(dts)dts.onchange=function(){S.form.docType=dts.value};
+  document.querySelectorAll('[data-rmfile]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.form.files=S.form.files.filter(function(fl){return fl.k!==b.dataset.rmfile});
+    S.form.docErr=docsErrMsg(S.form);render()}});
+  var acs=$('#assetCat');if(acs)acs.onchange=function(){
+    S.form.assetCat=acs.value;S.form.assetVals={};S.form.amt='';S.form.err='';render()};
+  document.querySelectorAll('[data-assetfield]').forEach(function(inp){inp.oninput=function(){
+    if(!S.form.assetVals)S.form.assetVals={};S.form.assetVals[inp.dataset.assetfield]=inp.value;
+    if(inp.dataset.assetfield===ASSET_PRICE_KEY[S.form.assetCat]){S.form.amt=inp.value;S.form.err=''}}});
+  document.querySelectorAll('[data-firmtype]').forEach(function(b){b.onchange=function(){
+    S.form.firmType=b.dataset.firmtype;
+    S.form.firmName=S.form.firmType==='in'?MASTER.valfirms.filter(function(vf){return vf.net==='in'})[0].nm:'';
+    render()}});
+  var fnSel=$('#firmName');if(fnSel)fnSel[fnSel.tagName==='SELECT'?'onchange':'oninput']=function(){S.form.firmName=fnSel.value};
+  document.querySelectorAll('[data-paymode]').forEach(function(b){b.onclick=function(){
+    var e=S.ents.filter(function(x){return x.id===S.sel})[0];
+    S.form.payMode=b.dataset.paymode;
+    if(S.form.payMode==='full')S.form.amt=fmt(e.cap-e.paid);
+    S.form.err='';render()}});
+  document.querySelectorAll('[data-copy]').forEach(function(b){b.onclick=function(){S.certCopy=b.dataset.copy==='1';render()}});
+  document.querySelectorAll('[data-cert]').forEach(function(b){b.onclick=function(ev){ev.stopPropagation();go('cert')}});
+  document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=function(){S.modal=null;render()}});
+  document.querySelectorAll('[data-logout]').forEach(function(b){b.onclick=function(){logout()}});
+  document.querySelectorAll('[data-bell]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.bell=!S.bell;S.umenu=false;render()}});
+  document.querySelectorAll('[data-user]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.umenu=!S.umenu;S.bell=false;render()}});
+  document.querySelectorAll('[data-read]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.read=true;render()}});
+  document.querySelectorAll('[data-help]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal={type:'help'};render()}});
+  document.querySelectorAll('[data-clearcache]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal={type:'clearcache'};render()}});
+  document.querySelectorAll('[data-doclearcache]').forEach(function(b){b.onclick=function(){
+    clearCache();toast(t('clearCacheDone'),t('clearCacheDoneS'),true)}});
+  document.querySelectorAll('[data-pay]').forEach(function(b){b.onclick=function(){
+    var e=S.ents.filter(function(x){return x.id===S.sel})[0];
+    S.form={mode:'cash',payMode:'full',amt:fmt(e.cap-e.paid),files:[],docType:'doc0',err:''};go('declare')}});
+  document.querySelectorAll('[data-selfpay]').forEach(function(b){b.onclick=function(){
+    var e=S.ents[0];S.sel=e.id;S.form={mode:'cash',payMode:'full',amt:fmt(e.cap-e.paid),files:[],docType:'doc0',err:''};go('declare')}});
+  document.querySelectorAll('[data-payinv]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal={type:'qr',inv:b.dataset.payinv};render()}});
+  document.querySelectorAll('[data-viewrec]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal={type:'receipt',inv:b.dataset.viewrec};render()}});
+  document.querySelectorAll('[data-copyacct]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();var txt=b.dataset.copyacct;
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt);
+    toast(t('copied'),txt,true)}});
+  document.querySelectorAll('[data-pickch]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal.channel=b.dataset.pickch;render()}});
+  document.querySelectorAll('[data-refundinv]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();var inv=S.invs.filter(function(x){return x.id===b.dataset.refundinv})[0];
+    if(!inv)return;inv.status='REFUNDED';S.modal=null;render();toast(t('refundDone'),inv.receipt,true)}});
+  document.querySelectorAll('[data-adduser]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal={type:'adduser',nm:'',org:'APB',role:ROLE_OPT.APB[0]};render()}});
+  document.querySelectorAll('[data-toggleuser]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();var u=S.users[Number(b.dataset.toggleuser)];if(!u)return;
+    u.active=u.active?0:1;render();toast(u.nm,u.active?t('uActive'):t('uLocked'),true)}});
+  document.querySelectorAll('[data-verify]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal={type:'verify',q:''};render()}});
+  document.querySelectorAll('[data-histrow]').forEach(function(r){r.onclick=function(){
+    var parts=r.dataset.histrow.split('|');S.tx={ent:parts[0],idx:Number(parts[1]),back:S.view};go('tx')}});
+  document.querySelectorAll('[data-valjob]').forEach(function(r){r.onclick=function(){
+    S.modal={type:'valjob',i:Number(r.dataset.valjob)};render()}});
+  document.querySelectorAll('[data-valjobfirm]').forEach(function(r){r.onclick=function(){
+    S.valI=Number(r.dataset.valjobfirm);S.valForm={val:null,files:[],err:'',docType:'valReport',docErr:''};go('valjobdetail')}});
+  var fjv=$('#fjVal');if(fjv)fjv.oninput=function(){S.valForm.val=fjv.value};
+  if($('#fjDrop'))wireDropTyped($('#fjDrop'),S.valForm,valDocTypeOptions(),valDocMocks(S.valjobs[S.valI].id));
+  var vdt=$('#valDocType');if(vdt)vdt.onchange=function(){S.valForm.docType=vdt.value};
+  document.querySelectorAll('[data-rmvalfile]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.valForm.files=S.valForm.files.filter(function(fl){return fl.k!==b.dataset.rmvalfile});
+    S.valForm.docErr=valDocsErrMsg(S.valForm);render()}});
+  document.querySelectorAll('[data-submitjob]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();var j=S.valjobs[Number(b.dataset.submitjob)];if(!j)return;
+    var v=Number(String(S.valForm.val!=null?S.valForm.val:j.amt).replace(/[^0-9]/g,''));
+    if(!v){S.valForm.err=t('errAmt');return render()}
+    var docErr=valDocsErrMsg(S.valForm);
+    if(docErr){S.valForm.docErr=docErr;return render()}
+    S.valForm.docErr='';
+    j.amt=v;j.files=S.valForm.files.slice();j.status='wait';toast(t('jobSubmitted'),t('jobSubmittedS'),true);
+    render()}});
+  document.querySelectorAll('[data-acceptjob]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();var j=S.valjobs[Number(b.dataset.acceptjob)];if(!j)return;
+    j.status='accepted';S.modal=null;render();toast(t('jobAccepted'),t('jobAcceptedS'),true)}});
+  document.querySelectorAll('[data-approvefirm]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();var j=S.valjobs[Number(b.dataset.approvefirm)];if(!j)return;
+    j.status='wait';S.modal=null;render();toast(t('firmApproved'),t('firmApprovedS'),true)}});
+  document.querySelectorAll('[data-after]').forEach(function(b){b.onclick=function(){
+    S.modal=null;S.view=b.dataset.after==='cert'?'cert':'dash';render();
+    if(b.dataset.after==='dash')setTimeout(function(){
+      document.querySelectorAll('.kpi.ok,.kpi.warn').forEach(function(k){k.classList.add('flash')})},60)}});
+
+  var st=$('#stSel');if(st)st.onchange=function(){S.tab=st.value;render()};
+  var q=$('#q');if(q)q.oninput=function(){var p=q.selectionStart;S.q=q.value;render();
+    var n=$('#q');if(n){n.focus();n.setSelectionRange(p,p)}};
+  document.querySelectorAll('[data-clearadv]').forEach(function(b){b.onclick=function(){
+    S.adv={regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''};render()}});
+  var an=$('#advRegNo');if(an)an.oninput=function(){var p=an.selectionStart;S.adv.regNo=an.value;render();
+    var n=$('#advRegNo');if(n){n.focus();n.setSelectionRange(p,p)}};
+  var ae=$('#advEtype');if(ae)ae.onchange=function(){S.adv.etype=ae.value;render()};
+  var anl=$('#advNameLo');if(anl)anl.oninput=function(){var p=anl.selectionStart;S.adv.nameLo=anl.value;render();
+    var n=$('#advNameLo');if(n){n.focus();n.setSelectionRange(p,p)}};
+  var ane=$('#advNameEn');if(ane)ane.oninput=function(){var p=ane.selectionStart;S.adv.nameEn=ane.value;render();
+    var n=$('#advNameEn');if(n){n.focus();n.setSelectionRange(p,p)}};
+  var apv=$('#advProv');if(apv)apv.onchange=function(){S.adv.prov=apv.value;render()};
+  var ais=$('#advIsic');if(ais)ais.onchange=function(){S.adv.isic=ais.value;render()};
+  var arf=$('#advRegFrom');if(arf)arf.onchange=function(){S.adv.regFrom=arf.value;render()};
+  var art=$('#advRegTo');if(art)art.onchange=function(){S.adv.regTo=art.value;render()};
+  var auf=$('#advUpdFrom');if(auf)auf.onchange=function(){S.adv.updFrom=auf.value;render()};
+  var aut=$('#advUpdTo');if(aut)aut.onchange=function(){S.adv.updTo=aut.value;render()};
+
+  var amt=$('#fAmt');if(amt)amt.oninput=function(){S.form.amt=amt.value};
+  if($('#drop'))wireDropTyped($('#drop'),S.form,docTypeOptions(S.form.mode),DOC_MOCKS);
+
+  var sp=$('#submitDeclare');
+  if(sp)sp.onclick=function(){
+    var e=S.ents.filter(function(x){return x.id===S.sel})[0];
+    if(S.form.sending)return;
+    if(pendingOf(e.id)){toast(t('hasPending'),t('hasPendingS'));return go(S.role==='owner'?'dash':'detail')}
+    var v=Number(String(S.form.amt).replace(/[^0-9]/g,''));
+    if(!v){S.form.err=t('errAmt');return render()}
+    if(v>e.cap-e.paid){S.form.err=t('errOver')+' — '+fmt(e.cap-e.paid);return render()}
+    if(S.form.mode==='asset'){
+      var reqK=ASSET_REQ[S.form.assetCat],reqV=S.form.assetVals&&S.form.assetVals[reqK];
+      if(!reqV||!reqV.trim()){S.form.err=t('errAssetField');return render()}
+    }
+    var docErr=docsErrMsg(S.form);
+    if(docErr){S.form.docErr=docErr;return render()}
+    S.form.docErr='';
+    S.form.sending=true;sp.disabled=true;
+    var subWho=who().n,isOwner=S.role==='owner';
+    S.tasks.push({ref:'APR-2026-0'+(918+S.tasks.length),ent:e,amt:v,mode:S.form.mode,
+      by:subWho,at:'09:47',stage:'checker',files:S.form.files.slice(),
+      trail:[{who:subWho+' ('+(isOwner?t('channelOnline').split(' (')[0]:t('channelCounter').split(' (')[0])+')',
+        act:{lo:'ຍື່ນຄຳຮ້ອງແຈ້ງຊຳລະທຶນ',en:'Submitted a capital payment declaration'},at:'04/08/2026 09:47'}]});
+    if(e.insts[1]&&e.insts[1].state!=='paid'){e.insts[1].state='review';
+      e.insts[1].meta={lo:'ສົ່ງກວດສອບແລ້ວ 04/08/2026 09:47',en:'Sent for verification on 04/08/2026 09:47'}}
+    e.hist.push({d:'04/08/2026',a:{lo:'ບັນທຶກການຊຳລະທຶນ (ລໍກວດສອບ)',en:'Capital payment recorded (pending verification)'},
+      m:S.form.mode,v:v,u:subWho,f:S.form.files.length,ch:'',st:'pending'});
+    toast(t('sentCheck'),t('sentCheckS'),true);go(isOwner?'dash':'detail')};
+
+  document.querySelectorAll('[data-task]').forEach(function(r){r.onclick=function(){
+    S.taskI=Number(r.dataset.task);S.backReasonInt='';S.backReasonExt='';go('task')}});
+  document.querySelectorAll('[data-sign]').forEach(function(b){b.onclick=function(){
+    S.modal={type:'approve',i:S.taskI};render()}});
+  document.querySelectorAll('[data-fwd]').forEach(function(b){b.onclick=function(){
+    var x=S.tasks[S.taskI],e=x.ent,who1=who().n;x.stage='approve';
+    x.trail.push({who:who1+' (Checker)',act:{lo:'ກວດສອບແລ້ວ ສົ່ງຕໍ່ຜູ້ອະນຸມັດ',en:'Verified and sent to the approver'},at:'04/08/2026 10:04'});
+    e.hist.push({d:'04/08/2026',a:{lo:'ກວດສອບໂດຍ Checker',en:'Verified by the Checker'},m:'',v:0,u:who1,f:'—',ch:'',st:'complete'});
+    toast(t('checkDone'),t('checkDoneS'),true);go('inspect')}});
+  var riTxt=$('#reasonIntTxt');if(riTxt)riTxt.oninput=function(){S.backReasonInt=riTxt.value};
+  var reTxt=$('#reasonExtTxt');if(reTxt)reTxt.oninput=function(){S.backReasonExt=reTxt.value};
+  document.querySelectorAll('[data-openback]').forEach(function(b){b.onclick=function(){
+    S.modal={type:'backreason',err:''};render()}});
+  document.querySelectorAll('[data-back]').forEach(function(b){b.onclick=function(){
+    if(!(S.backReasonExt||'').trim()){S.modal.err=t('errRequired');return render()}
+    var x=S.tasks[S.taskI],e=x.ent,extReason=S.backReasonExt.trim(),intNote=(S.backReasonInt||'').trim(),wasChecker=x.stage==='checker';
+    if(e.insts[1]){e.insts[1].state='due';e.insts[1].meta={lo:'ຖືກຕີກັບໃຫ້ແກ້ໄຂ 04/08/2026',en:'Returned for correction on 04/08/2026'}}
+    e.hist.push({d:'04/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ — '+extReason,en:'Returned for correction — '+extReason},
+      m:'',v:0,u:who().n,f:'—',ch:'',internal:intNote,st:'returned'});
+    S.tasks.splice(S.taskI,1);S.backReasonInt='';S.backReasonExt='';S.modal=null;toast(t('backDone'),t('backDoneS'));
+    go(wasChecker?'inspect':'approveQ')}});
+
+  var o1=$('#otp');if(o1)otpWire(o1,function(f){$('#doLogin').disabled=!f});
+  var dl=$('#doLogin');
+  if(dl)dl.onclick=function(){
+    S.role=S.pick;S.mobile=false;S.read=false;
+    S.view=S.role==='owner'?'dash':(S.role==='valfirm'?'valfirm':(S.role==='external'?'portal':
+      (S.role==='checker'?'inspect':(S.role==='approver'?'approveQ':(S.role==='admin'?'set':'ent')))));
+    render();toast(t('loggedIn'),who().n+' · '+who().r,true)};
+  var o2=$('#otp2');if(o2)otpWire(o2,function(f){$('#doApprove').disabled=!f});
+  var da=$('#doApprove');if(da)da.onclick=function(){approve(S.modal.i)};
+
+  var lu=$('#loginUser');
+  if(lu)lu.oninput=function(){var p=lu.selectionStart;S.loginUser=lu.value;S.loginErr='';render();
+    var n=$('#loginUser');if(n){n.focus();n.setSelectionRange(p,p)}};
+  var lp=$('#loginPass');if(lp)lp.oninput=function(){S.loginPass=lp.value};
+  var dc=$('#doCred');
+  if(dc)dc.onclick=function(){
+    var matched=matchAcct();
+    if(!matched){S.loginErr=t('unknownUser');return render()}
+    if(!(S.loginPass||'').trim()){S.loginErr=t('errPw');return render()}
+    S.pick=matched.id;S.loginStep='otp';S.loginErr='';render()};
+  document.querySelectorAll('[data-backcred]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.loginStep='cred';render()}});
+  document.querySelectorAll('[data-forgot]').forEach(function(b){b.onclick=function(ev){
+    ev.stopPropagation();S.modal={type:'forgot',step:'id',idv:''};render()}});
+
+  var fid=$('#forgotId');if(fid)fid.oninput=function(){S.modal.idv=fid.value};
+  var dsc=$('#doSendCode');
+  if(dsc)dsc.onclick=function(){
+    if(!(S.modal.idv||'').trim())return;
+    var idv=S.modal.idv;S.modal.step='otp';render();toast(t('sendCode'),idv,true)};
+  var o3=$('#otp3');if(o3)otpWire(o3,function(f){var b=$('#doVerifyCode');if(b)b.disabled=!f});
+  var dvc=$('#doVerifyCode');if(dvc)dvc.onclick=function(){S.modal.step='new';render()};
+  var dsp=$('#doSetPw');
+  if(dsp)dsp.onclick=function(){
+    var p1=$('#newPw1').value,p2=$('#newPw2').value;
+    if(!p1||p1!==p2){S.modal.err=t('pwMismatch');return render()}
+    S.modal=null;render();toast(t('pwResetDone'),t('pwResetDoneS'),true)};
+
+  var nuo=$('#newUOrg');if(nuo)nuo.onchange=function(){
+    S.modal.nm=$('#newUName').value;S.modal.org=nuo.value;S.modal.role=ROLE_OPT[nuo.value][0];render()};
+
+  var dsu=$('#doSaveUser');
+  if(dsu)dsu.onclick=function(){
+    var nm=$('#newUName').value.trim(),org=$('#newUOrg').value,role=$('#newURole').value;
+    if(!nm){S.modal.err=t('errRequired');S.modal.nm=nm;S.modal.org=org;S.modal.role=role;return render()}
+    S.users.push({nm:nm,org:org,role:role,active:1,pwd:'0',online:0});
+    S.modal=null;render();toast(t('userAdded'),nm,true)};
+
+  var vfq=$('#verifyQ');
+  if(vfq)vfq.oninput=function(){var p=vfq.selectionStart;S.modal.q=vfq.value;render();
+    var n=$('#verifyQ');if(n){n.focus();n.setSelectionRange(p,p)}};
+
+  var sim=$('#doSimPay');
+  if(sim)sim.onclick=function(){
+    var inv=S.invs.filter(function(x){return x.id===sim.dataset.inv})[0];if(!inv)return;
+    var idx=S.invs.indexOf(inv);
+    inv.status='PAID';inv.paidAt='04/08/2026';inv.receipt='RCP-2026-0'+(500+idx);
+    inv.channel=(S.modal&&S.modal.channel)||'qr';
+    S.modal={type:'receipt',inv:inv.id};render();
+    toast(t('paidOk'),t('paidOkS'),true)};
+
+  var tip=$('#tip');
+  document.querySelectorAll('[data-tip]').forEach(function(el){
+    el.addEventListener('mousemove',function(ev){
+      var p=el.dataset.tip.split('|');
+      tip.innerHTML='<b>'+p[0]+'</b><span>'+(p[1]||'')+'</span>';
+      tip.style.opacity='1';
+      tip.style.left=Math.min(ev.clientX+14,window.innerWidth-210)+'px';
+      tip.style.top=Math.max(8,ev.clientY-50)+'px'});
+    el.addEventListener('mouseleave',function(){tip.style.opacity='0'})});
+}
+
+reset();
+</script>
+</body>
+</html>

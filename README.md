@@ -3,27 +3,27 @@
 Prototype สำหรับนำเสนอโครงการ **Registration and Capital Monitoring System (RCMS)**
 ความร่วมมือระหว่างกระทรวงอุตสาหกรรมและการค้า (MOIC) กับธนาคารส่งเสริมการเกษตร (APB)
 
-แอปยังเป็น `index.html` ไฟล์เดียว vanilla JS เหมือนเดิม แต่ตอนนี้รันผ่าน Vite
+แอปเป็น HTML ไฟล์เดียว vanilla JS เหมือนเดิม แต่ตอนนี้รันผ่าน Vite
 (ดู `package.json`) เพื่อให้ import npm package จริงได้ (เช่น Leaflet สำหรับแผนที่)
+
+### โครงสร้าง
+
+- `src/index.html` — **source** ที่แก้ไข (ใช้ ES module + `import`)
+- `index.html` ที่ root — **ไฟล์ build** เดียวจบ (self-contained) สร้างจาก `npm run build`
+  → GitHub Pages เสิร์ฟจาก root นี้ และเปิดตรงๆ (`file://`) ก็ได้
 
 ```
 npm install
-npm run dev      # dev server ที่ http://localhost:5173
-npm run build    # build เป็นไฟล์เดียวไปที่ docs/index.html
-npm run preview  # serve docs/ ไว้เช็คก่อน deploy
+npm run dev      # dev server ที่ http://localhost:5173 (เสิร์ฟ src/)
+npm run build    # build เป็นไฟล์เดียวไปที่ index.html ที่ root
+npm run preview  # serve ตัว build ไว้เช็คก่อน deploy
 ```
 
 ต้องมีเน็ตตอน `npm install` ครั้งแรก และตอนรัน (โหลดฟอนต์จาก Google Fonts + tile แผนที่จาก OpenStreetMap —
 ถ้าไม่มีเน็ต ฟอนต์จะ fallback เป็นฟอนต์ระบบ แต่แผนที่จะไม่ขึ้น)
 
-### เปิดดูเฉยๆ (ไม่ต้องรัน server)
-
-`npm run build` จะ inline ทุกอย่าง (JS + CSS + รูป) ลงใน `docs/index.html` ไฟล์เดียว
-ที่เปิดตรงๆ ได้เลย — ดับเบิลคลิกเปิดในเบราว์เซอร์ (`file://`) ก็ได้ ไม่ต้องมี server
-
-> อย่าเปิด `index.html` ที่ root โดยตรง — ไฟล์นั้นเป็น source ที่ยังใช้ ES module +
-> `import 'leaflet'` ซึ่งเบราว์เซอร์รันบน `file://` ไม่ได้ (จะได้หน้าว่างๆ) ให้ใช้ `docs/index.html`
-> ที่ build แล้ว หรือรันผ่าน `npm run dev` / `npm run preview` แทน
+> ⚠️ แก้โค้ดที่ `src/index.html` เท่านั้น แล้ว `npm run build` ทับ `index.html` ที่ root
+> อย่าแก้ `index.html` ที่ root ตรงๆ เพราะมันคือ output ที่ถูก generate ทับทุกครั้งที่ build
 
 ---
 
