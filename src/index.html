@@ -406,7 +406,7 @@ lo:{
  repLbl:'ຊື່ຜູ້ຖືທະບຽນ',regStatusLbl:'ສະຖານະ',operating:'ດຳເນີນທຸລະກິດຢູ່',districtLbl:'ເມືອງ',villageLbl:'ບ້ານ',
  taxRegDateLbl:'ວັນທີຂຶ້ນທະບຽນອາກອນ',taxStatusLbl:'ສະຖານະອາກອນ',vatStatusLbl:'ສະຖານະອາກອນມູນຄ່າເພີ່ມ',vatRegistered:'ຂຶ້ນທະບຽນແລ້ວ',
  mapCaption:'ແຜນທີ່ສະແດງຂອບເຂດພື້ນທີ່ຂອງວິສາຫະກິດ',mapSyncedAt:'ຂໍ້ມູນລ້າສຸດ',
- capStatus:'ສະຖານະການປະກອບທຶນ',capBreak:'ຊຳລະແລ້ວ ທຽບກັບ ຄົງເຫຼືອ',outstanding:'ຍອດຄ້າງຊຳລະ',penaltyAmt:'ຄ່າປັບສະສົມ',
+ capStatus:'ສະຖານະການປະກອບທຶນ',capDetails:'ລາຍລະອຽດທຶນ',capBreak:'ຊຳລະແລ້ວ ທຽບກັບ ຄົງເຫຼືອ',outstanding:'ຍອດຄ້າງຊຳລະ',penaltyAmt:'ຄ່າປັບສະສົມ',
  daysLeft:'ວັນທີ່ເຫຼືອກ່ອນຄົບກຳນົດ',
  stPaid:'ຢືນຢັນແລ້ວ',stDue:'ລໍຊຳລະ',
  collateral:'ລາຍການຫຼັກປະກັນ',colDetail:'ລາຍລະອຽດ',colVal:'ມູນຄ່າທີ່ຕີລາຄາ',viewReport:'ເບິ່ງບົດລາຍງານ',
@@ -542,7 +542,7 @@ en:{
  repLbl:'Name of registration holder',regStatusLbl:'Status',operating:'Operating',districtLbl:'District',villageLbl:'Village',
  taxRegDateLbl:'Tax registration date',taxStatusLbl:'Tax status',vatStatusLbl:'VAT status',vatRegistered:'Registered',
  mapCaption:'Map showing the enterprise location',mapSyncedAt:'Last synced',
- capStatus:'Capital contribution status',capBreak:'Paid vs outstanding',outstanding:'Outstanding balance',penaltyAmt:'Accrued penalty',
+ capStatus:'Capital contribution status',capDetails:'Capital Details',capBreak:'Paid vs outstanding',outstanding:'Outstanding balance',penaltyAmt:'Accrued penalty',
  daysLeft:'Days left before the deadline',
  stPaid:'Confirmed',stDue:'Awaiting payment',
  collateral:'Collateral Items',colDetail:'Details',colVal:'Appraised value',viewReport:'View report',
@@ -1114,7 +1114,7 @@ function vOwnerDash(){
   var days=daysLeft(e.due);
   var payBtn=(remain>0)?(pend?'<button class="btn ghost" disabled>'+t('waitingOn')+' '+(pend.stage==='checker'?t('stageChecker'):t('stageApprover'))+'…</button>'
     :'<button class="btn" data-selfpay="1">'+t('selfDeclare')+'</button>'):'';
-  var capStatusCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('capStatus')+'</h3></div>'+
+  var capStatusCard='<div class="card"><div class="h"><h3>'+t('capDetails')+'</h3></div>'+
    '<div class="c"><div class="donutrow">'+donutPct(pct,'#1B6E45')+
    '<div class="dstat">'+
    '<div class="cell"><div class="k">'+t('cCap')+'</div><div class="v">'+fmt(e.cap)+'</div></div>'+
@@ -1122,13 +1122,10 @@ function vOwnerDash(){
    '<div class="cell"><div class="k">'+(remain>0?t('bizRemain'):t('bizDone'))+'</div><div class="v" style="color:'+(remain>0?'var(--warn)':'var(--ok)')+'">'+fmt(remain)+'</div></div>'+
    '<div class="cell"><div class="k">'+t('cDue')+'</div><div class="v" style="color:'+(days<0?'var(--bad)':'var(--ink)')+';font-size:13px">'+e.due+'</div>'+
    '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">'+(lang==='lo'?days+' ວັນ':days+' days')+'</div></div>'+
-   '</div></div></div></div>';
-  var inner=regDetailCard(e)+capStatusCard+
-   (remain>0&&!pend?'<div class="card" style="margin:14px 0"><div class="h"><h3>'+t('howToPay')+'</h3></div><div class="c">'+
-    '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">'+
-    '<div class="num" style="font-size:18px;font-weight:600">'+e.acct+'</div>'+
-    '<button class="btn ghost" style="padding:6px 12px;font-size:11px" data-copyacct="'+e.acct+'">'+t('copyAcct')+'</button></div>'+
-    '<div style="font-size:11.5px;color:var(--muted);line-height:1.7;margin-bottom:14px">'+t('capTransferNote')+'</div>'+payBtn+'</div></div>':'')+
+   '</div></div>'+
+   (payBtn?'<div style="margin-top:14px">'+payBtn+'</div>':'')+
+   '</div></div>';
+  var inner='<div class="split" style="margin-bottom:14px">'+regDetailCard(e)+capStatusCard+'</div>'+
    historySection(e)+
    '<div class="card" style="margin:14px 0"><div class="h"><h3>'+t('myInvoices')+'</h3></div><div class="c" style="padding:12px 0 0">'+
    (invRows?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cItem')+'</th>'+
