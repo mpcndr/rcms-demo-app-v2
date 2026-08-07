@@ -2346,7 +2346,7 @@ function vModal(){
     '<div><span class="k">'+t('valFirmType')+'</span><span class="v">'+(j.net==='in'?t('inNet'):t('outNet').split(' (')[0])+'</span></div>'+
     '<div><span class="k">'+t('valDeclared')+'</span><span class="v num">'+fmt(j.amt)+' LAK</span></div>'+
     '<div><span class="k">'+t('cStatus')+'</span><span class="v"><span class="pill '+jLbl[1]+'">'+t(jLbl[0])+'</span></span></div></div>'+
-    (j.files&&j.files.length?'<div class="files" style="margin-top:12px">'+j.files.map(function(f){
+    (j.files&&j.files.length?'<div style="margin-top:12px">'+j.files.map(function(f){
       return '<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px">'+
       '<span style="color:var(--bad)">▤</span><span style="font-size:11.5px;flex:1">'+(f.lbl?f.lbl+': '+f.name:f)+'</span>'+
       '<span style="font-size:10.5px;color:var(--m);cursor:pointer" data-soon="'+t('openDoc')+'">'+t('openDoc')+'</span></div>'}).join('')+'</div>':'')+
