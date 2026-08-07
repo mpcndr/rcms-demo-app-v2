@@ -351,6 +351,7 @@ tbody tr:hover td{background:var(--m-lite)}
 .sealrow .seal{margin-bottom:0}
 .moic-logo{width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:3px}
 .brand .moic-logo{width:22px;height:22px;padding:2px;margin-right:2px}
+.moic-logo-login{width:100px;height:100px;object-fit:contain;border-radius:14px;background:#fff;padding:10px}
 .login h1{font-size:27px;font-weight:600;line-height:1.4;letter-spacing:-.02em;margin-bottom:14px}
 .login h1 span{color:var(--m-light)}
 .login .sub{font-size:12.5px;color:#9EBCD1;line-height:1.9;max-width:440px}
@@ -1199,7 +1200,7 @@ function vLogin(){
    '<div class="otp" id="otp">'+[0,1,2,3,4,5].map(function(){return '<input maxlength="1" size="1" inputmode="numeric">'}).join('')+'</div>'+
    '<button class="btn" style="width:100%;padding:12px;margin-top:13px" id="doLogin" disabled>'+t('login')+'</button>'+
    '<div style="margin-top:12px;font-size:11px;color:var(--m);cursor:pointer" data-backcred="1">'+t('loginBack')+'</div>';
-  return '<div class="login"><div class="lf"><div class="sealrow"><img class="moic-logo" src="'+LOGO+'" alt="MOIC"><div class="seal">ລ</div></div>'+
+  return '<div class="login"><div class="lf"><div class="sealrow"><img id="loginLogo" class="moic-logo-login" src="https://www.moic.gov.la/moic-logo.png" alt="MOIC"></div>'+
   '<h1>'+t('sysName')+'<br><span>RCMS</span></h1>'+
   '<div class="sub">'+t('sysSub')+' - '+t('coop')+'</div>'+
   '<div class="stat"><div><div class="n num">218,622</div><div class="l">'+t('s1')+'</div></div>'+
@@ -2876,6 +2877,7 @@ function bind(){
     S.tasks.splice(S.taskI,1);S.backReasonInt='';S.backReasonExt='';S.modal=null;toast(t('backDone'),t('backDoneS'));
     go('dash')}});
 
+  var llg=$('#loginLogo');if(llg)llg.onerror=function(){llg.onerror=null;llg.src=LOGO};
   var o1=$('#otp');if(o1)otpWire(o1,function(f){$('#doLogin').disabled=!f});
   var dl=$('#doLogin');
   if(dl)dl.onclick=function(){
