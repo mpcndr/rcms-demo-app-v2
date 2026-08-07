@@ -419,6 +419,9 @@ lo:{
  mkDue:'ໃກ້ຄົບກຳນົດ / ເກີນກຳນົດ',mkNoDue:'ບໍ່ມີວິສາຫະກິດໃກ້ຄົບກຳນົດ',mkFix:'ແກ້ໄຂ',
  mkBlocked:'ຄ້າງຄ່າປັບ (ບລັອກການຊຳລະ)',mkBlockedNote:'ຕ້ອງເກັບຄ່າປັບໃຫ້ຄົບກ່ອນ ຈຶ່ງບັນທຶກການຊຳລະໃໝ່ໄດ້',mkStage:'ຂັ້ນຕອນ',mkReason:'ເຫດຜົນ',mkOverBy:'ເກີນ',
  mkSecWork:'ງານທີ່ຕ້ອງຈັດການ',mkSecPortfolio:'ພາບລວມພອດໂຟລິໂອ',mkTotalCo:'ວິສາຫະກິດທັງໝົດ',mkPaidCo:'ຊຳລະທຶນຄົບແລ້ວ',mkUnpaidCo:'ຍັງຊຳລະບໍ່ຄົບ',mkAwaitApprove:'ລໍຫົວໜ້າອະນຸມັດ',
+ ckTitle:'ໜ້າວຽກກວດສອບ (Checker)',ckKQueue:'ລໍກວດສອບໃນຄິວ',ckKValue:'ມູນຄ່າລວມໃນຄິວ',ckKApprover:'ສົ່ງຕໍ່ ລໍອະນຸມັດ',ckKReturned:'ຕີກັບໃຫ້ແກ້',
+ ckQueue:'ຄິວລໍກວດສອບ',ckNoQueue:'ບໍ່ມີງານລໍກວດສອບ',ckAtApprover:'ສົ່ງຕໍ່ແລ້ວ ລໍອະນຸມັດ',ckNoApprover:'ຍັງບໍ່ມີງານທີ່ສົ່ງຕໍ່',
+ ckReturned:'ຕີກັບໃຫ້ແກ້ໄຂ (ໂດຍຂ້ອຍ)',ckNoReturned:'ຍັງບໍ່ໄດ້ຕີກັບລາຍການໃດ',ckReview:'ຕ້ອງກວດເຂັ້ມ',ckOpen:'ເປີດກວດ',ckHighVal:'ຍອດສູງ',
 
  dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING — ລໍຊຳລະ',kPartial:'PARTIAL — ຊຳລະບາງສ່ວນ',
  kCompleted:'COMPLETED — ຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ວິສາຫະກິດຕາມສະຖານະ',
@@ -570,6 +573,9 @@ en:{
  mkDue:'Due soon / Overdue',mkNoDue:'No enterprises due soon',mkFix:'Fix',
  mkBlocked:'Outstanding penalties (payment blocked)',mkBlockedNote:'Collect the penalty in full before a new payment can be recorded',mkStage:'Stage',mkReason:'Reason',mkOverBy:'overdue',
  mkSecWork:'Needs your action',mkSecPortfolio:'Portfolio overview',mkTotalCo:'Total enterprises',mkPaidCo:'Fully paid',mkUnpaidCo:'Not fully paid',mkAwaitApprove:'Awaiting approval',
+ ckTitle:'Verification Workspace (Checker)',ckKQueue:'Awaiting my review',ckKValue:'Value in queue',ckKApprover:'Forwarded, at approver',ckKReturned:'Returned to fix',
+ ckQueue:'Verification queue',ckNoQueue:'Nothing waiting for verification',ckAtApprover:'Forwarded — awaiting approval',ckNoApprover:'Nothing forwarded yet',
+ ckReturned:'Returned for correction (by me)',ckNoReturned:'You have not returned any case',ckReview:'Needs close review',ckOpen:'Review',ckHighVal:'High value',
 
  dashTitle:'Registered Capital Contribution Overview',kPending:'PENDING — awaiting payment',kPartial:'PARTIAL — partly paid',
  kCompleted:'COMPLETED — paid in full',kOverdue:'OVERDUE — past deadline',byStatus:'Enterprises by status',
@@ -756,7 +762,10 @@ var LU={
  building2:'<path d="M10 12h4"/><path d="M10 8h4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>',
  circleCheck:'<path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/>',
  wallet:'<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
- hourglass:'<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>'
+ hourglass:'<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>',
+ clipboardCheck:'<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/>',
+ banknote:'<rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>',
+ send:'<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>'
 };
 function luSvg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(LU[name]||'')+'</svg>';}
 // Framed KPI card (icon top-right, big value, optional delta chip + subtext).
@@ -1133,6 +1142,7 @@ function vDash(){
   if(S.role==='owner')return vOwnerDash();
   if(S.role==='admin')return vAdminDash();
   if(S.role==='maker')return vMakerDash();
+  if(S.role==='checker')return vCheckerDash();
   return vStaffDash();
 }
 
@@ -1211,6 +1221,65 @@ function vMakerDash(){
    '<div class="split70" style="grid-template-columns:1fr 1fr;margin-bottom:14px">'+returnedCard+pendingCard+'</div>'+
    dueCard+penCard;
   return shell(t('mkTitle'),'',inner);
+}
+
+function vCheckerDash(){
+  var me=who().n,LO=lang==='lo';
+  var myQ=[],atAp=[];
+  S.tasks.forEach(function(x,i){if(x.stage==='checker')myQ.push([x,i]);else if(x.stage==='approve')atAp.push([x,i])});
+  var qVal=myQ.reduce(function(a,p){return a+p[0].amt},0);
+  var retMine=[];
+  S.ents.forEach(function(e){e.hist.forEach(function(h){if(h.st==='returned'&&h.u===me)retMine.push({e:e,h:h})})});
+
+  var kpis='<div class="kpiframe"><div class="kpis">'+
+    kpiTile('warn','clipboardCheck',t('ckKQueue'),fmt(myQ.length),LO?'ລໍໃຫ້ຂ້ອຍກວດ':'Waiting on you')+
+    kpiTile('','banknote',t('ckKValue'),fmt(qVal),LO?'ກີບ · ລໍກວດສອບ':'LAK · pending review')+
+    kpiTile('','send',t('ckKApprover'),fmt(atAp.length),LO?'ຢູ່ຂັ້ນຜູ້ອະນຸມັດ':'At the approver')+
+    kpiTile('bad','rotateCcw',t('ckKReturned'),fmt(retMine.length),LO?'ຕີກັບຫາ Maker':'Sent back to Maker',retMine.length?[LO?'ຕິດຕາມ':'Track','down']:null)+
+   '</div></div>';
+
+  function flags(x){
+    var e=x.ent,out='';
+    var pen=S.invs.some(function(iv){return iv.ent===e.id&&iv.kind==='penalty'&&iv.status==='UNPAID'});
+    if(x.mode==='asset')out+=' <span class="pill p-rev">'+t('modeAsset')+'</span>';
+    if(x.amt>=500000000)out+=' <span class="pill p-warn">'+t('ckHighVal')+'</span>';
+    if(pen)out+=' <span class="pill p-bad">'+t('penaltyAmt')+'</span>';
+    return out;
+  }
+  var qRows=myQ.map(function(p){var x=p[0];
+    return '<tr data-task="'+p[1]+'"><td style="padding-left:16px" class="num">'+x.ref+'</td>'+
+     '<td><span class="co">'+x.ent.name+'<small>'+x.ent.id+'</small></span>'+flags(x)+'</td>'+
+     '<td>'+modeLbl(x.mode)+'</td><td class="r num">'+fmt(x.amt)+'</td>'+
+     '<td>'+x.by+'</td><td class="num">'+x.at+'</td>'+
+     '<td class="r" style="padding-right:16px"><span style="color:var(--m);font-size:11px;font-weight:600">'+t('ckOpen')+' →</span></td></tr>'}).join('');
+  var queueCard='<div class="card"><div class="h"><h3>'+t('ckQueue')+'</h3>'+(myQ.length?'<span class="cnt" style="margin-left:auto">'+myQ.length+'</span>':'')+'</div>'+
+    '<div class="c" style="padding:12px 0 0">'+(qRows
+     ?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+'</th><th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+'</th><th>'+t('cBy')+'</th><th>'+t('cTime')+'</th><th></th></tr></thead><tbody>'+qRows+'</tbody></table>'
+     :'<div class="empty" style="padding:30px"><b>'+t('ckNoQueue')+'</b></div>')+'</div></div>';
+
+  var apRows=atAp.map(function(p){var x=p[0];
+    return '<tr data-open="'+x.ent.id+'"><td style="padding-left:16px" class="num">'+x.ref+'</td>'+
+     '<td><span class="co">'+x.ent.name+'<small>'+x.ent.id+'</small></span></td>'+
+     '<td class="r num">'+fmt(x.amt)+'</td>'+
+     '<td style="padding-right:16px"><span class="pill p-rev">'+t('stageApprover')+'</span></td></tr>'}).join('');
+  var apCard='<div class="card"><div class="h"><h3>'+t('ckAtApprover')+'</h3>'+(atAp.length?'<span class="cnt" style="margin-left:auto">'+atAp.length+'</span>':'')+'</div>'+
+    '<div class="c" style="padding:12px 0 0">'+(apRows
+     ?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+'</th><th class="r">'+t('cAmt')+'</th><th></th></tr></thead><tbody>'+apRows+'</tbody></table>'
+     :'<div class="empty" style="padding:30px"><b>'+t('ckNoApprover')+'</b></div>')+'</div></div>';
+
+  var retRows=retMine.map(function(o){
+    return '<tr data-open="'+o.e.id+'"><td style="padding-left:16px"><span class="co">'+o.e.name+'<small>'+o.e.id+'</small></span></td>'+
+     '<td style="color:var(--muted);font-size:11px">'+L(o.h.a)+'</td>'+
+     '<td class="r num" style="padding-right:16px">'+o.h.d+'</td></tr>'}).join('');
+  var retCard='<div class="card" style="margin-bottom:14px"><div class="h"><h3>'+t('ckReturned')+'</h3>'+(retMine.length?'<span class="cnt" style="margin-left:auto">'+retMine.length+'</span>':'')+'</div>'+
+    '<div class="c" style="padding:12px 0 0">'+(retRows?'<table><tbody>'+retRows+'</tbody></table>':'<div class="empty" style="padding:30px"><b>'+t('ckNoReturned')+'</b></div>')+'</div></div>';
+
+  var inner=
+   '<div style="font-size:12.5px;color:var(--ink2);margin-bottom:14px">'+t('mkGreeting')+' <b>'+me+'</b></div>'+
+   kpis+
+   '<div class="split70" style="grid-template-columns:1fr 1fr;margin-bottom:14px">'+queueCard+apCard+'</div>'+
+   retCard;
+  return shell(t('ckTitle'),'',inner);
 }
 
 function vStaffDash(){
