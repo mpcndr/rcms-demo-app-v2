@@ -280,6 +280,10 @@ tbody tr:hover td{background:var(--m-lite)}
 .roinfo{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 13px}
 .roinfo .k{font-size:10.5px;color:var(--muted);margin-bottom:4px}
 .roinfo .v{font-size:13.5px;font-weight:600;color:var(--ink)}
+.ftabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px;flex-wrap:wrap}
+.ftabs .ft{padding:9px 16px;font-size:12.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500;white-space:nowrap}
+.ftabs .ft:hover{color:var(--ink2)}
+.ftabs .ft.on{color:var(--m);border-bottom-color:var(--m);font-weight:600}
 .drop{border:1.5px dashed var(--line);border-radius:8px;padding:18px;text-align:center;color:var(--muted);font-size:11.5px;background:var(--white);cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:5px}
 .drop.drag{border-color:var(--m);background:var(--m-lite);color:var(--m)}
@@ -1069,16 +1073,15 @@ function clearCache(){
 function menus(){
   var Tc=S.tasks.filter(function(x){return x.stage==='checker'}).length;
   var Ta=S.tasks.filter(function(x){return x.stage==='approve'}).length;
-  var FIN_SUB=[['fee','feeTab'],['pen','penTab'],['rec','recTab']];
   var SET_SUB=[['fee','setFee'],['master','master'],['gl','glTitle'],['user','setUser'],['api','setApi']];
   if(S.role==='owner')return [['mMonitor'],['dash','▦','myCap']];
   if(S.role==='maker')return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent']];
   if(S.role==='valfirm')return [['mMonitor'],['valfirm','◫','valPortal']];
   if(S.role==='external')return [['mMonitor'],['portal','⛁','portal']];
   if(S.role==='checker')return [['mQueue'],['inspect','⌸','inspect',Tc],['mMonitor'],['dash','▦','dash'],
-    ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin',null,FIN_SUB],['rep','◱','rep']];
+    ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin'],['rep','◱','rep']];
   if(S.role==='approver')return [['mMonitor'],['dash','▦','dash'],
-    ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin',null,FIN_SUB],['rep','◱','rep']];
+    ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin'],['rep','◱','rep']];
   return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent'],['mOther'],['rep','◱','rep'],['set','⚙','set',null,SET_SUB]];
 }
 function bellPanel(){
@@ -1994,7 +1997,7 @@ function vValQueue(){
 }
 
 function vFin(){
-  var tab=S.finTab,subLbl={fee:'feeTab',pen:'penTab',rec:'recTab'}[tab];
+  var tab=S.finTab;
   var body;
   if(tab==='pen'){
     var realPen=S.invs.filter(function(x){return x.kind==='penalty'}).map(function(x){
@@ -2041,7 +2044,9 @@ function vFin(){
      '<td class="r" style="padding-right:16px"><span class="pill '+(x[3]?'p-ok':'p-warn')+'">'+(x[3]?t('stPaid'):t('stDue'))+'</span></td></tr>'}).join('')+
      '</tbody></table></div></div>';
   }
-  return shell(t('finTitle')+' - '+t(subLbl),'',body);
+  var tabBar='<div class="ftabs">'+[['fee','feeTab'],['pen','penTab'],['rec','recTab']].map(function(tb){
+    return '<div class="ft'+(tab===tb[0]?' on':'')+'" data-subtab="fin:'+tb[0]+'">'+t(tb[1])+'</div>';}).join('')+'</div>';
+  return shell(t('finTitle'),'',tabBar+body);
 }
 
 function vRep(){
