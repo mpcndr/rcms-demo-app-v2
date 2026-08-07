@@ -117,6 +117,24 @@ select.sel{cursor:pointer;height:33px;flex:0 1 190px}
 .dkpi.ok .ic{background:var(--okbg);color:var(--ok)}
 .dkpi.warn .ic{background:var(--warnbg);color:var(--warn)}
 .dkpi.bad .ic{background:var(--badbg);color:var(--bad)}
+.kpiframe{border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:16px;
+  background:linear-gradient(135deg,var(--m-lite) 0%,var(--white) 55%)}
+.kpiframe .kpis{margin-bottom:0}
+.kpi2{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:15px 17px;
+  display:flex;flex-direction:column;gap:9px;box-shadow:0 1px 2px rgba(8,50,77,.05)}
+.kpi2 .kh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.kpi2 .kl{font-size:12.5px;color:var(--ink2);font-weight:500}
+.kpi2 .ki{width:30px;height:30px;flex:0 0 30px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  background:var(--m-lite);color:var(--m)}
+.kpi2 .ki svg{width:17px;height:17px}
+.kpi2.ok .ki{background:var(--okbg);color:var(--ok)}
+.kpi2.warn .ki{background:var(--warnbg);color:var(--warn)}
+.kpi2.bad .ki{background:var(--badbg);color:var(--bad)}
+.kpi2 .kvr{display:flex;align-items:baseline;gap:8px}
+.kpi2 .kvr .v{font-size:27px;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+.kpi2 .dl{font-size:11.5px;font-weight:600;white-space:nowrap}
+.kpi2 .dl.up{color:var(--ok)} .kpi2 .dl.down{color:var(--bad)}
+.kpi2 .ks{font-size:11px;color:var(--muted);line-height:1.5}
 .dlegend{display:flex;flex-direction:column;gap:7px;flex:1;min-width:200px}
 .dlegend .row{position:relative;overflow:hidden;display:flex;align-items:center;gap:9px;padding:8px 10px;
   border-radius:7px;background:var(--soft);font-size:11px;transition:.15s}
@@ -724,9 +742,24 @@ function donutLegend(segs){
     '<span class="ct">'+fmt(s[0])+'</span><span class="pc">'+pc.toFixed(0)+'%</span></div>'}).join('')+'</div>';
 }
 var KPI_ICON={PENDING:'◷',PARTIAL:'◐',COMPLETED:'✓',OVERDUE:'⚠'};
-function kpiTile(cls,icon,label,val,tab){
-  return '<div class="kpi dkpi '+cls+'"'+(tab?' data-tab="'+tab+'"':'')+'><div class="ic">'+icon+'</div>'+
-   '<div class="k">'+label+'</div><div class="v num">'+val+'</div></div>';
+// Lucide icons (https://lucide.dev/icons) — inner markup, inlined for offline use.
+var LU={
+ clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+ rotateCcw:'<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+ calendarClock:'<path d="M16 14v2.2l1.6 1"/><path d="M16 2v3"/><path d="M21 7.338V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h2.338"/><path d="M3 9h5.859"/><path d="M8 2v3"/><circle cx="16" cy="16" r="6"/>',
+ triangleAlert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/>',
+ userCheck:'<path d="m16 11 2 2 4-4"/><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
+ userX:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" x2="22" y1="8" y2="13"/><line x1="22" x2="17" y1="8" y2="13"/>'
+};
+function luSvg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(LU[name]||'')+'</svg>';}
+// Framed KPI card (icon top-right, big value, optional delta chip + subtext).
+function kpiTile(cls,icon,label,val,sub,delta){
+  return '<div class="kpi2 '+cls+'">'+
+   '<div class="kh"><span class="kl">'+label+'</span><span class="ki">'+luSvg(icon)+'</span></div>'+
+   '<div class="kvr"><span class="v num">'+val+'</span>'+(delta?'<span class="dl '+(delta[1]||'')+'">'+delta[0]+'</span>':'')+'</div>'+
+   (sub?'<div class="ks">'+sub+'</div>':'')+
+   '</div>';
 }
 function capHero(){
   var totalCap=0,totalPaid=0;
@@ -1105,12 +1138,13 @@ function vMakerDash(){
   var penInvs=S.invs.filter(function(x){return x.kind==='penalty'&&x.status==='UNPAID'});
   var penBy={};penInvs.forEach(function(x){penBy[x.ent]=(penBy[x.ent]||0)+x.amt});
 
-  var kpis='<div class="kpis" style="margin-bottom:16px">'+
-    kpiTile('warn','◷',t('mkKPending'),fmt(pend.length))+
-    kpiTile('bad','↩',t('mkKReturned'),fmt(returned.length))+
-    kpiTile('warn','◷',t('mkKDueSoon'),fmt(dueSoon.length))+
-    kpiTile('bad','⚠',t('mkKOverdue'),fmt(overdue.length))+
-   '</div>';
+  var LO=lang==='lo';
+  var kpis='<div class="kpiframe"><div class="kpis">'+
+    kpiTile('warn','clock',t('mkKPending'),fmt(pend.length),LO?'ຢູ່ຄິວກວດສອບ/ອະນຸມັດ':'In the review queue')+
+    kpiTile('bad','rotateCcw',t('mkKReturned'),fmt(returned.length),LO?'ລໍແກ້ໄຂ ແລ້ວຍື່ນຄືນ':'Fix and resubmit',returned.length?[LO?'ດ່ວນ':'Urgent','down']:null)+
+    kpiTile('warn','calendarClock',t('mkKDueSoon'),fmt(dueSoon.length),LO?'ຕິດຕາມໃຫ້ມາຊຳລະ':'Follow up to collect')+
+    kpiTile('bad','triangleAlert',t('mkKOverdue'),fmt(overdue.length),LO?'ເກີນກຳນົດ · ມີຄ່າປັບ':'Past deadline · penalty')+
+   '</div></div>';
 
   var retRows=returned.map(function(e){
     var r=e.hist.filter(function(h){return h.st==='returned'}).slice(-1)[0];
@@ -1220,10 +1254,10 @@ function vAdminDash(){
    barChart(mm,MOCK_OVERDUE,'#B03127',t('items'))+
    '<div style="font-size:10.5px;color:var(--muted);margin-top:6px">'+t('overdueTrendN')+'</div></div></div></div>'+
    sechead(t('secUsers'))+
-   '<div class="kpis" style="grid-template-columns:repeat(3,1fr)">'+
-   kpiTile('','◈',t('totalUsers'),S.users.length)+
-   kpiTile('ok','✓',t('onlineNow'),online)+
-   kpiTile('warn',KPI_ICON.OVERDUE,t('uLocked'),S.users.filter(function(u){return !u.active}).length)+'</div>'+
+   '<div class="kpiframe"><div class="kpis" style="grid-template-columns:repeat(3,1fr)">'+
+   kpiTile('','users',t('totalUsers'),S.users.length,lang==='lo'?'ຜູ້ໃຊ້ທັງໝົດໃນລະບົບ':'All system users')+
+   kpiTile('ok','userCheck',t('onlineNow'),online,lang==='lo'?'ກຳລັງໃຊ້ງານ':'Active now')+
+   kpiTile('warn','userX',t('uLocked'),S.users.filter(function(u){return !u.active}).length,lang==='lo'?'ບັນຊີຖືກລັອກ':'Locked accounts')+'</div></div>'+
    '<div class="grid3" style="grid-template-columns:1fr 1fr;margin-top:12px">'+
    '<div class="card"><div class="h"><h3>'+t('adminUsers')+'</h3></div><div class="c">'+
    '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'+donutSegs(userSegs,t('totalUsers'))+donutLegend(userSegs)+
