@@ -2009,7 +2009,7 @@ function vFin(){
      '<th style="padding-left:16px">'+t('cEnt')+'</th><th class="r">'+t('penDays')+'</th>'+
      '<th class="r">'+t('penaltyAmt')+' (LAK)</th><th class="r" style="padding-right:16px">'+t('payStatus')+'</th></tr></thead><tbody>'+
      pen.map(function(x){var paid=x[4]==='PAID';
-     return '<tr><td style="padding-left:16px"><span class="co">'+x[0]+'<small>'+x[1]+'</small></span></td>'+
+     return '<tr data-ent="'+esc((x[0]+' '+x[1]).toLowerCase())+'" data-days="'+(typeof x[2]==='number'?x[2]:'')+'" data-status="'+(paid?'paid':'due')+'"><td style="padding-left:16px"><span class="co">'+x[0]+'<small>'+x[1]+'</small></span></td>'+
      '<td class="r num">'+x[2]+'</td><td class="r num" style="color:var(--'+(paid?'ok':'bad')+')">'+fmt(x[3])+'</td>'+
      '<td class="r" style="padding-right:16px"><span class="pill '+(paid?'p-ok':'p-bad')+'">'+(paid?t('stPaid'):t('stDue'))+'</span></td></tr>'}).join('')+
      '</tbody></table></div></div>';
@@ -2018,7 +2018,8 @@ function vFin(){
     if(paidInvs.length){
       var recRows=paidInvs.map(function(x){
         var ent=S.ents.filter(function(y){return y.id===x.ent})[0];
-        return '<tr><td style="padding-left:16px" class="num">'+x.receipt+'</td>'+
+        var iso=(x.paidAt||'').split('/').reverse().join('-');
+        return '<tr data-receipt="'+esc(x.receipt.toLowerCase())+'" data-ent="'+esc(((ent?ent.name:x.ent)+' '+x.ent).toLowerCase())+'" data-item="'+esc(L(x.title).toLowerCase())+'" data-date="'+iso+'"><td style="padding-left:16px" class="num">'+x.receipt+'</td>'+
         '<td><span class="co">'+(ent?ent.name:x.ent)+'</span></td><td>'+L(x.title)+
         (x.status==='REFUNDED'?' <span class="pill p-idle">'+t('refunded')+'</span>':'')+'</td>'+
         '<td class="r num">'+fmt(x.amt)+'</td><td class="num">'+x.paidAt+'</td>'+
@@ -2039,15 +2040,58 @@ function vFin(){
     body='<div class="card"><div class="c" style="padding:0"><table><thead><tr>'+
      '<th style="padding-left:16px">'+t('cEnt')+'</th><th>'+t('cRef')+'</th>'+
      '<th class="r">'+t('feeAmt')+' (LAK)</th><th class="r" style="padding-right:16px">'+t('payStatus')+'</th></tr></thead><tbody>'+
-     fee.map(function(x){return '<tr><td style="padding-left:16px"><span class="co">'+x[0]+'</span></td>'+
+     fee.map(function(x){return '<tr data-ent="'+esc((x[0]+' '+x[1]).toLowerCase())+'" data-ref="'+esc(x[1].toLowerCase())+'" data-status="'+(x[3]?'paid':'due')+'"><td style="padding-left:16px"><span class="co">'+x[0]+'</span></td>'+
      '<td class="num">'+x[1]+'</td><td class="r num">'+fmt(x[2])+'</td>'+
      '<td class="r" style="padding-right:16px"><span class="pill '+(x[3]?'p-ok':'p-warn')+'">'+(x[3]?t('stPaid'):t('stDue'))+'</span></td></tr>'}).join('')+
      '</tbody></table></div></div>';
   }
   var tabBar='<div class="ftabs">'+[['fee','feeTab'],['pen','penTab'],['rec','recTab']].map(function(tb){
     return '<div class="ft'+(tab===tb[0]?' on':'')+'" data-subtab="fin:'+tb[0]+'">'+t(tb[1])+'</div>';}).join('')+'</div>';
-  var search='<div class="filters" style="margin-bottom:12px"><input class="inp" id="finSearch" placeholder="'+t('finSearchPh')+'" style="flex:0 1 320px"></div>';
-  return shell(t('finTitle'),'',tabBar+search+'<div id="finContent">'+body+'</div>');
+  var statusSel='<select class="sel" id="finFStatus"><option value="">'+t('payStatus')+'</option>'+
+    '<option value="paid">'+t('stPaid')+'</option><option value="due">'+t('stDue')+'</option></select>';
+  var entInp='<input class="inp" id="finFEnt" placeholder="'+t('cEnt')+'" style="flex:0 1 200px">';
+  var filters;
+  if(tab==='pen'){
+    filters=entInp+'<select class="sel" id="finFDays"><option value="">'+t('penDays')+'</option>'+
+     '<option value="1-30">1 - 30</option><option value="31-60">31 - 60</option>'+
+     '<option value="61-90">61 - 90</option><option value="90+">&gt; 90</option></select>'+statusSel;
+  } else if(tab==='rec'){
+    filters='<input class="inp" id="finFReceipt" placeholder="'+t('receiptNo')+'" style="flex:0 1 160px">'+entInp+
+     '<input class="inp" id="finFItem" placeholder="'+t('cItem')+'" style="flex:0 1 160px">'+
+     '<span style="font-size:11px;color:var(--muted);align-self:center">'+t('cDate')+'</span>'+
+     '<input type="date" class="inp" id="finFFrom" style="flex:0 0 auto">'+
+     '<span style="align-self:center;color:var(--muted)">-</span>'+
+     '<input type="date" class="inp" id="finFTo" style="flex:0 0 auto">';
+  } else {
+    filters=entInp+'<input class="inp" id="finFRef" placeholder="'+t('cRef')+'" style="flex:0 1 180px">'+statusSel;
+  }
+  var filterBar='<div class="filters" style="margin-bottom:12px">'+filters+'</div>';
+  return shell(t('finTitle'),'',tabBar+filterBar+'<div id="finContent">'+body+'</div>');
+}
+function applyFinFilter(){
+  var gv=function(id){var el=document.getElementById(id);return el?el.value.trim().toLowerCase():null;};
+  var fEnt=gv('finFEnt'),fRef=gv('finFRef'),fRec=gv('finFReceipt'),fItem=gv('finFItem'),fStatus=gv('finFStatus'),fDays=gv('finFDays');
+  var fe=document.getElementById('finFFrom'),te=document.getElementById('finFTo');
+  var from=fe&&fe.value?fe.value:'',to=te&&te.value?te.value:'';
+  document.querySelectorAll('#finContent tbody tr').forEach(function(tr){
+    var d=tr.dataset,ok=true;
+    if(fEnt&&(d.ent||'').indexOf(fEnt)<0)ok=false;
+    if(fRef&&(d.ref||'').indexOf(fRef)<0)ok=false;
+    if(fRec&&(d.receipt||'').indexOf(fRec)<0)ok=false;
+    if(fItem&&(d.item||'').indexOf(fItem)<0)ok=false;
+    if(fStatus&&d.status!==fStatus)ok=false;
+    if(fDays){
+      if(d.days===''||d.days==null){ok=false}
+      else{var n=Number(d.days);
+        if(fDays==='1-30')ok=ok&&n>=1&&n<=30;
+        else if(fDays==='31-60')ok=ok&&n>=31&&n<=60;
+        else if(fDays==='61-90')ok=ok&&n>=61&&n<=90;
+        else if(fDays==='90+')ok=ok&&n>90;}
+    }
+    if(from&&(d.date||'')<from)ok=false;
+    if(to&&(d.date||'')>to)ok=false;
+    tr.style.display=ok?'':'none';
+  });
 }
 
 function vRep(){
@@ -2505,10 +2549,8 @@ function bind(){
   document.querySelectorAll('[data-subtab]').forEach(function(b){b.onclick=function(ev){
     ev.stopPropagation();var p=b.dataset.subtab.split(':');
     if(p[0]==='fin'){S.finTab=p[1];go('fin')}else{S.setTab=p[1];go('set')}}});
-  var finSr=$('#finSearch');if(finSr)finSr.oninput=function(){
-    var q=finSr.value.trim().toLowerCase();
-    document.querySelectorAll('#finContent tbody tr').forEach(function(tr){
-      tr.style.display=tr.textContent.toLowerCase().indexOf(q)>-1?'':'none'})};
+  ['finFEnt','finFRef','finFReceipt','finFItem'].forEach(function(id){var el=$('#'+id);if(el)el.oninput=applyFinFilter});
+  ['finFStatus','finFDays','finFFrom','finFTo'].forEach(function(id){var el=$('#'+id);if(el)el.onchange=applyFinFilter});
   document.querySelectorAll('[data-burger]').forEach(function(b){b.onclick=function(){S.mini=!S.mini;render()}});
   document.querySelectorAll('[data-open]').forEach(function(r){r.onclick=function(){S.sel=r.dataset.open;go('detail')}});
   document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.dataset.tab;go('ent')}});
