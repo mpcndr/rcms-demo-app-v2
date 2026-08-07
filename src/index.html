@@ -143,15 +143,14 @@ select.sel{cursor:pointer;height:33px;flex:0 1 190px}
   -webkit-mask-composite:xor;mask-composite:exclude;
   animation:spinredrot 3s linear infinite;pointer-events:none;z-index:2}
 @keyframes spinredrot{to{--spinang:360deg}}
-.dlegend{display:flex;flex-direction:column;gap:7px;flex:1;min-width:200px}
-.dlegend .row{position:relative;overflow:hidden;display:flex;align-items:center;gap:9px;padding:8px 10px;
-  border-radius:7px;background:var(--soft);font-size:11px;transition:.15s}
-.dlegend .row:hover{background:var(--m-lite)}
-.dlegend .row .bar{position:absolute;left:0;top:0;bottom:0;opacity:.16;border-radius:7px 0 0 7px}
-.dlegend .row i{width:9px;height:9px;border-radius:3px;flex:0 0 auto;position:relative}
-.dlegend .row .nm{flex:1;color:var(--ink2);position:relative}
-.dlegend .row .ct{font-weight:600;color:var(--ink);font-family:'IBM Plex Mono',monospace;position:relative}
-.dlegend .row .pc{font-size:10px;color:var(--muted);min-width:32px;text-align:right;position:relative}
+.dlegend{display:flex;flex-direction:column;gap:2px;flex:1;min-width:200px}
+.dlegend .row{display:flex;align-items:center;gap:10px;padding:7px 10px;
+  border-radius:8px;font-size:12.5px;transition:.15s}
+.dlegend .row:hover{background:var(--soft)}
+.dlegend .row i{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.dlegend .row .nm{flex:1;color:var(--ink2)}
+.dlegend .row .ct{font-weight:700;color:var(--ink);font-family:'IBM Plex Mono',monospace}
+.dlegend .row .pc{font-size:11px;color:var(--muted);min-width:34px;text-align:right}
 .dstat{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-width:220px;align-content:center}
 .dstat .cell{background:var(--soft);border-radius:9px;padding:12px 14px}
 .dstat .cell .k{font-size:10.5px;color:var(--muted);margin-bottom:5px}
@@ -772,13 +771,16 @@ function donutPct(pct,color,size){
    '<text x="50" y="62" text-anchor="middle" font-size="8.5" fill="var(--muted)">'+t('cPaid')+'</text></svg>';
 }
 function donutSegs(segs,centerLabel){
-  var tot=segs.reduce(function(a,s){return a+s[0]},0)||1,R=48,C=2*Math.PI*R,off=0;
-  var arcs=segs.map(function(s){
-    var len=s[0]/tot*C;
-    var d='<circle class="hv" cx="64" cy="64" r="'+R+'" fill="none" stroke="'+s[1]+'" stroke-width="17" '+
-      'stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" stroke-dashoffset="'+(-off).toFixed(1)+'" '+
+  var live=segs.filter(function(s){return s[0]>0});
+  var tot=segs.reduce(function(a,s){return a+s[0]},0)||1,R=46,W=15,C=2*Math.PI*R,off=0;
+  // gap between segments (path units); with round caps a real gap needs GAP>W.
+  var GAP=live.length>1?(live.length>3?14:20):0;
+  var arcs=live.map(function(s){
+    var raw=s[0]/tot*C,len=Math.max(raw-GAP,0.6);
+    var d='<circle class="hv" cx="64" cy="64" r="'+R+'" fill="none" stroke="'+s[1]+'" stroke-width="'+W+'" stroke-linecap="round" '+
+      'stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" stroke-dashoffset="'+(-(off+GAP/2)).toFixed(1)+'" '+
       'transform="rotate(-90 64 64)" data-tip="'+s[2]+'|'+fmt(s[0])+' ('+(s[0]/tot*100).toFixed(1)+'%)"></circle>';
-    off+=len;return d}).join('');
+    off+=raw;return d}).join('');
   return '<svg viewBox="0 0 128 128" style="width:130px;height:130px;flex:0 0 130px">'+arcs+
    '<text x="64" y="60" text-anchor="middle" font-size="19" font-weight="700" fill="var(--ink)" font-family="IBM Plex Mono,monospace">'+fmt(tot)+'</text>'+
    '<text x="64" y="76" text-anchor="middle" font-size="8.5" fill="var(--muted)">'+(centerLabel||'')+'</text></svg>';
@@ -787,8 +789,7 @@ function donutLegend(segs){
   var tot=segs.reduce(function(a,s){return a+s[0]},0)||1;
   return '<div class="dlegend">'+segs.map(function(s){
     var pc=s[0]/tot*100;
-    return '<div class="row"><div class="bar" style="width:'+pc.toFixed(1)+'%;background:'+s[1]+'"></div>'+
-    '<i style="background:'+s[1]+'"></i><span class="nm">'+s[2]+'</span>'+
+    return '<div class="row"><i style="background:'+s[1]+'"></i><span class="nm">'+s[2]+'</span>'+
     '<span class="ct">'+fmt(s[0])+'</span><span class="pc">'+pc.toFixed(0)+'%</span></div>'}).join('')+'</div>';
 }
 var KPI_ICON={PENDING:'◷',PARTIAL:'◐',COMPLETED:'✓',OVERDUE:'⚠'};
