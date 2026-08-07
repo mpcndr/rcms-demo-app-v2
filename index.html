@@ -356,6 +356,7 @@ tbody tr:hover td{background:var(--m-lite)}
    ============================================================ */
 import Leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import LOGO from './moic-logo.png';
 var D={
 lo:{
  sysName:'ລະບົບຂຶ້ນທະບຽນ ແລະ ຕິດຕາມການປະກອບທຶນ',sysSub:'Registration and Capital Monitoring System',
@@ -963,7 +964,7 @@ function shell(title,crumb,inner,right){
   var w=who();
   return '<div class="app'+(S.mini?' mini':'')+'">'+
    '<div class="side"><div class="sh"><button class="burger" data-burger>☰</button>'+
-   '<div class="brand"><img class="moic-logo" src="moic-logo.png" alt="MOIC">RCMS</div></div>'+m+'</div>'+
+   '<div class="brand"><img class="moic-logo" src="'+LOGO+'" alt="MOIC">RCMS</div></div>'+m+'</div>'+
    '<div class="main"><div class="top"><div>'+
    (crumb?'<div class="crumb" data-nav="'+crumb[1]+'">← '+crumb[0]+'</div>':'')+
    '<div class="title">'+title+'</div></div><div class="rt">'+(right||'')+
@@ -1002,7 +1003,7 @@ function vLogin(){
    '<div class="otp" id="otp">'+[0,1,2,3,4,5].map(function(){return '<input maxlength="1" size="1" inputmode="numeric">'}).join('')+'</div>'+
    '<button class="btn" style="width:100%;padding:12px;margin-top:13px" id="doLogin" disabled>'+t('login')+'</button>'+
    '<div style="margin-top:12px;font-size:11px;color:var(--m);cursor:pointer" data-backcred="1">'+t('loginBack')+'</div>';
-  return '<div class="login"><div class="lf"><div class="sealrow"><img class="moic-logo" src="moic-logo.png" alt="MOIC"><div class="seal">ລ</div></div>'+
+  return '<div class="login"><div class="lf"><div class="sealrow"><img class="moic-logo" src="'+LOGO+'" alt="MOIC"><div class="seal">ລ</div></div>'+
   '<h1>'+t('sysName')+'<br><span>RCMS</span></h1>'+
   '<div class="sub">'+t('sysSub')+' — '+t('coop')+'</div>'+
   '<div class="stat"><div><div class="n num">218,622</div><div class="l">'+t('s1')+'</div></div>'+

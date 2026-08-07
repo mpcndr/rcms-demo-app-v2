@@ -9,12 +9,21 @@ Prototype สำหรับนำเสนอโครงการ **Registrati
 ```
 npm install
 npm run dev      # dev server ที่ http://localhost:5173
-npm run build    # build ไปที่ dist/
-npm run preview  # serve dist/ ไว้เช็คก่อน deploy
+npm run build    # build เป็นไฟล์เดียวไปที่ docs/index.html
+npm run preview  # serve docs/ ไว้เช็คก่อน deploy
 ```
 
 ต้องมีเน็ตตอน `npm install` ครั้งแรก และตอนรัน (โหลดฟอนต์จาก Google Fonts + tile แผนที่จาก OpenStreetMap —
 ถ้าไม่มีเน็ต ฟอนต์จะ fallback เป็นฟอนต์ระบบ แต่แผนที่จะไม่ขึ้น)
+
+### เปิดดูเฉยๆ (ไม่ต้องรัน server)
+
+`npm run build` จะ inline ทุกอย่าง (JS + CSS + รูป) ลงใน `docs/index.html` ไฟล์เดียว
+ที่เปิดตรงๆ ได้เลย — ดับเบิลคลิกเปิดในเบราว์เซอร์ (`file://`) ก็ได้ ไม่ต้องมี server
+
+> อย่าเปิด `index.html` ที่ root โดยตรง — ไฟล์นั้นเป็น source ที่ยังใช้ ES module +
+> `import 'leaflet'` ซึ่งเบราว์เซอร์รันบน `file://` ไม่ได้ (จะได้หน้าว่างๆ) ให้ใช้ `docs/index.html`
+> ที่ build แล้ว หรือรันผ่าน `npm run dev` / `npm run preview` แทน
 
 ---
 
