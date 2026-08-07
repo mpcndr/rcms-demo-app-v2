@@ -1147,17 +1147,12 @@ function vMakerDash(){
   var LO=lang==='lo';
   var paidCo=S.ents.filter(function(e){return e.status==='COMPLETED'}).length;
   var awaitApprove=S.tasks.filter(function(x){return x.stage==='approve'}).length;
-  var lbl=function(txt){return '<div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin:0 0 8px">'+txt+'</div>';};
   var kpis=
-   lbl(t('mkSecWork'))+
    '<div class="kpiframe"><div class="kpis">'+
     kpiTile('warn','clock',t('mkKPending'),fmt(pend.length),LO?'ຢູ່ຄິວກວດສອບ/ອະນຸມັດ':'In the review queue')+
     kpiTile('bad','rotateCcw',t('mkKReturned'),fmt(returned.length),LO?'ລໍແກ້ໄຂ ແລ້ວຍື່ນຄືນ':'Fix and resubmit',returned.length?[LO?'ດ່ວນ':'Urgent','down']:null)+
     kpiTile('warn','calendarClock',t('mkKDueSoon'),fmt(dueSoon.length),LO?'ຕິດຕາມໃຫ້ມາຊຳລະ':'Follow up to collect')+
     kpiTile('bad','triangleAlert',t('mkKOverdue'),fmt(overdue.length),LO?'ເກີນກຳນົດ · ມີຄ່າປັບ':'Past deadline · penalty')+
-   '</div></div>'+
-   lbl(t('mkSecPortfolio'))+
-   '<div class="kpiframe"><div class="kpis">'+
     kpiTile('','building2',t('mkTotalCo'),fmt(S.ents.length),LO?'ໃນຄວາມຮັບຜິດຊອບ':'In your portfolio')+
     kpiTile('ok','circleCheck',t('mkPaidCo'),fmt(paidCo),LO?'ທຶນຄົບ 100%':'Capital 100% settled')+
     kpiTile('warn','wallet',t('mkUnpaidCo'),fmt(S.ents.length-paidCo),LO?'ຍັງມີຍອດຄ້າງ':'Still owing capital')+
