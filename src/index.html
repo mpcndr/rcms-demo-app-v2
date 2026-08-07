@@ -418,6 +418,7 @@ lo:{
  mkReturned:'ງານຕີກັບໃຫ້ແກ້ໄຂ',mkNoReturned:'ບໍ່ມີງານຕີກັບ',mkPending:'ລາຍການທີ່ຍື່ນໄປ ລໍຜົນ',mkNoPending:'ຍັງບໍ່ມີລາຍການທີ່ຍື່ນ',
  mkDue:'ໃກ້ຄົບກຳນົດ / ເກີນກຳນົດ',mkNoDue:'ບໍ່ມີວິສາຫະກິດໃກ້ຄົບກຳນົດ',mkFix:'ແກ້ໄຂ',
  mkBlocked:'ຄ້າງຄ່າປັບ (ບລັອກການຊຳລະ)',mkBlockedNote:'ຕ້ອງເກັບຄ່າປັບໃຫ້ຄົບກ່ອນ ຈຶ່ງບັນທຶກການຊຳລະໃໝ່ໄດ້',mkStage:'ຂັ້ນຕອນ',mkReason:'ເຫດຜົນ',mkOverBy:'ເກີນ',
+ mkSecWork:'ງານທີ່ຕ້ອງຈັດການ',mkSecPortfolio:'ພາບລວມພອດໂຟລິໂອ',mkTotalCo:'ວິສາຫະກິດທັງໝົດ',mkPaidCo:'ຊຳລະທຶນຄົບແລ້ວ',mkUnpaidCo:'ຍັງຊຳລະບໍ່ຄົບ',mkAwaitApprove:'ລໍຫົວໜ້າອະນຸມັດ',
 
  dashTitle:'ພາບລວມການປະກອບທຶນຈົດທະບຽນ',kPending:'PENDING — ລໍຊຳລະ',kPartial:'PARTIAL — ຊຳລະບາງສ່ວນ',
  kCompleted:'COMPLETED — ຄົບຖ້ວນ',kOverdue:'OVERDUE — ເກີນກຳນົດ',byStatus:'ວິສາຫະກິດຕາມສະຖານະ',
@@ -568,6 +569,7 @@ en:{
  mkReturned:'Returned for correction',mkNoReturned:'Nothing returned',mkPending:'Submitted — awaiting result',mkNoPending:'No submissions yet',
  mkDue:'Due soon / Overdue',mkNoDue:'No enterprises due soon',mkFix:'Fix',
  mkBlocked:'Outstanding penalties (payment blocked)',mkBlockedNote:'Collect the penalty in full before a new payment can be recorded',mkStage:'Stage',mkReason:'Reason',mkOverBy:'overdue',
+ mkSecWork:'Needs your action',mkSecPortfolio:'Portfolio overview',mkTotalCo:'Total enterprises',mkPaidCo:'Fully paid',mkUnpaidCo:'Not fully paid',mkAwaitApprove:'Awaiting approval',
 
  dashTitle:'Registered Capital Contribution Overview',kPending:'PENDING — awaiting payment',kPartial:'PARTIAL — partly paid',
  kCompleted:'COMPLETED — paid in full',kOverdue:'OVERDUE — past deadline',byStatus:'Enterprises by status',
@@ -750,7 +752,11 @@ var LU={
  triangleAlert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/>',
  userCheck:'<path d="m16 11 2 2 4-4"/><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
- userX:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" x2="22" y1="8" y2="13"/><line x1="22" x2="17" y1="8" y2="13"/>'
+ userX:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" x2="22" y1="8" y2="13"/><line x1="22" x2="17" y1="8" y2="13"/>',
+ building2:'<path d="M10 12h4"/><path d="M10 8h4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>',
+ circleCheck:'<path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/>',
+ wallet:'<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+ hourglass:'<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>'
 };
 function luSvg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(LU[name]||'')+'</svg>';}
 // Framed KPI card (icon top-right, big value, optional delta chip + subtext).
@@ -1139,11 +1145,23 @@ function vMakerDash(){
   var penBy={};penInvs.forEach(function(x){penBy[x.ent]=(penBy[x.ent]||0)+x.amt});
 
   var LO=lang==='lo';
-  var kpis='<div class="kpiframe"><div class="kpis">'+
+  var paidCo=S.ents.filter(function(e){return e.status==='COMPLETED'}).length;
+  var awaitApprove=S.tasks.filter(function(x){return x.stage==='approve'}).length;
+  var lbl=function(txt){return '<div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin:0 0 8px">'+txt+'</div>';};
+  var kpis=
+   lbl(t('mkSecWork'))+
+   '<div class="kpiframe"><div class="kpis">'+
     kpiTile('warn','clock',t('mkKPending'),fmt(pend.length),LO?'ຢູ່ຄິວກວດສອບ/ອະນຸມັດ':'In the review queue')+
     kpiTile('bad','rotateCcw',t('mkKReturned'),fmt(returned.length),LO?'ລໍແກ້ໄຂ ແລ້ວຍື່ນຄືນ':'Fix and resubmit',returned.length?[LO?'ດ່ວນ':'Urgent','down']:null)+
     kpiTile('warn','calendarClock',t('mkKDueSoon'),fmt(dueSoon.length),LO?'ຕິດຕາມໃຫ້ມາຊຳລະ':'Follow up to collect')+
     kpiTile('bad','triangleAlert',t('mkKOverdue'),fmt(overdue.length),LO?'ເກີນກຳນົດ · ມີຄ່າປັບ':'Past deadline · penalty')+
+   '</div></div>'+
+   lbl(t('mkSecPortfolio'))+
+   '<div class="kpiframe"><div class="kpis">'+
+    kpiTile('','building2',t('mkTotalCo'),fmt(S.ents.length),LO?'ໃນຄວາມຮັບຜິດຊອບ':'In your portfolio')+
+    kpiTile('ok','circleCheck',t('mkPaidCo'),fmt(paidCo),LO?'ທຶນຄົບ 100%':'Capital 100% settled')+
+    kpiTile('warn','wallet',t('mkUnpaidCo'),fmt(S.ents.length-paidCo),LO?'ຍັງມີຍອດຄ້າງ':'Still owing capital')+
+    kpiTile('','hourglass',t('mkAwaitApprove'),fmt(awaitApprove),LO?'ຍື່ນແລ້ວ ລໍຫົວໜ້າເຊັນ':'Submitted, awaiting sign-off')+
    '</div></div>';
 
   var retRows=returned.map(function(e){
