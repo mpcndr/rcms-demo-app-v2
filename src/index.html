@@ -2462,7 +2462,7 @@ function logout(){S.role=null;S.view='login';S.mobile=false;S.bell=false;S.umenu
   S.loginStep='cred';S.loginUser='';S.loginPass='';S.loginErr='';render()}
 function roleHome(role){
   return role==='owner'?'dash':(role==='valfirm'?'valfirm':(role==='external'?'portal':
-    (role==='checker'?'inspect':(role==='approver'?'dash':(role==='admin'?'set':(role==='maker'?'dash':'ent'))))));
+    (role==='checker'?'dash':(role==='approver'?'dash':(role==='admin'?'set':(role==='maker'?'dash':'ent'))))));
 }
 function switchRole(id){
   if(id===S.role){S.umenu=false;return render()}
@@ -2745,9 +2745,7 @@ function bind(){
   var o1=$('#otp');if(o1)otpWire(o1,function(f){$('#doLogin').disabled=!f});
   var dl=$('#doLogin');
   if(dl)dl.onclick=function(){
-    S.role=S.pick;S.mobile=false;S.read=false;
-    S.view=S.role==='owner'?'dash':(S.role==='valfirm'?'valfirm':(S.role==='external'?'portal':
-      (S.role==='checker'?'dash':(S.role==='approver'?'dash':(S.role==='admin'?'set':(S.role==='maker'?'dash':'ent'))))));
+    S.role=S.pick;S.mobile=false;S.read=false;S.view=roleHome(S.role);
     render();toast(t('loggedIn'),who().n+' · '+who().r,true)};
   var o2=$('#otp2');if(o2)otpWire(o2,function(f){$('#doApprove').disabled=!f});
   var da=$('#doApprove');if(da)da.onclick=function(){approve(S.modal.i)};
