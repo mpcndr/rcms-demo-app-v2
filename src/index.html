@@ -135,6 +135,13 @@ select.sel{cursor:pointer;height:33px;flex:0 1 190px}
 .kpi2 .dl{font-size:11.5px;font-weight:600;white-space:nowrap}
 .kpi2 .dl.up{color:var(--ok)} .kpi2 .dl.down{color:var(--bad)}
 .kpi2 .ks{font-size:11px;color:var(--muted);line-height:1.5}
+.hotcard{border:1.5px solid var(--m);box-shadow:0 0 0 3px rgba(15,92,140,.10),0 8px 24px rgba(15,92,140,.15)}
+.hotcard .h{background:var(--m-lite);border-bottom:1px solid #C8DDEC;border-radius:9px 9px 0 0;padding:13px 16px}
+.hotcard .h h3{color:var(--m-dark)}
+.hoticon{width:26px;height:26px;flex:0 0 26px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--m);color:#fff;margin-right:9px}
+.hoticon svg{width:15px;height:15px}
+@keyframes hotpulse{0%,100%{box-shadow:0 0 0 0 rgba(15,92,140,.30)}50%{box-shadow:0 0 0 5px rgba(15,92,140,0)}}
+.hotcnt{background:var(--m);color:#fff;border-radius:9px;padding:1px 9px;font-size:12px;font-weight:700;animation:hotpulse 2s ease-out infinite}
 .dlegend{display:flex;flex-direction:column;gap:7px;flex:1;min-width:200px}
 .dlegend .row{position:relative;overflow:hidden;display:flex;align-items:center;gap:9px;padding:8px 10px;
   border-radius:7px;background:var(--soft);font-size:11px;transition:.15s}
@@ -423,7 +430,7 @@ lo:{
  ckQueue:'ຄິວລໍກວດສອບ',ckNoQueue:'ບໍ່ມີງານລໍກວດສອບ',ckAtApprover:'ສົ່ງຕໍ່ແລ້ວ ລໍອະນຸມັດ',ckNoApprover:'ຍັງບໍ່ມີງານທີ່ສົ່ງຕໍ່',
  ckReturned:'ຕີກັບໃຫ້ແກ້ໄຂ (ໂດຍຂ້ອຍ)',ckNoReturned:'ຍັງບໍ່ໄດ້ຕີກັບລາຍການໃດ',ckReview:'ຕ້ອງກວດເຂັ້ມ',ckOpen:'ເປີດກວດ',ckHighVal:'ຍອດສູງ',
  apTitle:'ໜ້າວຽກອະນຸມັດ (Approver)',apKQueue:'ລໍອະນຸມັດ + ລົງນາມ',apKValue:'ມູນຄ່າລໍລົງນາມ',apKSigned:'ລົງນາມແລ້ວມື້ນີ້',apKOverdue:'ເກີນກຳນົດ (ທັງຝ່າຍ)',
- apQueue:'ຄິວລໍອະນຸມັດ + ລົງນາມ',apNoQueue:'ບໍ່ມີງານລໍອະນຸມັດ',apSign:'ລົງນາມ',apVerifiedBy:'ກວດໂດຍ',
+ apQueue:'ຄິວລໍອະນຸມັດ + ລົງນາມ',apNoQueue:'ບໍ່ມີງານລໍອະນຸມັດ',apSign:'ລົງນາມ',apVerifiedBy:'ກວດໂດຍ',apActionNeeded:'ຕ້ອງດຳເນີນການ',
  apPipeline:'ທໍ່ຂະບວນການ',apStgCheck:'ຢູ່ຂັ້ນກວດສອບ',apStgApprove:'ຢູ່ຂັ້ນອະນຸມັດ',apStgDone:'ຄົບຖ້ວນແລ້ວ',
  apRisk:'ເກີນກຳນົດ / ຄ່າປັບ',apNoRisk:'ບໍ່ມີລາຍການສ່ຽງ',apRecent:'ລົງນາມລ່າສຸດ (E-Sign)',apNoRecent:'ຍັງບໍ່ໄດ້ລົງນາມລາຍການໃດ',
 
@@ -581,7 +588,7 @@ en:{
  ckQueue:'Verification queue',ckNoQueue:'Nothing waiting for verification',ckAtApprover:'Forwarded - awaiting approval',ckNoApprover:'Nothing forwarded yet',
  ckReturned:'Returned for correction (by me)',ckNoReturned:'You have not returned any case',ckReview:'Needs close review',ckOpen:'Review',ckHighVal:'High value',
  apTitle:'Approval Workspace (Approver)',apKQueue:'Awaiting my approval',apKValue:'Value awaiting sign-off',apKSigned:'Signed today',apKOverdue:'Overdue (division)',
- apQueue:'Awaiting approval + E-Sign',apNoQueue:'Nothing waiting for approval',apSign:'Sign',apVerifiedBy:'Verified by',
+ apQueue:'Awaiting approval + E-Sign',apNoQueue:'Nothing waiting for approval',apSign:'Sign',apVerifiedBy:'Verified by',apActionNeeded:'Action needed',
  apPipeline:'Pipeline',apStgCheck:'At verification',apStgApprove:'At approval',apStgDone:'Completed',
  apRisk:'Overdue / penalties',apNoRisk:'No at-risk cases',apRecent:'Recently signed (E-Sign)',apNoRecent:'You have not signed any case yet',
 
@@ -1056,7 +1063,7 @@ function menus(){
   if(S.role==='external')return [['mMonitor'],['portal','⛁','portal']];
   if(S.role==='checker')return [['mQueue'],['inspect','⌸','inspect',Tc],['mMonitor'],['dash','▦','dash'],
     ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin',null,FIN_SUB],['rep','◱','rep']];
-  if(S.role==='approver')return [['mQueue'],['approveQ','✓','approveQ',Ta],['mMonitor'],['dash','▦','dash'],
+  if(S.role==='approver')return [['mMonitor'],['dash','▦','dash'],
     ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin',null,FIN_SUB],['rep','◱','rep']];
   return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent'],['mOther'],['rep','◱','rep'],['set','⚙','set',null,SET_SUB]];
 }
@@ -1080,7 +1087,7 @@ function shell(title,crumb,inner,right){
     if(it.length===1)return '<div class="sect">'+t(it[0])+'</div>';
     var on=it[0]===S.view||(it[0]==='ent'&&(S.view==='detail'||S.view==='declare'||S.view==='cert'||S.view==='tx'))||
       (it[0]==='dash'&&S.role==='owner'&&S.view==='tx')||
-      ((it[0]==='inspect'||it[0]==='approveQ')&&S.view==='task')||(it[0]==='valfirm'&&S.view==='valjobdetail');
+      ((it[0]==='inspect'||it[0]==='approveQ')&&S.view==='task')||(it[0]==='dash'&&S.role==='approver'&&S.view==='task')||(it[0]==='valfirm'&&S.view==='valjobdetail');
     var cnt=it[3]?'<span class="cnt">'+it[3]+'</span>':'';
     var row='<div class="mi'+(on?' on':'')+'" data-nav="'+it[0]+'">'+
       '<span class="ic">'+it[1]+'</span><span class="lbl">'+t(it[2])+'</span>'+cnt+'</div>';
@@ -1330,7 +1337,14 @@ function vApproverDash(){
      '<td>'+modeLbl(x.mode)+'</td><td class="r num">'+fmt(x.amt)+'</td>'+
      '<td style="font-size:11px;color:var(--muted)">'+t('apVerifiedBy')+' '+(chk?chk.who.replace(/ \(.*/,''):x.by)+'</td>'+
      '<td class="r" style="padding-right:16px"><span style="color:var(--m);font-size:11px;font-weight:600">'+t('apSign')+' →</span></td></tr>'}).join('');
-  var queueCard='<div class="card"><div class="h"><h3>'+t('apQueue')+'</h3>'+(myQ.length?'<span class="cnt" style="margin-left:auto">'+myQ.length+'</span>':'')+'</div>'+
+  var hot=myQ.length>0;
+  var qHead=hot
+    ?'<div class="h"><span class="hoticon">'+luSvg('signature')+'</span><h3>'+t('apQueue')+'</h3>'+
+      '<span style="margin-left:auto;display:flex;align-items:center;gap:9px">'+
+      '<span class="pill p-warn" style="font-weight:600">'+t('apActionNeeded')+'</span>'+
+      '<span class="hotcnt num">'+myQ.length+'</span></span></div>'
+    :'<div class="h"><h3>'+t('apQueue')+'</h3></div>';
+  var queueCard='<div class="card'+(hot?' hotcard':'')+'">'+qHead+
     '<div class="c" style="padding:12px 0 0">'+(qRows
      ?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+'</th><th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+'</th><th></th><th></th></tr></thead><tbody>'+qRows+'</tbody></table>'
      :'<div class="empty" style="padding:30px"><b>'+t('apNoQueue')+'</b></div>')+'</div></div>';
@@ -1861,7 +1875,7 @@ function vTask(){
   (isC?'<button class="btn" data-fwd="1">'+t('fwdApprover')+'</button>'
       :'<button class="btn" data-sign="1">'+t('signApprove')+'</button>')+
   '</div>';
-  return shell(x.ref,[isC?t('queueTitle'):t('queueApprove'),isC?'inspect':'approveQ'],inner);
+  return shell(x.ref,[isC?t('queueTitle'):t('apTitle'),isC?'inspect':'dash'],inner);
 }
 
 function vValFirm(){
@@ -2399,7 +2413,7 @@ function approve(i){
   S.notif.unshift({t:{lo:'ທຶນຈົດທະບຽນຄົບຖ້ວນແລ້ວ',en:'Registered capital fully paid'},
     s:{lo:'ອະນຸມັດແລ້ວ · ໃບຢັ້ງຢືນການຝາກທຶນພ້ອມດາວໂຫຼດ',en:'Approved · the capital deposit certificate is ready to download'},x:'10:12',c:'var(--ok)'});
   S.tasks.splice(i,1);
-  S.sel=e.id;S.view='approveQ';
+  S.sel=e.id;S.view='dash';
   S.modal={type:'done',name:e.name,status:stName(e.status)};
   render();toast(t('apvDone'),t('statusTo')+' '+stName(e.status),true);
 }
@@ -2639,14 +2653,14 @@ function bind(){
     e.hist.push({d:'04/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ - '+extReason,en:'Returned for correction - '+extReason},
       m:'',v:0,u:who().n,f:'-',ch:'',internal:intNote,st:'returned'});
     S.tasks.splice(S.taskI,1);S.backReasonInt='';S.backReasonExt='';S.modal=null;toast(t('backDone'),t('backDoneS'));
-    go(wasChecker?'inspect':'approveQ')}});
+    go(wasChecker?'inspect':'dash')}});
 
   var o1=$('#otp');if(o1)otpWire(o1,function(f){$('#doLogin').disabled=!f});
   var dl=$('#doLogin');
   if(dl)dl.onclick=function(){
     S.role=S.pick;S.mobile=false;S.read=false;
     S.view=S.role==='owner'?'dash':(S.role==='valfirm'?'valfirm':(S.role==='external'?'portal':
-      (S.role==='checker'?'inspect':(S.role==='approver'?'approveQ':(S.role==='admin'?'set':(S.role==='maker'?'dash':'ent'))))));
+      (S.role==='checker'?'inspect':(S.role==='approver'?'dash':(S.role==='admin'?'set':(S.role==='maker'?'dash':'ent'))))));
     render();toast(t('loggedIn'),who().n+' · '+who().r,true)};
   var o2=$('#otp2');if(o2)otpWire(o2,function(f){$('#doApprove').disabled=!f});
   var da=$('#doApprove');if(da)da.onclick=function(){approve(S.modal.i)};
