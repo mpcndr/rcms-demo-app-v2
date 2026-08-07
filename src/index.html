@@ -772,11 +772,11 @@ function donutPct(pct,color,size){
 }
 function donutSegs(segs,centerLabel){
   var live=segs.filter(function(s){return s[0]>0});
-  var tot=segs.reduce(function(a,s){return a+s[0]},0)||1,R=46,W=15,C=2*Math.PI*R,off=0;
-  // gap between segments (path units); with round caps a real gap needs GAP>W.
-  var GAP=live.length>1?(live.length>3?14:20):0;
+  var tot=segs.reduce(function(a,s){return a+s[0]},0)||1,R=44,W=22,C=2*Math.PI*R,off=0;
+  // thick ring, small gap + round caps -> smooth segments with rounded ends
+  var GAP=live.length>1?6:0;
   var arcs=live.map(function(s){
-    var raw=s[0]/tot*C,len=Math.max(raw-GAP,0.6);
+    var raw=s[0]/tot*C,len=Math.max(raw-GAP,0.4);
     var d='<circle class="hv" cx="64" cy="64" r="'+R+'" fill="none" stroke="'+s[1]+'" stroke-width="'+W+'" stroke-linecap="round" '+
       'stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" stroke-dashoffset="'+(-(off+GAP/2)).toFixed(1)+'" '+
       'transform="rotate(-90 64 64)" data-tip="'+s[2]+'|'+fmt(s[0])+' ('+(s[0]/tot*100).toFixed(1)+'%)"></circle>';
