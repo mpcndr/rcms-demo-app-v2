@@ -827,6 +827,28 @@ function seedInv(){return[
   amt:2400000,due:'25/08/2026',status:'UNPAID',paidAt:null,receipt:null,channel:''}
 ];}
 
+// Mock queue: two submissions the Maker keyed in, one waiting on the Checker
+// and one already forwarded to the Approver — so the Maker workspace opens
+// with live figures in every card.
+function seedTasks(){
+  function E(id){return S.ents.filter(function(x){return x.id===id})[0]}
+  return [
+   {ref:'APR-2026-0912',ent:E('ELN-2025-1002'),amt:135000000,mode:'cash',by:'ນ. ຄຳລາ',at:'08:52',stage:'checker',
+    files:[{k:'doc0',lbl:'ໃບນຳຝາກ',name:'deposit-1002.pdf'}],
+    trail:[{who:'ນ. ຄຳລາ (Maker)',act:{lo:'ຍື່ນຄຳຮ້ອງແຈ້ງຊຳລະທຶນ',en:'Submitted a capital payment declaration'},at:'04/08/2026 08:52'}]},
+   {ref:'APR-2026-0915',ent:E('ELN-2025-1003'),amt:1540000000,mode:'asset',by:'ນ. ຄຳລາ',at:'09:20',stage:'approve',
+    files:[{k:'valReport',lbl:'ບົດລາຍງານປະເມີນ',name:'valuation-1003.pdf'}],
+    trail:[{who:'ນ. ຄຳລາ (Maker)',act:{lo:'ຍື່ນຄຳຮ້ອງແຈ້ງຊຳລະທຶນ',en:'Submitted a capital payment declaration'},at:'04/08/2026 09:20'},
+           {who:'ນ. ສີວິໄລ (Checker)',act:{lo:'ກວດສອບແລ້ວ ສົ່ງຕໍ່ຜູ້ອະນຸມັດ',en:'Verified and sent to the approver'},at:'04/08/2026 09:35'}]}
+  ];
+}
+// Mock a case the Checker bounced back so the Maker has rework waiting.
+function seedReturned(){
+  var e=S.ents.filter(function(x){return x.id==='ELN-2025-1006'})[0];
+  if(e)e.hist.push({d:'03/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ — ຫຼັກຖານການໂອນບໍ່ຊັດເຈນ',en:'Returned for correction — transfer evidence unclear'},
+    m:'cash',v:0,u:'ນ. ສີວິໄລ',f:'—',ch:'',st:'returned'});
+}
+
 var VALJOBS=[
  {id:'VAL-2026-0341',ent:'ELN-2025-1001',asset:{lo:'ທີ່ດິນ 2 ຕອນ',en:'2 land plots'},firm:'Lao Valuation Co., Ltd.',net:'in',amt:700000000,status:'doing'},
  {id:'VAL-2026-0338',ent:'ELN-2025-1006',asset:{lo:'ເຄື່ອງຈັກ 6 ລາຍການ',en:'6 machinery items'},firm:'Mekong Appraisal',net:'in',amt:3780000000,status:'wait',
@@ -943,10 +965,11 @@ function reset(){
      valjobs:JSON.parse(JSON.stringify(VALJOBS)),users:JSON.parse(JSON.stringify(USERS_SEED)),
      backReasonInt:'',backReasonExt:'',loginStep:'cred',loginUser:'',loginPass:'',loginErr:'',tx:null,valI:0,valForm:{val:null,files:[],err:'',docType:'valReport',docErr:''},
      adv:{regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''}};
+  S.tasks=seedTasks();seedReturned();
   render();
 }
 function clearCache(){
-  S.ents=seedEnts();S.invs=seedInv();S.tasks=[];S.taskI=0;S.form=null;S.modal=null;S.notif=[];
+  S.ents=seedEnts();S.invs=seedInv();S.tasks=seedTasks();seedReturned();S.taskI=0;S.form=null;S.modal=null;S.notif=[];
   S.read=false;S.bell=false;S.umenu=false;S.certCopy=false;
   S.valjobs=JSON.parse(JSON.stringify(VALJOBS));S.users=JSON.parse(JSON.stringify(USERS_SEED));
   S.backReasonInt='';S.backReasonExt='';S.tx=null;S.valI=0;S.valForm={val:null,files:[],err:'',docType:'valReport',docErr:''};
@@ -1077,8 +1100,8 @@ function vDash(){
 function vMakerDash(){
   var pend=S.tasks;
   var returned=S.ents.filter(function(e){return e.status!=='COMPLETED'&&!pendingOf(e.id)&&e.hist.some(function(h){return h.st==='returned'})});
-  var overdue=S.ents.filter(function(e){return e.status==='OVERDUE'});
-  var dueSoon=S.ents.filter(function(e){var d=daysLeft(e.due);return e.status!=='COMPLETED'&&e.status!=='OVERDUE'&&d>=0&&d<=30});
+  var overdue=S.ents.filter(function(e){return e.status==='OVERDUE'&&!pendingOf(e.id)});
+  var dueSoon=S.ents.filter(function(e){var d=daysLeft(e.due);return e.status!=='COMPLETED'&&e.status!=='OVERDUE'&&!pendingOf(e.id)&&d>=0&&d<=30});
   var penInvs=S.invs.filter(function(x){return x.kind==='penalty'&&x.status==='UNPAID'});
   var penBy={};penInvs.forEach(function(x){penBy[x.ent]=(penBy[x.ent]||0)+x.amt});
 
@@ -1136,9 +1159,7 @@ function vMakerDash(){
     '<table><tbody>'+penRows+'</tbody></table></div></div>':'';
 
   var inner=
-   '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">'+
-   '<div style="font-size:12.5px;color:var(--ink2)">'+t('mkGreeting')+' <b>'+who().n+'</b></div>'+
-   '<button class="btn" data-nav="ent">＋ '+t('mkNewPay')+'</button></div>'+
+   '<div style="font-size:12.5px;color:var(--ink2);margin-bottom:14px">'+t('mkGreeting')+' <b>'+who().n+'</b></div>'+
    kpis+
    '<div class="split70" style="grid-template-columns:1fr 1fr;margin-bottom:14px">'+returnedCard+pendingCard+'</div>'+
    dueCard+penCard;
