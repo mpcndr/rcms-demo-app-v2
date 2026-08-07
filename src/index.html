@@ -406,7 +406,7 @@ lo:{
  repLbl:'ຊື່ຜູ້ຖືທະບຽນ',regStatusLbl:'ສະຖານະ',operating:'ດຳເນີນທຸລະກິດຢູ່',districtLbl:'ເມືອງ',villageLbl:'ບ້ານ',
  taxRegDateLbl:'ວັນທີຂຶ້ນທະບຽນອາກອນ',taxStatusLbl:'ສະຖານະອາກອນ',vatStatusLbl:'ສະຖານະອາກອນມູນຄ່າເພີ່ມ',vatRegistered:'ຂຶ້ນທະບຽນແລ້ວ',
  mapCaption:'ແຜນທີ່ສະແດງຂອບເຂດພື້ນທີ່ຂອງວິສາຫະກິດ',mapSyncedAt:'ຂໍ້ມູນລ້າສຸດ',
- capStatus:'ສະຖານະການປະກອບທຶນ',capDetails:'ລາຍລະອຽດທຶນ',capBreak:'ຊຳລະແລ້ວ ທຽບກັບ ຄົງເຫຼືອ',outstanding:'ຍອດຄ້າງຊຳລະ',penaltyAmt:'ຄ່າປັບສະສົມ',
+ capStatus:'ສະຖານະການປະກອບທຶນ',capDetails:'ລາຍລະອຽດທຶນ',capPaidUp:'ທຶນທີ່ຊຳລະແລ້ວ',capUnpaid:'ທຶນທີ່ຍັງບໍ່ຊຳລະ',capCallDue:'ວັນຄົບກຳນົດຮຽກຊຳລະທຶນ',capBreak:'ຊຳລະແລ້ວ ທຽບກັບ ຄົງເຫຼືອ',outstanding:'ຍອດຄ້າງຊຳລະ',penaltyAmt:'ຄ່າປັບສະສົມ',
  daysLeft:'ວັນທີ່ເຫຼືອກ່ອນຄົບກຳນົດ',
  stPaid:'ຢືນຢັນແລ້ວ',stDue:'ລໍຊຳລະ',
  collateral:'ລາຍການຫຼັກປະກັນ',colDetail:'ລາຍລະອຽດ',colVal:'ມູນຄ່າທີ່ຕີລາຄາ',viewReport:'ເບິ່ງບົດລາຍງານ',
@@ -542,7 +542,7 @@ en:{
  repLbl:'Name of registration holder',regStatusLbl:'Status',operating:'Operating',districtLbl:'District',villageLbl:'Village',
  taxRegDateLbl:'Tax registration date',taxStatusLbl:'Tax status',vatStatusLbl:'VAT status',vatRegistered:'Registered',
  mapCaption:'Map showing the enterprise location',mapSyncedAt:'Last synced',
- capStatus:'Capital contribution status',capDetails:'Capital Details',capBreak:'Paid vs outstanding',outstanding:'Outstanding balance',penaltyAmt:'Accrued penalty',
+ capStatus:'Capital contribution status',capDetails:'Capital Details',capPaidUp:'Paid-Up Capital',capUnpaid:'Unpaid Capital',capCallDue:'Capital Call Due Date',capBreak:'Paid vs outstanding',outstanding:'Outstanding balance',penaltyAmt:'Accrued penalty',
  daysLeft:'Days left before the deadline',
  stPaid:'Confirmed',stDue:'Awaiting payment',
  collateral:'Collateral Items',colDetail:'Details',colVal:'Appraised value',viewReport:'View report',
@@ -1120,9 +1120,9 @@ function vOwnerDash(){
    '<div style="display:flex;justify-content:center;padding:4px 0">'+donutPct(pct,'#1B6E45',160)+'</div>'+
    '<div class="dstat" style="grid-template-columns:1fr;grid-auto-rows:1fr;flex:1">'+
    '<div class="cell"><div class="k">'+t('cCap')+'</div><div class="v">'+fmt(e.cap)+'</div></div>'+
-   '<div class="cell"><div class="k">'+t('cPaid')+'</div><div class="v" style="color:var(--ok)">'+fmt(e.paid)+'</div></div>'+
-   '<div class="cell"><div class="k">'+(remain>0?t('bizRemain'):t('bizDone'))+'</div><div class="v" style="color:'+(remain>0?'var(--warn)':'var(--ok)')+'">'+fmt(remain)+'</div></div>'+
-   '<div class="cell"><div class="k">'+t('cDue')+'</div><div class="v" style="color:'+(days<0?'var(--bad)':'var(--ink)')+';font-size:13px">'+e.due+'</div>'+
+   '<div class="cell"><div class="k">'+t('capPaidUp')+'</div><div class="v" style="color:var(--ok)">'+fmt(e.paid)+'</div></div>'+
+   '<div class="cell"><div class="k">'+(remain>0?t('capUnpaid'):t('bizDone'))+'</div><div class="v" style="color:'+(remain>0?'var(--warn)':'var(--ok)')+'">'+fmt(remain)+'</div></div>'+
+   '<div class="cell"><div class="k">'+t('capCallDue')+'</div><div class="v" style="color:'+(days<0?'var(--bad)':'var(--ink)')+';font-size:13px">'+e.due+'</div>'+
    '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">'+(lang==='lo'?days+' ວັນ':days+' days')+'</div></div>'+
    '</div>'+
    (payBtn?'<div style="display:flex;justify-content:center">'+payBtn+'</div>':'')+
