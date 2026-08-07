@@ -536,7 +536,7 @@ lo:{
  jobSubmitted:'ສົ່ງຜົນປະເມີນແລ້ວ',jobSubmittedS:'ລໍເຈົ້າໜ້າທີ່ Checker ກວດຮັບຜົນ',jobAccepted:'ກວດຮັບຜົນປະເມີນແລ້ວ',
  jobAcceptedS:'ມູນຄ່ານີ້ນັບເປັນທຶນຈົດທະບຽນແລ້ວ',firmApproved:'ອະນຸມັດບໍລິສັດແລ້ວ',firmApprovedS:'ບໍລິສັດສາມາດບັນທຶກມູນຄ່າໄດ້ແລ້ວ',
 
- finTitle:'ການເງິນ ແລະ ຄ່າປັບ',feeTab:'ຄ່າທຳນຽມ',penTab:'ຄ່າປັບ',recTab:'ໃບຮັບເງິນເອເລັກໂຕຣນິກ',finSearchPh:'ຄົ້ນຫາໃນຕາຕະລາງ...',
+ finTitle:'ການເງິນ ແລະ ຄ່າປັບ',feeTab:'ຄ່າທຳນຽມ',penTab:'ຄ່າປັບ',recTab:'ໃບຮັບເງິນເອເລັກໂຕຣນິກ',finSearchPh:'ຄົ້ນຫາໃນຕາຕະລາງ...',finAll:'ທັງໝົດ',finDateFrom:'ວັນທີ່ ຈາກ',finDateTo:'ວັນທີ່ ຫາ',
  penDays:'ຈຳນວນວັນທີ່ເກີນ',payStatus:'ສະຖານະຊຳລະ',feeByType:'ຄ່າທຳນຽມຕາມປະເພດວິສາຫະກິດ',
  feeByCapital:'ຄ່າທຳນຽມຕາມມູນຄ່າທຶນຈົດທະບຽນ',feeRange:'ຊ່ວງທຶນຈົດທະບຽນ',feeAmt:'ຄ່າທຳນຽມ',penRate:'ອັດຕາຄ່າປັບຕໍ່ວັນ',
  penRateTBD:'ອັດຕາຄ່າປັບຕໍ່ວັນຍັງບໍ່ມີກຳນົດຈາກ TOR - ລໍຢືນຢັນຈາກລູກຄ້າ',
@@ -695,7 +695,7 @@ en:{
  jobSubmitted:'Valuation result submitted',jobSubmittedS:'Awaiting acceptance by the Checker',jobAccepted:'Valuation result accepted',
  jobAcceptedS:'This value now counts toward registered capital',firmApproved:'Firm approved',firmApprovedS:'The firm can now record valuations',
 
- finTitle:'Finance & Penalties',feeTab:'Fees',penTab:'Penalties',recTab:'E-Receipts',finSearchPh:'Search the table...',
+ finTitle:'Finance & Penalties',feeTab:'Fees',penTab:'Penalties',recTab:'E-Receipts',finSearchPh:'Search the table...',finAll:'All',finDateFrom:'Date from',finDateTo:'Date to',
  penDays:'Days overdue',payStatus:'Payment status',feeByType:'Fee by enterprise type',
  feeByCapital:'Fee by registered capital',feeRange:'Registered capital band',feeAmt:'Fee',penRate:'Penalty rate per day',
  penRateTBD:'The daily penalty rate is not yet defined in the TOR - pending client confirmation',
@@ -2047,26 +2047,31 @@ function vFin(){
   }
   var tabBar='<div class="ftabs">'+[['fee','feeTab'],['pen','penTab'],['rec','recTab']].map(function(tb){
     return '<div class="ft'+(tab===tb[0]?' on':'')+'" data-subtab="fin:'+tb[0]+'">'+t(tb[1])+'</div>';}).join('')+'</div>';
-  var statusSel='<select class="sel" id="finFStatus"><option value="">'+t('payStatus')+'</option>'+
-    '<option value="paid">'+t('stPaid')+'</option><option value="due">'+t('stDue')+'</option></select>';
-  var entInp='<input class="inp" id="finFEnt" placeholder="'+t('cEnt')+'" style="flex:0 1 200px">';
-  var filters;
+  var statusOpts='<option value="">'+t('finAll')+'</option><option value="paid">'+t('stPaid')+'</option><option value="due">'+t('stDue')+'</option>';
+  var flds;
   if(tab==='pen'){
-    filters=entInp+'<select class="sel" id="finFDays"><option value="">'+t('penDays')+'</option>'+
-     '<option value="1-30">1 - 30</option><option value="31-60">31 - 60</option>'+
-     '<option value="61-90">61 - 90</option><option value="90+">&gt; 90</option></select>'+statusSel;
+    flds='<div class="field"><label>'+t('cEnt')+'</label><input id="finFEnt"></div>'+
+     '<div class="field"><label>'+t('penDays')+'</label><select id="finFDays"><option value="">'+t('finAll')+'</option>'+
+      '<option value="1-30">1 - 30</option><option value="31-60">31 - 60</option><option value="61-90">61 - 90</option><option value="90+">&gt; 90</option></select></div>'+
+     '<div class="field"><label>'+t('payStatus')+'</label><select id="finFStatus">'+statusOpts+'</select></div>';
   } else if(tab==='rec'){
-    filters='<input class="inp" id="finFReceipt" placeholder="'+t('receiptNo')+'" style="flex:0 1 160px">'+entInp+
-     '<input class="inp" id="finFItem" placeholder="'+t('cItem')+'" style="flex:0 1 160px">'+
-     '<span style="font-size:11px;color:var(--muted);align-self:center">'+t('cDate')+'</span>'+
-     '<input type="date" class="inp" id="finFFrom" style="flex:0 0 auto">'+
-     '<span style="align-self:center;color:var(--muted)">-</span>'+
-     '<input type="date" class="inp" id="finFTo" style="flex:0 0 auto">';
+    flds='<div class="field"><label>'+t('receiptNo')+'</label><input id="finFReceipt"></div>'+
+     '<div class="field"><label>'+t('cEnt')+'</label><input id="finFEnt"></div>'+
+     '<div class="field"><label>'+t('cItem')+'</label><input id="finFItem"></div>'+
+     '<div class="field"></div>'+
+     '<div class="field"><label>'+t('finDateFrom')+'</label><input type="date" id="finFFrom"></div>'+
+     '<div class="field"><label>'+t('finDateTo')+'</label><input type="date" id="finFTo"></div>';
   } else {
-    filters=entInp+'<input class="inp" id="finFRef" placeholder="'+t('cRef')+'" style="flex:0 1 180px">'+statusSel;
+    flds='<div class="field"><label>'+t('cEnt')+'</label><input id="finFEnt"></div>'+
+     '<div class="field"><label>'+t('cRef')+'</label><input id="finFRef"></div>'+
+     '<div class="field"><label>'+t('payStatus')+'</label><select id="finFStatus">'+statusOpts+'</select></div>';
   }
-  var filterBar='<div class="filters" style="margin-bottom:12px">'+filters+'</div>';
-  return shell(t('finTitle'),'',tabBar+filterBar+'<div id="finContent">'+body+'</div>');
+  var filterCard='<div class="card" style="margin-bottom:12px"><div class="h"><h3>'+t('filterTitle')+'</h3>'+
+   '<span class="more" data-clearfin="1">'+t('clearCriteria')+'</span></div>'+
+   '<div class="c" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 16px">'+flds+'</div>'+
+   '<div class="c" style="padding-top:0"><div class="acts"><button class="btn ghost" data-soon="'+t('export')+'">'+t('export')+'</button>'+
+   '<button class="btn ghost" data-soon="'+t('print')+'">'+t('print')+'</button></div></div></div>';
+  return shell(t('finTitle'),'',tabBar+filterCard+'<div id="finContent">'+body+'</div>');
 }
 function applyFinFilter(){
   var gv=function(id){var el=document.getElementById(id);return el?el.value.trim().toLowerCase():null;};
@@ -2551,6 +2556,9 @@ function bind(){
     if(p[0]==='fin'){S.finTab=p[1];go('fin')}else{S.setTab=p[1];go('set')}}});
   ['finFEnt','finFRef','finFReceipt','finFItem'].forEach(function(id){var el=$('#'+id);if(el)el.oninput=applyFinFilter});
   ['finFStatus','finFDays','finFFrom','finFTo'].forEach(function(id){var el=$('#'+id);if(el)el.onchange=applyFinFilter});
+  document.querySelectorAll('[data-clearfin]').forEach(function(b){b.onclick=function(){
+    ['finFEnt','finFRef','finFReceipt','finFItem','finFStatus','finFDays','finFFrom','finFTo'].forEach(function(id){var el=$('#'+id);if(el)el.value=''});
+    applyFinFilter()}});
   document.querySelectorAll('[data-burger]').forEach(function(b){b.onclick=function(){S.mini=!S.mini;render()}});
   document.querySelectorAll('[data-open]').forEach(function(r){r.onclick=function(){S.sel=r.dataset.open;go('detail')}});
   document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.dataset.tab;go('ent')}});
