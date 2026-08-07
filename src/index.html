@@ -1078,7 +1078,7 @@ function menus(){
   if(S.role==='maker')return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent']];
   if(S.role==='valfirm')return [['mMonitor'],['valfirm','◫','valPortal']];
   if(S.role==='external')return [['mMonitor'],['portal','⛁','portal']];
-  if(S.role==='checker')return [['mQueue'],['inspect','⌸','inspect',Tc],['mMonitor'],['dash','▦','dash'],
+  if(S.role==='checker')return [['mMonitor'],['dash','▦','dash'],
     ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin'],['rep','◱','rep']];
   if(S.role==='approver')return [['mMonitor'],['dash','▦','dash'],
     ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin'],['rep','◱','rep']];
@@ -1104,7 +1104,7 @@ function shell(title,crumb,inner,right){
     if(it.length===1)return '<div class="sect">'+t(it[0])+'</div>';
     var on=it[0]===S.view||(it[0]==='ent'&&(S.view==='detail'||S.view==='declare'||S.view==='cert'||S.view==='tx'))||
       (it[0]==='dash'&&S.role==='owner'&&S.view==='tx')||
-      ((it[0]==='inspect'||it[0]==='approveQ')&&S.view==='task')||(it[0]==='dash'&&S.role==='approver'&&S.view==='task')||(it[0]==='valfirm'&&S.view==='valjobdetail');
+      ((it[0]==='inspect'||it[0]==='approveQ')&&S.view==='task')||(it[0]==='dash'&&(S.role==='approver'||S.role==='checker')&&S.view==='task')||(it[0]==='valfirm'&&S.view==='valjobdetail');
     var cnt=it[3]?'<span class="cnt">'+it[3]+'</span>':'';
     var row='<div class="mi'+(on?' on':'')+'" data-nav="'+it[0]+'">'+
       '<span class="ic">'+it[1]+'</span><span class="lbl">'+t(it[2])+'</span>'+cnt+'</div>';
@@ -1301,7 +1301,7 @@ function vCheckerDash(){
      '<td>'+modeLbl(x.mode)+'</td><td class="r num">'+fmt(x.amt)+'</td>'+
      '<td>'+x.by+'</td><td class="num">'+x.at+'</td>'+
      '<td class="r" style="padding-right:16px"><span style="color:var(--m);font-size:11px;font-weight:600">'+t('ckOpen')+' →</span></td></tr>'}).join('');
-  var queueCard='<div class="card"><div class="h"><h3>'+t('ckQueue')+'</h3>'+(myQ.length?'<span class="cnt" style="margin-left:auto">'+myQ.length+'</span>':'')+'</div>'+
+  var queueCard='<div class="card'+(myQ.length?' spinred':'')+'"><div class="h"><h3>'+t('ckQueue')+'</h3>'+(myQ.length?'<span class="cnt" style="margin-left:auto">'+myQ.length+'</span>':'')+'</div>'+
     '<div class="c" style="padding:12px 0 0">'+(qRows
      ?'<table><thead><tr><th style="padding-left:16px">'+t('cRef')+'</th><th>'+t('cEnt')+'</th><th>'+t('cMode')+'</th><th class="r">'+t('cAmt')+'</th><th>'+t('cBy')+'</th><th>'+t('cTime')+'</th><th></th></tr></thead><tbody>'+qRows+'</tbody></table>'
      :'<div class="empty" style="padding:30px"><b>'+t('ckNoQueue')+'</b></div>')+'</div></div>';
@@ -1899,7 +1899,7 @@ function vTask(){
   regCard+
   '<div style="display:flex;flex-direction:column;gap:14px;height:100%">'+caseCard+evidCard+decideCard+'</div>'+
   '</div>';
-  return shell(x.ref,[isC?t('queueTitle'):t('apTitle'),isC?'inspect':'dash'],inner);
+  return shell(x.ref,[isC?t('ckTitle'):t('apTitle'),'dash'],inner);
 }
 
 function vValFirm(){
@@ -2728,7 +2728,7 @@ function bind(){
     var x=S.tasks[S.taskI],e=x.ent,who1=who().n;x.stage='approve';
     x.trail.push({who:who1+' (Checker)',act:{lo:'ກວດສອບແລ້ວ ສົ່ງຕໍ່ຜູ້ອະນຸມັດ',en:'Verified and sent to the approver'},at:'04/08/2026 10:04'});
     e.hist.push({d:'04/08/2026',a:{lo:'ກວດສອບໂດຍ Checker',en:'Verified by the Checker'},m:'',v:0,u:who1,f:'-',ch:'',st:'complete'});
-    toast(t('checkDone'),t('checkDoneS'),true);go('inspect')}});
+    toast(t('checkDone'),t('checkDoneS'),true);go('dash')}});
   var riTxt=$('#reasonIntTxt');if(riTxt)riTxt.oninput=function(){S.backReasonInt=riTxt.value};
   var reTxt=$('#reasonExtTxt');if(reTxt)reTxt.oninput=function(){S.backReasonExt=reTxt.value};
   document.querySelectorAll('[data-openback]').forEach(function(b){b.onclick=function(){
@@ -2740,14 +2740,14 @@ function bind(){
     e.hist.push({d:'04/08/2026',a:{lo:'ຕີກັບໃຫ້ແກ້ໄຂ - '+extReason,en:'Returned for correction - '+extReason},
       m:'',v:0,u:who().n,f:'-',ch:'',internal:intNote,st:'returned'});
     S.tasks.splice(S.taskI,1);S.backReasonInt='';S.backReasonExt='';S.modal=null;toast(t('backDone'),t('backDoneS'));
-    go(wasChecker?'inspect':'dash')}});
+    go('dash')}});
 
   var o1=$('#otp');if(o1)otpWire(o1,function(f){$('#doLogin').disabled=!f});
   var dl=$('#doLogin');
   if(dl)dl.onclick=function(){
     S.role=S.pick;S.mobile=false;S.read=false;
     S.view=S.role==='owner'?'dash':(S.role==='valfirm'?'valfirm':(S.role==='external'?'portal':
-      (S.role==='checker'?'inspect':(S.role==='approver'?'dash':(S.role==='admin'?'set':(S.role==='maker'?'dash':'ent'))))));
+      (S.role==='checker'?'dash':(S.role==='approver'?'dash':(S.role==='admin'?'set':(S.role==='maker'?'dash':'ent'))))));
     render();toast(t('loggedIn'),who().n+' · '+who().r,true)};
   var o2=$('#otp2');if(o2)otpWire(o2,function(f){$('#doApprove').disabled=!f});
   var da=$('#doApprove');if(da)da.onclick=function(){approve(S.modal.i)};
