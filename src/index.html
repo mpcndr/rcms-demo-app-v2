@@ -460,7 +460,7 @@ lo:{
  cPaid:'ຊຳລະແລ້ວ',cLeft:'ຍັງເຫຼືອ',cStatus:'ສະຖານະ',cDate:'ວັນທີ',cAct:'ລາຍການ',cMode:'ຊ່ອງທາງ',
  cAmt:'ຈຳນວນ',cBy:'ຜູ້ສົ່ງເລື່ອງ',cDoc:'ເອກະສານ',cTime:'ເວລາ',cRef:'ເລກທີ່ອ້າງອີງ',
  hstComplete:'ສຳເລັດ',hstPending:'ລໍກວດສອບ',hstReturned:'ຕີກັບ',
- search:'ຄົ້ນຫາຊື່ ຫຼື ເລກທະບຽນ',allSt:'ທຸກສະຖານະ',allProv:'ທຸກແຂວງ',allIsic:'ISIC ທຸກຂະແໜງ',
+ search:'ຄົ້ນຫາຊື່ ຫຼື ເລກທະບຽນ',searchBtn:'ຄົ້ນຫາ',allSt:'ທຸກສະຖານະ',allProv:'ທຸກແຂວງ',allIsic:'ISIC ທຸກຂະແໜງ',
  export:'ສົ່ງອອກ Excel',print:'ພິມ',showing:'ສະແດງ',of:'ຈາກ',items:'ລາຍການ',
  noMatch:'ບໍ່ພົບລາຍການທີ່ຕົງກັບເງື່ອນໄຂ',noMatchS:'ລອງປ່ຽນເງື່ອນໄຂ ຫຼື ລ້າງຄ່າຄົ້ນຫາ',
  filterTitle:'ຕົວກອງ',clearCriteria:'ລ້າງເງື່ອນໄຂ',fltRegNo:'ເລກທະບຽນ',fltEtype:'ປະເພດວິສາຫະກິດ',
@@ -619,7 +619,7 @@ en:{
  cPaid:'Paid',cLeft:'Outstanding',cStatus:'Status',cDate:'Date',cAct:'Activity',cMode:'Channel',
  cAmt:'Amount',cBy:'Submit by',cDoc:'Files',cTime:'Time',cRef:'Reference',
  hstComplete:'Complete',hstPending:'Pending',hstReturned:'Returned',
- search:'Search by name or registration number',allSt:'All statuses',allProv:'All provinces',allIsic:'All ISIC sectors',
+ search:'Search by name or registration number',searchBtn:'Search',allSt:'All statuses',allProv:'All provinces',allIsic:'All ISIC sectors',
  export:'Export to Excel',print:'Print',showing:'Showing',of:'of',items:'records',
  noMatch:'No records match these filters',noMatchS:'Try different criteria or clear the search',
  filterTitle:'Filter',clearCriteria:'Clear criteria',fltRegNo:'Registration number',fltEtype:'Enterprise type',
@@ -1550,14 +1550,16 @@ function vList(){
    '<div class="field"><label>'+t('cProv')+'</label><select id="advProv"><option value="">'+t('allProv')+'</option>'+provOpts+'</select></div>'+
    '<div class="field"><label>ISIC</label><select id="advIsic"><option value="">'+t('allIsic')+'</option>'+isicOpts+'</select></div>'+
    '<div class="field"><label>'+t('cStatus')+'</label><select id="stSel">'+stOpts+'</select></div>'+
-   '<div class="field"></div>'+
    '<div class="field"><label>'+t('fltRegFrom')+'</label><input type="date" id="advRegFrom" value="'+adv.regFrom+'"></div>'+
    '<div class="field"><label>'+t('fltRegTo')+'</label><input type="date" id="advRegTo" value="'+adv.regTo+'"></div>'+
    '<div class="field"><label>'+t('fltUpdFrom')+'</label><input type="date" id="advUpdFrom" value="'+adv.updFrom+'"></div>'+
    '<div class="field"><label>'+t('fltUpdTo')+'</label><input type="date" id="advUpdTo" value="'+adv.updTo+'"></div>'+
-   '</div><div class="c" style="padding-top:0"><div class="acts"><button class="btn ghost" data-soon="'+t('export')+'">'+t('export')+'</button>'+
-   '<button class="btn ghost" data-soon="'+t('print')+'">'+t('print')+'</button></div></div></div>';
-  var inner=panel+'<div class="card"><div class="c" style="padding:0">'+body+'</div></div>'+
+   '</div><div class="c" style="padding-top:0"><div class="acts" style="justify-content:center"><button class="btn" data-search="1">'+t('searchBtn')+'</button></div></div></div>';
+  var inner=panel+
+  '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px">'+
+   '<button class="btn ghost" data-soon="'+t('export')+'">'+t('export')+'</button>'+
+   '<button class="btn ghost" data-soon="'+t('print')+'">'+t('print')+'</button></div>'+
+  '<div class="card"><div class="c" style="padding:0">'+body+'</div></div>'+
   '<div style="font-size:11.5px;color:var(--muted);margin-top:12px">'+t('showing')+' '+list.length+' '+t('of')+' '+fmt(tot)+' '+t('items')+'</div>';
   return shell(t('ent'),'',inner);
 }
@@ -2677,6 +2679,7 @@ function bind(){
     var n=$('#q');if(n){n.focus();n.setSelectionRange(p,p)}};
   document.querySelectorAll('[data-clearadv]').forEach(function(b){b.onclick=function(){
     S.adv={regNo:'',etype:'',nameLo:'',nameEn:'',prov:'',isic:'',regFrom:'',regTo:'',updFrom:'',updTo:''};render()}});
+  document.querySelectorAll('[data-search]').forEach(function(b){b.onclick=function(){render()}});
   var an=$('#advRegNo');if(an)an.oninput=function(){var p=an.selectionStart;S.adv.regNo=an.value;render();
     var n=$('#advRegNo');if(n){n.focus();n.setSelectionRange(p,p)}};
   var ae=$('#advEtype');if(ae)ae.onchange=function(){S.adv.etype=ae.value;render()};
