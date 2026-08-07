@@ -42,7 +42,8 @@ button{font-family:inherit}
   cursor:pointer;white-space:nowrap;color:#B2C6D6;margin-bottom:1px}
 .mi:hover{background:#12486B;color:#fff}
 .mi.on{background:var(--m);color:#fff;font-weight:600}
-.mi .ic{width:18px;flex:0 0 18px;text-align:center;font-size:14px}
+.mi .ic{width:18px;flex:0 0 18px;display:inline-flex;align-items:center;justify-content:center}
+.mi .ic svg{width:16px;height:16px}
 .mi .cnt{margin-left:auto;background:var(--bad);color:#fff;border-radius:9px;padding:0 6px;font-size:10px;font-weight:600}
 .mi.soon{opacity:.48}
 .mi.sub{padding-left:36px;font-size:11.5px;color:#93AAC0}
@@ -813,7 +814,13 @@ var LU={
  send:'<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>',
  signature:'<path d="m21 17-2.156-1.868A.5.5 0 0 0 18 15.5v.5a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1c0-2.545-3.991-3.97-8.5-4a1 1 0 0 0 0 5c4.153 0 4.745-11.295 5.708-13.5a2.5 2.5 0 1 1 3.31 3.284"/><path d="M3 21h18"/>',
  scale:'<path d="M12 3v18"/><path d="m19 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1"/><path d="m5 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M7 21h10"/>',
- plug:'<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>'
+ plug:'<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>',
+ layoutDashboard:'<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
+ search:'<path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
+ clipboardList:'<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>',
+ globe:'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+ chartColumn:'<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
+ settings:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>'
 };
 function luSvg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(LU[name]||'')+'</svg>';}
 // Framed KPI card (icon top-right, big value, optional delta chip + subtext).
@@ -1103,15 +1110,16 @@ function clearCache(){
 function menus(){
   var Tc=S.tasks.filter(function(x){return x.stage==='checker'}).length;
   var Ta=S.tasks.filter(function(x){return x.stage==='approve'}).length;
-  if(S.role==='owner')return [['mMonitor'],['dash','▦','myCap']];
-  if(S.role==='maker')return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent']];
-  if(S.role==='valfirm')return [['mMonitor'],['valfirm','◫','valPortal']];
-  if(S.role==='external')return [['mMonitor'],['portal','⛁','portal']];
-  if(S.role==='checker')return [['mMonitor'],['dash','▦','dash'],
-    ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin'],['rep','◱','rep']];
-  if(S.role==='approver')return [['mMonitor'],['dash','▦','dash'],
-    ['ent','◈','ent'],['valQueue','◫','valQueue'],['mOther'],['fin','₭','fin'],['rep','◱','rep']];
-  return [['mMonitor'],['dash','▦','dash'],['ent','◈','ent'],['mOther'],['rep','◱','rep'],['set','⚙','set']];
+  var I=luSvg;
+  if(S.role==='owner')return [['mMonitor'],['dash',I('wallet'),'myCap']];
+  if(S.role==='maker')return [['mMonitor'],['dash',I('layoutDashboard'),'dash'],['ent',I('search'),'ent']];
+  if(S.role==='valfirm')return [['mMonitor'],['valfirm',I('clipboardList'),'valPortal']];
+  if(S.role==='external')return [['mMonitor'],['portal',I('globe'),'portal']];
+  if(S.role==='checker')return [['mMonitor'],['dash',I('layoutDashboard'),'dash'],
+    ['ent',I('search'),'ent'],['valQueue',I('clipboardCheck'),'valQueue'],['mOther'],['fin',I('banknote'),'fin'],['rep',I('chartColumn'),'rep']];
+  if(S.role==='approver')return [['mMonitor'],['dash',I('layoutDashboard'),'dash'],
+    ['ent',I('search'),'ent'],['valQueue',I('clipboardCheck'),'valQueue'],['mOther'],['fin',I('banknote'),'fin'],['rep',I('chartColumn'),'rep']];
+  return [['mMonitor'],['dash',I('layoutDashboard'),'dash'],['ent',I('search'),'ent'],['mOther'],['rep',I('chartColumn'),'rep'],['set',I('settings'),'set']];
 }
 function bellPanel(){
   var ns=notifs(),un=S.read?0:ns.length;
