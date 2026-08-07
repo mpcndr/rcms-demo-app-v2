@@ -1835,9 +1835,12 @@ function vValJobDetail(){
    (S.valForm.docErr?'<div class="hint err" style="margin-top:8px">'+S.valForm.docErr+'</div>':'')+'</div>'+
    '<button class="btn" style="width:100%;margin-top:6px" data-submitjob="'+S.valI+'">'+t('submitJob')+'</button>'+
    '</div></div>':'';
-  var inner='<div class="declrow">'+
-   '<div>'+jobCard+colCard+fieldsCard+'</div>'+
-   '<div>'+filesCard+formCard+'</div>'+
+  var noM=function(h){return h.replace(' style="margin-bottom:14px"','');};
+  var colWrap='display:flex;flex-direction:column;gap:14px;height:100%';
+  var filesGrow=noM(filesCard).replace('<div class="card"','<div class="card" style="flex:1 1 auto"');
+  var inner='<div class="declrow" style="align-items:stretch">'+
+   '<div style="'+colWrap+'">'+noM(jobCard)+noM(colCard)+noM(fieldsCard)+'</div>'+
+   '<div style="'+colWrap+'">'+filesGrow+formCard+'</div>'+
    '</div>';
   return shell(j.id,[t('valPortal'),'valfirm'],inner);
 }
