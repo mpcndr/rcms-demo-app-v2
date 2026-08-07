@@ -1125,7 +1125,7 @@ function vOwnerDash(){
    '<div class="cell"><div class="k">'+t('cDue')+'</div><div class="v" style="color:'+(days<0?'var(--bad)':'var(--ink)')+';font-size:13px">'+e.due+'</div>'+
    '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">'+(lang==='lo'?days+' ວັນ':days+' days')+'</div></div>'+
    '</div>'+
-   (payBtn?'<div>'+payBtn+'</div>':'')+
+   (payBtn?'<div style="display:flex;justify-content:center">'+payBtn+'</div>':'')+
    '</div></div>';
   var regCard=regDetailCard(e).replace('<div class="card" style="margin-bottom:14px">','<div class="card" style="height:100%">');
   var inner='<div class="split" style="margin-bottom:14px;align-items:stretch">'+regCard+capStatusCard+'</div>'+
