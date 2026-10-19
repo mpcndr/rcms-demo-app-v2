@@ -97,8 +97,10 @@ npm run preview  # เสิร์ฟตัว build ไว้เช็คก่
 (ทอง/แดง/เขียว) เพื่อให้เห็นทันทีว่าอะไรต้องทำ ทั้งหมดมาจาก helper เดียว `sumCard()` + `metric()`
 
 ### ทะเบียนวิสาหกิจ (Search Enterprises)
-- ช่องค้นหาเดียว (ชื่อลาว / อังกฤษ / เลขทะเบียน) + แขวง + ประเภทวิสาหกิจ กรองทันที
-  ขณะพิมพ์, ปุ่ม **More filters** เปิดช่อง ISIC และช่วงวันที่ (มี badge บอกจำนวนตัวกรอง)
+- การ์ดค้นหาแสดงทุกช่องตลอด: ชื่อวิสาหกิจ (ลาว / อังกฤษ), เลขทะเบียน, แขวง, ประเภทวิสาหกิจ,
+  ISIC, ช่วงวันที่จดทะเบียน และช่วงวันที่อัปเดต กรอกแล้วกด **Search** หรือ Enter, **Clear**
+  ล้างเงื่อนไข (รายการแขวง / ISIC ดึงจากข้อมูลจริง ค่าใน dropdown ไม่ขึ้นกับภาษา)
+- ตารางแยกคอลัมน์ Enterprise กับ Registration no.
 - สถานะเป็นชิปกดได้พร้อมจำนวน, Export to Excel / Print อยู่ที่หัวตาราง
 
 ### รายละเอียดวิสาหกิจ / Case detail
@@ -132,8 +134,9 @@ npm run preview  # เสิร์ฟตัว build ไว้เช็คก่
 ### Finance
 - 3 แท็บภายในเมนูเดียว: **Fees / Penalties / E-Receipts**
 - แต่ละแท็บมี search filter แยกตาม criteria ของตัวเอง (เช่น Enterprise,
-  Reference, Payment status, Days overdue, Receipt no, ช่วงวันที่) กรองทันที
-  ขณะพิมพ์ แท็บเป็น segmented control และปุ่ม Export / Print อยู่แถวเดียวกับแท็บ
+  Reference, Payment status, Days overdue, Receipt no, ช่วงวันที่) กรอกแล้วกดปุ่ม
+  Search หรือ Enter เพื่อกรอง ปุ่ม Clear ล้างเงื่อนไข (แบบเดียวกับหน้า Checker)
+  แท็บเป็น segmented control และปุ่ม Export / Print อยู่แถวเดียวกับแท็บ
 
 ### Reports
 - เลือกรายงานตามประเภท + ช่วงวันที่ แล้ว generate / export (ตัด chart ออก เหลือ
