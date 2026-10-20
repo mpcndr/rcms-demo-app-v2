@@ -71,9 +71,11 @@ npm run preview  # เสิร์ฟตัว build ไว้เช็คก่
 - ชิป **Demo accounts** ใต้ปุ่ม Next กดแล้วกรอก username ให้ทันที (สะดวกตอนนำเสนอ)
 - **สร้างบัญชี (Create Account)**: ลิงก์ใต้ปุ่ม Next เปิดฟอร์ม 3 ขั้น มีแถบบอกขั้นด้านบน
   1. **Applicant details**: Email, Citizen ID / Passport Number (เลือกประเภทได้อย่างใดอย่างหนึ่ง แล้วกรอกเลข),
+     Role applied for (dropdown: Owner, Appraiser, MOIC Maker, MOIC Checker, MOIC Approver, Bank Maker, Bank Checker),
      ชื่อภาษาลาว (คำนำหน้า, ชื่อ, นามสกุล), ชื่อภาษาอังกฤษ (คำนำหน้า, ชื่อ, นามสกุล)
      (ตรวจครบทุกช่อง, รูปแบบอีเมล, เลขบัตรอย่างน้อย 6 ตัว, ชื่ออังกฤษใช้ได้แค่ A-Z) กด Submit แล้วระบบส่ง OTP ไปที่อีเมล
-  2. **Verify email**: ใส่ OTP 6 หลัก (demo ใส่เลขอะไรก็ได้) กด Next, มีลิงก์ Resend code และ Back กลับไปแก้อีเมล
+  2. **Verify email**: แจ้งว่าส่ง OTP ไปที่อีเมลที่ระบุแล้ว ให้นำรหัสมาใส่ (หากไม่พบให้ดูในโฟลเดอร์ Spam / Junk)
+     ใส่ OTP 6 หลัก (demo ใส่เลขอะไรก็ได้) กด Next, มีลิงก์ Resend code และ Back กลับไปแก้อีเมล
   3. **Documents**: Enterprise registration number และ Enterprise type (Sole proprietorship, Partnership,
      Company, State / Joint venture, Cooperative) เลือกประเภทแล้วจะขึ้นช่องอัปโหลดเอกสารตามประเภทนั้น
      (`SU_ETYPES` / `SU_DOC`) รับเฉพาะ PDF, JPG, PNG ไม่เกิน 10 MB ต่อไฟล์ (ตรวจจากไฟล์จริง ทั้งกดเลือกและลากวาง)
