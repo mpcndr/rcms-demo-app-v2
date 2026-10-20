@@ -15,13 +15,22 @@ npm run build    # writes the single self-contained index.html at the repo root
 npm run preview  # serve the built file
 ```
 
-There are no tests, linter or formatter. To verify a change, run it in a browser against `npm run dev`.
+There are no tests, linter or formatter. To verify a change, run it in a browser against `npm run dev`. After `npm run build`, the root `index.html` also opens straight from disk (`file://`), which is handy for headless browser checks. `src/index.html` itself does not: it is an ES module that imports Leaflet and the images, so it needs Vite.
 
 ## Source vs build
 
 - **Edit only `src/index.html`.** The root `index.html` is generated output. `vite-plugin-singlefile` inlines all JS/CSS, and images become data URIs, so the file works over `file://` and on GitHub Pages (served from `main`, repo root).
 - After changing `src/index.html`, run `npm run build` and commit **both** files. Pages serves the root file, so an unbuilt change never ships.
 - `vite.config.js` sets `root: 'src'` and `emptyOutDir: false`, so the build overwrites only `index.html`.
+- The only runtime dependency is Leaflet (`import Leaflet from 'leaflet'` in the module script). Map tiles come from OpenStreetMap, so the map needs network access even in the built file.
+
+## Docs to keep in sync
+
+- `README.md` (Thai) is the per-screen spec and lists the business rules. Update it whenever a screen, role or rule changes.
+- `docs/handoff/` is the guide for rebuilding the demo in React or Next.js:
+  - `README.md` covers the data model, routes, business rules, components and the API draft.
+  - `react.md` and `nextjs.md` cover framework-specific notes.
+  - Update it when a flow, a data shape or a route changes.
 
 ## Code style
 
@@ -31,7 +40,7 @@ There are no tests, linter or formatter. To verify a change, run it in a browser
 
 ## Architecture (all in `src/index.html`)
 
-Section comments split the file: dictionary → helpers → accounts → seed data → state → app shell → views → render/navigation → `bind()`.
+The `<style>` block comes first (CSS tokens in `:root`, then `/* ---------- name ---------- */` sections). The `<script type="module">` follows. Inside it, section comments (`/* ===== name ===== */`) split the code: dictionary → helpers → accounts → seed data → state → app shell → views → render/navigation → `bind()`. `reset()` runs at the end of the file to start the app.
 
 - **i18n**
   - `D.lo` / `D.en` hold every UI string; `t('key')` looks one up.
@@ -50,7 +59,15 @@ Section comments split the file: dictionary → helpers → accounts → seed da
     - `roleHome()` picks the home view.
     - `firstTab()` picks the default sub-menu.
     - `vDash()` dispatches to the per-role dashboard (`vMakerDash`, `vCheckerDash`, `vApproverDash`, `vAdminDash`, `vOwnerList` / `vOwnerDash`).
+- **Login and Create Account** (`vLogin()`, steps in `S.loginStep`: `cred` → `otp`, or `signup` → `signupDone`)
   - Login runs credentials, then OTP. Accounts with `tempPw` then get the forced set-password modal (`S.modal={type:'forgot',step:'new',first:true}`).
+  - Create Account keeps its form in `S.signup`, with `S.signup.step` 1-3:
+    1. Applicant details: email, Citizen ID or Passport (`idType` `cid`/`pp`), Role applied for (`SU_ROLES`), Lao and English names.
+    2. Verify email: OTP via `otpWire()`.
+    3. Documents, chosen by `suDocsFor(su)`. Owner gets Enterprise details plus the documents for the type (`SU_ETYPES` / `SU_DOC`). Other roles upload ID/Passport plus an employee ID card.
+  - Uploads are real `<input type="file">` (`data-sufile`, drop zone `data-sudrop`). `suFileErr()` allows PDF/JPG/PNG up to 10 MB.
+  - Submitting shows a "pending document review" page. The demo skips the review: the `newuser` account becomes the applicant and can log in at once.
+  - English UI says "Log in" / "Log out" and "Create Account", never "Sign in" / "Sign up".
 - **Lists, search and paging** (use these instead of hand-rolled tables)
   - `listCard(o)` renders the search card (`colFilterBar` → `filterBar` with Search / Clear) plus a table card with count and pager.
     - Fields: `[col, label, options?, type?, match?]`. `options` makes a dropdown (exact match), `type:'date'` a date picker, `match(row, value)` a custom rule (`listMatch()`).
@@ -66,4 +83,4 @@ Section comments split the file: dictionary → helpers → accounts → seed da
   - The owner's enterprises: `OWNER_ENTS`.
   - "Today" is fixed at 04/08/2026 (`daysLeft()`).
   - Keep the six original enterprises' states intact; demo flows depend on them.
-- **Dead code**: `vStaffDash` and `vQueue` (views `inspect` / `approveQ`) are unreachable from any role or menu.
+- **Dead code**: no menu leads to `vStaffDash` or `vQueue` (views `inspect` / `approveQ`). They survive only as fallbacks: `vDash()` returns `vStaffDash()` for an unmatched role, and `vTask()` returns `vQueue()` when the task is missing.
