@@ -484,6 +484,20 @@ table.tight th,table.tight td{padding-left:8px;padding-right:8px}
 .suname{border:0;padding:0;margin:0 0 4px;min-width:0}
 .suname legend{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px}
 .suname .g3{display:grid;grid-template-columns:92px 1fr 1fr;gap:10px}
+.suver{display:flex;gap:8px}
+.suver .btn{flex:none;padding:0 16px}
+.suin{position:relative;flex:1;min-width:0}
+.suin input{padding-right:36px}
+.suin input[readonly]{background:var(--soft)}
+/* Plain autocomplete look: hide the datalist arrow (Chrome / Safari). */
+/* Separate rules: a browser drops a whole selector list if it does not know one pseudo-element. */
+.suin input::-webkit-calendar-picker-indicator{display:none!important}
+.suin input::-webkit-list-button{display:none!important}
+.suclr{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;border:0;border-radius:6px;
+  background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.suclr[hidden]{display:none}
+.suclr:hover{background:var(--line);color:var(--ink)}
+.suclr svg{width:15px;height:15px}
 .sudoc .drop{padding:12px;flex-direction:row;justify-content:center;gap:8px}
 .sudoc .filelist{margin-top:0}
 .demoacc{margin-top:18px}
@@ -625,14 +639,15 @@ lo:{
  forgotPw:'ລືມລະຫັດຜ່ານ?',noAcct:'ຍັງບໍ່ມີບັນຊີ?',signUp:'ສ້າງບັນຊີ',signupTitle:'ສ້າງບັນຊີ',
  signupHint:'ກອກຂໍ້ມູນຜູ້ສະໝັກ ລະບົບຈະສົ່ງລະຫັດຢືນຢັນໄປທີ່ອີເມວຂອງທ່ານ',suEmail:'ອີເມວ',suIdNo:'ເລກບັດປະຈຳຕົວ / ໜັງສືຜ່ານແດນ',
  suTitle:'ຄຳນຳໜ້າ',suFirst:'ຊື່',suLast:'ນາມສະກຸນ',suBack:'← ກັບໄປໜ້າເຂົ້າສູ່ລະບົບ',suDoneTitle:'ສົ່ງຄຳຂໍສ້າງບັນຊີແລ້ວ',suPendTitle:'ລໍຖ້າກວດສອບເອກະສານ',
- suStep1:'ຂໍ້ມູນຜູ້ສະໝັກ',suStep2:'ຢືນຢັນອີເມວ',suStep3:'ເອກະສານ',suIdType:'ປະເພດເອກະສານຢັ້ງຢືນຕົວຕົນ',suCid:'ບັດປະຈຳຕົວ',suPassport:'ໜັງສືຜ່ານແດນ',
+ suStep1:'ຂໍ້ມູນຜູ້ສະໝັກ',suStep2:'ເອກະສານ',suStep3:'ຢືນຢັນອີເມວ',suIdType:'ປະເພດເອກະສານຢັ້ງຢືນຕົວຕົນ',suCid:'ບັດປະຈຳຕົວ',suPassport:'ໜັງສືຜ່ານແດນ',
  suCidNo:'ເລກບັດປະຈຳຕົວ',suRole:'ບົດບາດທີ່ສະໝັກ',suRolePick:'- ເລືອກບົດບາດ -',suPassportNo:'ເລກໜັງສືຜ່ານແດນ',suNameLo:'ຊື່ພາສາລາວ',suNameEn:'ຊື່ພາສາອັງກິດ',suSubmit:'ສົ່ງຂໍ້ມູນ',
  suOtpTitle:'ຢືນຢັນອີເມວ',suOtpMsg:'ລະບົບໄດ້ສົ່ງລະຫັດ OTP 6 ຫຼັກໄປທີ່ອີເມວ',suOtpHint:'ກະລຸນາກວດສອບອີເມວຂອງທ່ານ ແລ້ວນຳລະຫັດ OTP ມາໃສ່ຂ້າງລຸ່ມນີ້',
  suOtpSpam:'ຫາກບໍ່ພົບອີເມວ ກະລຸນາກວດສອບໃນໂຟນເດີ Spam ຫຼື Junk',suResend:'ສົ່ງລະຫັດອີກຄັ້ງ',
- suOtpSent:'ສົ່ງລະຫັດຢືນຢັນແລ້ວ',suEmailOk:'ຢືນຢັນອີເມວແລ້ວ',suDocTitle:'ເອກະສານຢືນຢັນວິສາຫະກິດ',suIdDocTitle:'ເອກະສານຢືນຢັນຕົວຕົນ',
+ suOtpSent:'ສົ່ງລະຫັດຢືນຢັນແລ້ວ',suDocTitle:'ເອກະສານຢືນຢັນວິສາຫະກິດ',suIdDocTitle:'ເອກະສານຢືນຢັນຕົວຕົນ',
  suIdDocHint:'ອັບໂຫຼດເອກະສານເພື່ອຢືນຢັນຕົວຕົນ ແລະ ການເປັນພະນັກງານຂອງທ່ານ',suRoleLbl:'ບົດບາດ',
  suDocHint:'ອັບໂຫຼດເອກະສານເພື່ອຢືນຢັນວິສາຫະກິດທີ່ທ່ານຕ້ອງການສ້າງບັນຊີ',suEntSec:'ຂໍ້ມູນວິສາຫະກິດ',suRegNo:'ເລກທະບຽນວິສາຫະກິດ',
- suEtype:'ປະເພດວິສາຫະກິດ',suEtypePick:'- ເລືອກປະເພດວິສາຫະກິດ -',suDocsSec:'ເອກະສານທີ່ຕ້ອງອັບໂຫຼດ',suPickFirst:'ເລືອກປະເພດວິສາຫະກິດກ່ອນ ເພື່ອເບິ່ງເອກະສານທີ່ຕ້ອງໃຊ້',
+ suVerify:'ກວດສອບ',suClearReg:'ລ້າງເລກທະບຽນ',suEntFound:'ພົບວິສາຫະກິດ',suErrRegNo:'ບໍ່ພົບເລກທະບຽນວິສາຫະກິດນີ້ໃນລະບົບ',suErrVerify:'ກະລຸນາກວດສອບເລກທະບຽນວິສາຫະກິດກ່ອນ',
+ suDocsSec:'ເອກະສານທີ່ຕ້ອງອັບໂຫຼດ',
  suDropT:'ກົດເພື່ອເລືອກໄຟລ໌ ຫຼື ລາກມາວາງ',suFileRule:'PDF, JPG, PNG ບໍ່ເກີນ 10 MB ຕໍ່ໄຟລ໌',suOptional:'(ຖ້າມີ)',
  suErrType:'ຮັບສະເພາະໄຟລ໌ PDF, JPG ຫຼື PNG',suErrSize:'ໄຟລ໌ໃຫຍ່ເກີນ 10 MB',suErrDoc:'ກະລຸນາອັບໂຫຼດເອກະສານທີ່ຈຳເປັນໃຫ້ຄົບ',
  suErrEnName:'ຊື່ພາສາອັງກິດໃຊ້ໄດ້ສະເພາະຕົວອັກສອນ A-Z',
@@ -808,14 +823,15 @@ en:{
  forgotPw:'Forgot password?',noAcct:"Don't have an account?",signUp:'Create Account',signupTitle:'Create Account',
  signupHint:'Enter the applicant details. We will email you a verification code.',suEmail:'Email',suIdNo:'Citizen ID / Passport Number',
  suTitle:'Title',suFirst:'First name',suLast:'Last name',suBack:'← Back to log in',suDoneTitle:'Application submitted',suPendTitle:'Documents pending review',
- suStep1:'Applicant details',suStep2:'Verify email',suStep3:'Documents',suIdType:'Identity document',suCid:'Citizen ID',suPassport:'Passport',
+ suStep1:'Applicant details',suStep2:'Documents',suStep3:'Verify email',suIdType:'Identity document',suCid:'Citizen ID',suPassport:'Passport',
  suCidNo:'Citizen ID number',suRole:'Role applied for',suRolePick:'- Select role -',suPassportNo:'Passport number',suNameLo:'Lao name',suNameEn:'English name',suSubmit:'Submit',
  suOtpTitle:'Verify email',suOtpMsg:'We have sent a 6-digit OTP code to',suOtpHint:'Please check your email and enter the OTP code below.',
  suOtpSpam:"Can't find the email? Check your Spam or Junk folder.",suResend:'Resend code',
- suOtpSent:'Verification code sent',suEmailOk:'Email verified',suDocTitle:'Enterprise documents',suIdDocTitle:'Identity documents',
+ suOtpSent:'Verification code sent',suDocTitle:'Enterprise documents',suIdDocTitle:'Identity documents',
  suIdDocHint:'Upload documents that verify your identity and employment.',suRoleLbl:'Role',
  suDocHint:'Upload documents that verify the enterprise this account is for.',suEntSec:'Enterprise details',suRegNo:'Enterprise registration number',
- suEtype:'Enterprise type',suEtypePick:'- Select enterprise type -',suDocsSec:'Documents to upload',suPickFirst:'Select an enterprise type to see the documents it needs',
+ suVerify:'Verify',suClearReg:'Clear registration number',suEntFound:'Enterprise found',suErrRegNo:'This enterprise registration number was not found',suErrVerify:'Verify the enterprise registration number first',
+ suDocsSec:'Documents to upload',
  suDropT:'Click to choose a file, or drag it here',suFileRule:'PDF, JPG, PNG up to 10 MB per file',suOptional:'(optional)',
  suErrType:'Only PDF, JPG or PNG files are accepted',suErrSize:'File is larger than 10 MB',suErrDoc:'Upload every required document',
  suErrEnName:'English name may use the letters A-Z only',
@@ -1062,6 +1078,7 @@ var LU={
  logOut:'<path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>',
  user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
  fileText:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+ x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
  settings:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>'
 };
 function luSvg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(LU[name]||'')+'</svg>';}
@@ -1147,9 +1164,12 @@ var SU_ROLES=[
 ];
 var SU_MAX_BYTES=10*1024*1024;
 function suEtype(k){return SU_ETYPES.filter(function(x){return x.k===k})[0]}
+// The registered enterprise behind a registration number, and its SU_ETYPES key.
+function suFindEnt(regNo){var r=(regNo||'').trim().toUpperCase();return S.ents.filter(function(e){return e.id===r})[0]}
+function suEtypeOf(e){return {'Limited company':'company','Partnership':'partnership','Sole proprietorship':'sole'}[e.type.en]||'company'}
 function suRole(k){return SU_ROLES.filter(function(x){return x.k===k})[0]}
-// Step 3 documents: an Owner uploads the documents of the chosen enterprise type (null until
-// a type is picked); every other role uploads the ID from step 1 plus an employee ID card.
+// Step 2 documents: an Owner uploads the documents of the verified enterprise's type (null until
+// the registration number is verified); every other role uploads the ID from step 1 plus an employee ID card.
 function suDocsFor(su){
   if(su.role==='owner'){var et=suEtype(su.etype);return et?et.docs:null}
   return [[su.idType==='pp'?'passport':'idCard'],['staffCard']];
@@ -1632,14 +1652,14 @@ function vLogin(){
    nameGroup('lo',t('suNameLo'))+nameGroup('en',t('suNameEn'))+errLine+
    '<button class="btn" style="width:100%;padding:12px;margin-top:6px;font-size:13.5px" id="doSignup">'+t('suSubmit')+'</button>'+
    '<div class="lnk" style="margin-top:14px;display:inline-block" data-backcred="1">'+t('suBack')+'</div>';
-  var su2=
+  var suVerify=
    '<h2>'+t('suOtpTitle')+'</h2><p>'+t('suOtpMsg')+' <b>'+esc(su.email||'')+'</b><br>'+t('suOtpHint')+'</p>'+stepBar+
    '<div class="otp" id="suOtp">'+[0,1,2,3,4,5].map(function(){return '<input maxlength="1" size="1" inputmode="numeric" aria-label="OTP">'}).join('')+'</div>'+
    '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">'+
     '<span class="hint" style="margin:0">'+t('suOtpSpam')+'</span><span class="lnk" data-suresend="1">'+t('suResend')+'</span></div>'+
-   '<button class="btn" style="width:100%;padding:12px;margin-top:16px;font-size:13.5px" id="doSuOtp" disabled>'+t('loginNext')+'</button>'+
-   '<div class="lnk" style="margin-top:14px;display:inline-block" data-sugo="1">'+t('loginBack')+'</div>';
-  var isOwner=su.role==='owner',et=isOwner?suEtype(su.etype):null,docList3=suDocsFor(su),docs=su.docs||{},docErr=su.docErr||{};
+   '<button class="btn" style="width:100%;padding:12px;margin-top:16px;font-size:13.5px" id="doSuOtp" disabled>'+t('signUp')+'</button>'+
+   '<div class="lnk" style="margin-top:14px;display:inline-block" data-sugo="2">'+t('loginBack')+'</div>';
+  var isOwner=su.role==='owner',ent=isOwner?su.ent:null,docList3=suDocsFor(su),docs=su.docs||{},docErr=su.docErr||{};
   var docField=function(d){var k=d[0],f=docs[k],lbl=L(SU_DOC[k]);
     return '<div class="field sudoc"><label>'+lbl+(d[1]?' <span style="color:var(--muted)">'+t('suOptional')+'</span>':' *')+'</label>'+
      (f?'<div class="filelist"><div class="filerow up"><span class="fic">'+luSvg('circleCheck')+'</span>'+
@@ -1648,26 +1668,29 @@ function vLogin(){
        :'<div class="drop" data-sudrop="'+k+'" role="button" tabindex="0"><span class="dropIcon">⬆</span><b>'+t('suDropT')+'</b></div>')+
      '<input type="file" hidden accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" data-sufile="'+k+'">'+
      (docErr[k]?'<div class="hint err">'+docErr[k]+'</div>':'')+'</div>'};
-  var su3=
+  var suDocs=
    '<h2>'+t(isOwner?'suDocTitle':'suIdDocTitle')+'</h2><p>'+t(isOwner?'suDocHint':'suIdDocHint')+'</p>'+stepBar+
-   '<div class="sc-note ok" style="border-radius:10px;margin:0 0 16px;padding:9px 14px"><span class="ni">'+luSvg('circleCheck')+'</span>'+
-    '<div class="nt">'+t('suEmailOk')+' - <b>'+esc(su.email||'')+'</b></div></div>'+
    (isOwner?'<fieldset class="suname"><legend>'+t('suEntSec')+'</legend>'+
-   '<div class="field"><label for="suRegNo">'+t('suRegNo')+' *</label><input id="suRegNo" data-su="regNo" placeholder="ELN-2025-xxxx" value="'+esc(su.regNo||'')+'"></div>'+
-   '<div class="field"><label for="suEtype">'+t('suEtype')+' *</label><select id="suEtype" data-suetype="1">'+
-    '<option value="">'+t('suEtypePick')+'</option>'+
-    SU_ETYPES.map(function(x){return '<option value="'+x.k+'"'+(su.etype===x.k?' selected':'')+'>'+L(x)+'</option>'}).join('')+'</select></div></fieldset>':'')+
-   '<fieldset class="suname"><legend>'+t('suDocsSec')+'</legend>'+
-    '<div class="hint" style="margin:-4px 0 12px">'+t('suFileRule')+'</div>'+
-    (docList3?docList3.map(docField).join(''):'<div class="hint" style="padding:6px 0 12px">'+t('suPickFirst')+'</div>')+'</fieldset>'+
+   '<div class="field"><label for="suRegNo">'+t('suRegNo')+' *</label><div class="suver">'+
+    '<div class="suin"><input id="suRegNo" list="reglist" autocomplete="off" placeholder="ELN-2025-xxxx" value="'+esc(su.regNo||'')+'"'+(ent?' readonly':'')+'>'+
+     '<datalist id="reglist">'+S.ents.map(function(e){return '<option value="'+e.id+'" label="'+esc(lang==='lo'?e.name:e.nameEn)+'">'}).join('')+'</datalist>'+
+     '<button type="button" class="suclr" data-suclr="1" aria-label="'+t('suClearReg')+'" title="'+t('suClearReg')+'"'+(su.regNo?'':' hidden')+'>'+luSvg('x')+'</button></div>'+
+    '<button class="btn" id="doSuVerify"'+(ent?' disabled':'')+'>'+t('suVerify')+'</button></div>'+
+    (su.regErr?'<div class="hint err">'+su.regErr+'</div>':'')+
+    (ent?'<div class="sc-note ok" style="border-radius:10px;margin:10px 0 0;padding:9px 14px"><span class="ni">'+luSvg('circleCheck')+'</span>'+
+     '<div class="nt">'+t('suEntFound')+' - <b>'+esc(lang==='lo'?ent.name:ent.nameEn)+'</b> · '+L(ent.type)+'</div></div>':'')+
+   '</div></fieldset>':'')+
+   // An Owner sees the document list only once the registration number is verified.
+   (docList3?'<fieldset class="suname"><legend>'+t('suDocsSec')+'</legend>'+
+    '<div class="hint" style="margin:-4px 0 12px">'+t('suFileRule')+'</div>'+docList3.map(docField).join('')+'</fieldset>':'')+
    errLine+
-   '<button class="btn" style="width:100%;padding:12px;margin-top:6px;font-size:13.5px" id="doSuCreate">'+t('signUp')+'</button>'+
-   '<div class="lnk" style="margin-top:14px;display:inline-block" data-backcred="1">'+t('suBack')+'</div>';
-  var signupBody=sustep===3?su3:sustep===2?su2:su1;
+   '<button class="btn" style="width:100%;padding:12px;margin-top:6px;font-size:13.5px" id="doSuCreate">'+t('loginNext')+'</button>'+
+   '<div class="lnk" style="margin-top:14px;display:inline-block" data-sugo="1">'+t('loginBack')+'</div>';
+  var signupBody=sustep===3?suVerify:sustep===2?suDocs:su1;
   var signupDone=
    '<h2>'+t('suDoneTitle')+'</h2>'+
    '<div class="sc-note warn" style="border-radius:10px;margin:14px 0;align-items:flex-start"><span class="ni">'+luSvg('clock')+'</span>'+
-    '<div class="nt"><b>'+t('suPendTitle')+'</b>'+(et?' - '+esc(su.regNo||'')+' · '+L(et):suRole(su.role)?' - '+t('suRoleLbl')+': '+L(suRole(su.role)):'')+'<br>'+
+    '<div class="nt"><b>'+t('suPendTitle')+'</b>'+(ent?' - '+esc(ent.id)+' · '+esc(lang==='lo'?ent.name:ent.nameEn):suRole(su.role)?' - '+t('suRoleLbl')+': '+L(suRole(su.role)):'')+'<br>'+
     t('suDoneMsg')+' <b>'+esc(su.email||'')+'</b></div></div>'+
    '<p>'+t('suDoneHint')+'</p>'+
    '<button class="btn" style="width:100%;padding:12px;margin-top:10px;font-size:13.5px" data-backcred="1">'+t('suToSignIn')+'</button>';
@@ -3429,16 +3452,24 @@ function bind(){
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(suv('email'))){su.err=t('errEmail');return render()}
     if(suv('idNo').length<6){su.err=t('errIdNo');return render()}
     if(!/^[A-Za-z][A-Za-z .'-]*$/.test(suv('firstEn')+' '+suv('lastEn'))){su.err=t('suErrEnName');return render()}
-    su.err='';su.step=2;render();toast(t('suOtpSent'),suv('email'),true)};
+    su.err='';su.step=2;render()};
   var suo=$('#suOtp');if(suo)otpWire(suo,function(f){$('#doSuOtp').disabled=!f});
   document.querySelectorAll('[data-suresend]').forEach(function(b){b.onclick=function(){
     render();toast(t('suOtpSent'),suv('email'),true)}});
   document.querySelectorAll('[data-sugo]').forEach(function(b){b.onclick=function(){
     S.signup.step=Number(b.dataset.sugo);S.signup.err='';render()}});
-  var dso=$('#doSuOtp');if(dso)dso.onclick=function(){S.signup.step=3;S.signup.err='';render();toast(t('suEmailOk'),suv('email'),true)};
-  var sue=$('#suEtype');if(sue)sue.onchange=function(){
-    // Documents differ per enterprise type, so a new type starts from an empty upload list.
-    S.signup.etype=sue.value;S.signup.docs={};S.signup.docErr={};S.signup.err='';render()};
+  var surn=$('#suRegNo');
+  if(surn){
+    surn.oninput=function(){S.signup.regNo=surn.value;$('[data-suclr]').hidden=!surn.value};
+    surn.onkeydown=function(ev){if(ev.key==='Enter')$('#doSuVerify').click()}}
+  var dsv=$('#doSuVerify');if(dsv)dsv.onclick=function(){
+    var su=S.signup,e=suFindEnt(su.regNo);
+    su.err='';
+    if(!e){su.regErr=suv('regNo')?t('suErrRegNo'):t('errRequired');return render()}
+    su.ent=e;su.regNo=e.id;su.etype=suEtypeOf(e);su.regErr='';render()};
+  // A verified number is read-only, so clearing is the way to change it. It also drops the uploads, which belong to that enterprise.
+  document.querySelectorAll('[data-suclr]').forEach(function(b){b.onclick=function(){
+    var su=S.signup;su.regNo='';su.ent=null;su.etype='';su.regErr='';su.err='';su.docs={};su.docErr={};render();$('#suRegNo').focus()}});
   var suTake=function(k,file){
     if(!file)return;
     var su=S.signup,err=suFileErr(file);
@@ -3460,9 +3491,13 @@ function bind(){
   var dsc2=$('#doSuCreate');
   if(dsc2)dsc2.onclick=function(){
     var su=S.signup,need=suDocsFor(su);
-    if(su.role==='owner'&&(!suv('regNo')||!need)){su.err=t('errRequired');return render()}
+    if(su.role==='owner'&&!su.ent){su.err=t('suErrVerify');return render()}
     var missing=need.filter(function(d){return !d[1]&&!su.docs[d[0]]});
     if(missing.length){su.err=t('suErrDoc')+': '+missing.map(function(d){return L(SU_DOC[d[0]])}).join(', ');return render()}
+    su.err='';su.step=3;render();toast(t('suOtpSent'),suv('email'),true)};
+  var dso=$('#doSuOtp');
+  if(dso)dso.onclick=function(){
+    var su=S.signup;
     // The demo "New user" account becomes the person who just registered.
     var a=ACCTS.filter(function(x){return x.id==='newuser'})[0],p=lang==='lo'?'Lo':'En';
     a.user=suv('email');a.nm=TITLES[su['title'+p]||'mr'][lang]+' '+suv('first'+p)+' '+suv('last'+p);a.tempPw=true;
