@@ -270,7 +270,7 @@ export const MapView = dynamic(() => import('./LeafletMap'), { ssr: false });
 /login (credentials) -> OTP -> session cookie (httpOnly)
   -> ถ้า mustChangePassword: modal ตั้งรหัสใหม่ (ปิดไม่ได้) -> redirect ตาม roleHome()
 /create-account
-  1 Applicant details -> 2 Verify email (OTP) -> 3 Documents (ตาม role)
+  1 Applicant details -> 2 Documents (ตาม role, owner ต้อง Verify เลขทะเบียนก่อน) -> 3 Verify email (OTP)
   -> หน้า "Application submitted" (รอตรวจเอกสาร ผ่านแล้วส่งรหัสผ่านชั่วคราวทางอีเมล) -> /login?user=<email>
 ```
 

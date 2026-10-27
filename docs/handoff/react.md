@@ -237,13 +237,13 @@ export const router = createBrowserRouter([
 ```
 /login (user + password) -> OTP -> ถ้า mustChangePassword: ChangePasswordModal (ปิดไม่ได้, Escape ไม่ปิด) -> RoleHome
 /create-account
-  1 Applicant details -> 2 Verify email (OTP) -> 3 Documents (ตาม role)
+  1 Applicant details -> 2 Documents (ตาม role, owner ต้อง Verify เลขทะเบียนก่อน) -> 3 Verify email (OTP)
   -> หน้า "Application submitted" (รอตรวจเอกสาร ผ่านแล้วส่งรหัสผ่านชั่วคราวทางอีเมล) -> /login?user=<email>
 ```
 
 - `CreateAccountPage`: เก็บข้อมูลทั้ง 3 ขั้นใน state เดียว (หรือ `useReducer`) กด Back แล้วข้อมูลไม่หาย
-  - ขั้น 3 ใช้ `FileDrop` (`<input type="file" accept=".pdf,.jpg,.jpeg,.png">` + drag and drop) ตรวจชนิดและขนาด ≤10 MB ก่อนอัปโหลด
-  - เปลี่ยน Enterprise type แล้วล้างไฟล์ที่เลือกไว้ เพราะรายการเอกสารต่างกัน
+  - ขั้น 2 ใช้ `FileDrop` (`<input type="file" accept=".pdf,.jpg,.jpeg,.png">` + drag and drop) ตรวจชนิดและขนาด ≤10 MB ก่อนอัปโหลด
+  - ช่องเลขทะเบียนมีปุ่ม ✕ เมื่อมีข้อความ ไว้ล้างเลข ผล verify และไฟล์ทั้งหมด (เอกสารเป็นของวิสาหกิจนั้น) verify ผ่านแล้วล็อกช่อง (`readOnly`)
 
 - `OtpInput`: 6 ช่อง, `inputMode="numeric"`, พิมพ์แล้วเลื่อนไปช่องถัดไป, Backspace ในช่องว่างย้อนกลับ, รองรับ paste ทั้ง 6 หลัก
 - เก็บ token ใน httpOnly cookie (ให้ backend ตั้ง) ดีกว่า `localStorage`

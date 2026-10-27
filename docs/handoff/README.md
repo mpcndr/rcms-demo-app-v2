@@ -86,14 +86,14 @@ interface Enterprise {
 type SignupRole = 'owner' | 'appraiser' | 'moicMaker' | 'moicChecker' | 'moicApprover' | 'bankMaker' | 'bankChecker';
 type EntityType = 'sole' | 'partnership' | 'company' | 'statejv' | 'coop';
 interface SignupApplication {
-  email: string;               // ต้องยืนยันด้วย OTP ก่อนถึงขั้นเอกสาร
+  email: string;               // ยืนยันด้วย OTP เป็นขั้นสุดท้าย หลังอัปโหลดเอกสาร
   idType: 'cid' | 'pp';        // Citizen ID หรือ Passport (เลือกอย่างใดอย่างหนึ่ง)
   idNo: string;
   role: SignupRole;
   nameLo: { title: 'mr' | 'mrs' | 'ms'; first: string; last: string };
   nameEn: { title: 'mr' | 'mrs' | 'ms'; first: string; last: string };
   regNo?: string;              // เฉพาะ owner
-  entityType?: EntityType;     // เฉพาะ owner
+  entityType?: EntityType;     // เฉพาะ owner ได้จากวิสาหกิจที่ verify เลขทะเบียนแล้ว ไม่ได้ให้ผู้ใช้เลือก
   docs: { k: string; name: string; size: number }[];   // k ตาม SU_DOC เช่น regCert, idCard, staffCard
   status: 'pending' | 'approved' | 'rejected';         // approved แล้วจึงส่งรหัสผ่านชั่วคราวทางอีเมล
 }
@@ -203,12 +203,14 @@ interface StaffUser { nm: string; org: string; role: string; active: 0 | 1; pwd:
   - Step 1 Applicant details: ทุกช่องต้องกรอก (Email, Citizen ID หรือ Passport, Role applied for,
     ชื่อลาว และชื่ออังกฤษ อย่างละ คำนำหน้า / ชื่อ / นามสกุล), อีเมลต้องถูกรูปแบบ, เลขบัตรอย่างน้อย 6 ตัว,
     ชื่ออังกฤษใช้ได้แค่ A-Z
-  - Step 2 Verify email: OTP 6 หลักที่ส่งไปอีเมล ปุ่ม Next กดได้เมื่อกรอกครบ มี Resend code
-  - Step 3 Documents เปลี่ยนตาม role (`suDocsFor()`)
-    - owner: ต้องกรอก Enterprise registration number + Enterprise type แล้วอัปโหลดเอกสารตามประเภท
-      (`SU_ETYPES` / `SU_DOC`, บางรายการไม่บังคับ)
+  - Step 2 Documents เปลี่ยนตาม role (`suDocsFor()`) กด Next แล้วส่ง OTP ไปอีเมล
+    - owner: กรอก Enterprise registration number แล้วกด Verify (`#doSuVerify`) ต้องพบวิสาหกิจในระบบก่อน
+      จึงขึ้นส่วนเอกสาร (ก่อนหน้านั้นซ่อนทั้งส่วน) ตามประเภทของวิสาหกิจนั้น (`suEtypeOf()` → `SU_ETYPES` / `SU_DOC`, บางรายการไม่บังคับ)
+      ไอคอน ✕ (`data-suclr`) ขึ้นเมื่อช่องมีข้อความ verify ผ่านแล้วช่องเป็น readonly และปุ่ม Verify disabled เปลี่ยนเลขได้ทางเดียวคือ ✕
+      ซึ่งล้างเลข ผล verify และไฟล์ทั้งหมด (ไฟล์เป็นของวิสาหกิจนั้น) กด Next ได้เมื่อ verify ผ่านแล้วเท่านั้น
     - role อื่น: ไม่มี Enterprise details อัปโหลดบัตรประชาชน (หรือ Passport ตาม step 1) + บัตรพนักงาน
     - รับเฉพาะ PDF, JPG, PNG ไม่เกิน 10 MB ต่อไฟล์ (`suFileErr()`) ต้องตรวจซ้ำฝั่ง backend (ทั้งนามสกุลและ MIME)
+  - Step 3 Verify email: OTP 6 หลักที่ส่งไปอีเมล ปุ่ม Create Account กดได้เมื่อกรอกครบ มี Resend code
   - ส่งแล้วเป็นสถานะรอตรวจเอกสาร เมื่อเอกสารผ่านจึงส่งรหัสผ่านชั่วคราวไปที่อีเมล
   - Role ที่สมัครยังไม่ได้ผูกกับ role ในระบบ (`Role`) ต้องตกลงกับลูกค้าว่า Bank Maker / Checker,
     MOIC Maker ฯลฯ ตรงกับ role ไหน
@@ -289,11 +291,12 @@ POST   /auth/login                 { user, password } -> { challengeId }
 POST   /auth/otp                   { challengeId, otp } -> session (+ mustChangePassword)
 POST   /auth/password              { newPassword }
 POST   /auth/forgot                { email }
-POST   /auth/signup                { email, idType, idNo, role, nameLo, nameEn } -> { applicationId } (ส่ง OTP ไปอีเมล)
-POST   /auth/signup/:id/otp        { otp }  (ยืนยันอีเมล)
-POST   /auth/signup/:id/otp/resend
+POST   /auth/signup                { email, idType, idNo, role, nameLo, nameEn } -> { applicationId }
+GET    /auth/signup/enterprise     ?regNo= -> { regNo, name, entityType }  (ปุ่ม Verify, 404 ถ้าไม่พบ)
 POST   /auth/signup/:id/documents  multipart: k, file  (PDF/JPG/PNG ≤10 MB)
-POST   /auth/signup/:id/submit     { regNo?, entityType? } -> status 'pending'
+POST   /auth/signup/:id/submit     { regNo? }  (ส่ง OTP ไปอีเมล)
+POST   /auth/signup/:id/otp/resend
+POST   /auth/signup/:id/otp        { otp }  (ยืนยันอีเมล) -> status 'pending'
 GET    /admin/signup-applications  ?status=&role=&page=&size=
 POST   /admin/signup-applications/:id/approve   (ส่งรหัสผ่านชั่วคราวทางอีเมล)
 POST   /admin/signup-applications/:id/reject    { reason }
