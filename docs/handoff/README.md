@@ -87,6 +87,7 @@ type SignupRole = 'owner' | 'appraiser' | 'moicMaker' | 'moicChecker' | 'moicApp
 type EntityType = 'sole' | 'partnership' | 'company' | 'statejv' | 'coop';
 interface SignupApplication {
   email: string;               // ยืนยันด้วย OTP เป็นขั้นสุดท้าย หลังอัปโหลดเอกสาร
+  mobile: string;              // required, ตัวเลขอย่างน้อย 8 หลัก
   idType: 'cid' | 'pp';        // Citizen ID หรือ Passport (เลือกอย่างใดอย่างหนึ่ง)
   idNo: string;
   role: SignupRole;
@@ -200,9 +201,9 @@ interface StaffUser { nm: string; org: string; role: string; active: 0 | 1; pwd:
   - เกินวันครบกำหนดเป็น `OVERDUE` และมีค่าปรับ (ดู `penOf()`)
 - **ใบรับรอง**: ออกได้เมื่อทุนชำระครบเท่านั้น
 - **Create Account** (handler `#doSignup`, `#doSuOtp`, `#doSuCreate` ใน `bind()`)
-  - Step 1 Applicant details: ทุกช่องต้องกรอก (Email, Citizen ID หรือ Passport, Role applied for,
-    ชื่อลาว และชื่ออังกฤษ อย่างละ คำนำหน้า / ชื่อ / นามสกุล), อีเมลต้องถูกรูปแบบ, เลขบัตรอย่างน้อย 6 ตัว,
-    ชื่ออังกฤษใช้ได้แค่ A-Z
+  - Step 1 Applicant details: ทุกช่องต้องกรอก (Email, Mobile Number, Citizen ID หรือ Passport, Role applied for,
+    ชื่อลาว และชื่ออังกฤษ อย่างละ คำนำหน้า / ชื่อ / นามสกุล), อีเมลต้องถูกรูปแบบ, เบอร์มือถือตัวเลขอย่างน้อย 8 หลัก,
+    เลขบัตรอย่างน้อย 6 ตัว, ชื่ออังกฤษใช้ได้แค่ A-Z
   - Step 2 Documents เปลี่ยนตาม role (`suDocsFor()`) กด Next แล้วส่ง OTP ไปอีเมล
     - owner: กรอก Enterprise registration number แล้วกด Verify (`#doSuVerify`) ต้องพบวิสาหกิจในระบบก่อน
       จึงขึ้นส่วนเอกสาร (ก่อนหน้านั้นซ่อนทั้งส่วน) ตามประเภทของวิสาหกิจนั้น (`suEtypeOf()` → `SU_ETYPES` / `SU_DOC`, บางรายการไม่บังคับ)
@@ -291,7 +292,7 @@ POST   /auth/login                 { user, password } -> { challengeId }
 POST   /auth/otp                   { challengeId, otp } -> session (+ mustChangePassword)
 POST   /auth/password              { newPassword }
 POST   /auth/forgot                { email }
-POST   /auth/signup                { email, idType, idNo, role, nameLo, nameEn } -> { applicationId }
+POST   /auth/signup                { email, mobile, idType, idNo, role, nameLo, nameEn } -> { applicationId }
 GET    /auth/signup/enterprise     ?regNo= -> { regNo, name, entityType }  (ปุ่ม Verify, 404 ถ้าไม่พบ)
 POST   /auth/signup/:id/documents  multipart: k, file  (PDF/JPG/PNG ≤10 MB)
 POST   /auth/signup/:id/submit     { regNo? }  (ส่ง OTP ไปอีเมล)
